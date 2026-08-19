@@ -424,13 +424,25 @@ const prefersReducedMotion = () =>
     }
 
     if (!isConfigured()) {
-      console.warn(
-        "[Solutions Binary] Supabase ainda não configurado. " +
-          "Preencha SUPABASE_URL e SUPABASE_ANON_KEY no topo de script.js."
-      );
-      showAlert(
-        "O formulário ainda não está conectado ao banco de dados. Fale com a gente pelo WhatsApp que respondemos na hora."
-      );
+      // Sem banco de dados configurado ainda: manda os dados preenchidos
+      // direto pro WhatsApp cadastrado, em vez de simplesmente falhar.
+      const nome = fields.nome.value.trim();
+      const telefone = fields.telefone.value.trim();
+      const servico = fields.servico.value;
+      const mensagem = fields.mensagem.value.trim();
+
+      let texto =
+        "Olá! Meu nome é " + nome + " e vim pelo site da Solutions Binary.\n" +
+        "Tenho interesse em: " + servico + ".\n" +
+        "Meu telefone: " + telefone + ".";
+      if (mensagem) texto += "\n\n" + mensagem;
+
+      const waHref = "https://wa.me/" + WHATSAPP_NUMBER + "?text=" + encodeURIComponent(texto);
+      window.open(waHref, "_blank", "noopener");
+
+      panel.hidden = true;
+      success.hidden = false;
+      success.focus();
       return;
     }
 
