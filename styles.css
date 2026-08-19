@@ -940,7 +940,7 @@ p { max-width: 62ch; }
   color: var(--primary);
   transition: background var(--dur) var(--ease), color var(--dur) var(--ease);
 }
-.card__title { margin-top: var(--sp-16); }
+.card__title { margin-top: 0; }
 .card__text { margin-top: var(--sp-8); color: var(--text-muted); margin-inline: auto; }
 
 @media (hover: hover) and (pointer: fine) {
@@ -1156,15 +1156,13 @@ p { max-width: 62ch; }
   justify-content: center;
   width: 88px;
   height: 88px;
-  border-radius: var(--r-20);
-  background: #fff;
-  box-shadow: 0 6px 20px rgba(10, 14, 39, .14);
+  border-radius: 50%;
   overflow: hidden;
 }
 .case__logo {
-  max-width: 70%;
-  max-height: 70%;
-  object-fit: contain;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
   display: block;
 }
 .case__body {
@@ -1700,7 +1698,7 @@ p { max-width: 62ch; }
   .person { padding: var(--sp-16); }
   .case__media { padding-block: var(--sp-16); }
   .case__media svg { width: 34px; height: 34px; }
-  .case__logo-plate { width: 64px; height: 64px; border-radius: var(--r-16); }
+  .case__logo-plate { width: 64px; height: 64px; }
   .case__body { padding: var(--sp-12) var(--sp-16) var(--sp-16); }
   .case__title { margin-top: var(--sp-8); font-size: 17px; }
   .case__cta { min-height: 42px; font-size: 14px; }
