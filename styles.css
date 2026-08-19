@@ -1141,6 +1141,23 @@ p { max-width: 62ch; }
     var(--surface-sunken);
   border-bottom: 1px solid var(--border);
 }
+.case__logo-plate {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 56px;
+  height: 56px;
+  border-radius: var(--r-16);
+  background: #fff;
+  box-shadow: 0 4px 16px rgba(10, 14, 39, .12);
+  overflow: hidden;
+}
+.case__logo {
+  max-width: 68%;
+  max-height: 68%;
+  object-fit: contain;
+  display: block;
+}
 .case__body { padding: var(--sp-16) var(--sp-24) var(--sp-24); text-align: center; }
 .case__title { margin-top: var(--sp-12); }
 .case__text { margin-top: var(--sp-4); color: var(--text-muted); font-size: 15px; margin-inline: auto; }
@@ -1657,6 +1674,7 @@ p { max-width: 62ch; }
   .person { padding: var(--sp-16); }
   .case__media { padding-block: var(--sp-8); }
   .case__media svg { width: 24px; height: 24px; }
+  .case__logo-plate { width: 40px; height: 40px; border-radius: var(--r-12); }
   .case__body { padding: var(--sp-12) var(--sp-16) var(--sp-16); }
   .case__title { margin-top: var(--sp-8); font-size: 17px; }
   .case__cta { margin-top: var(--sp-8); }
