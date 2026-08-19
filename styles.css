@@ -733,12 +733,12 @@ p { max-width: 62ch; }
    pra continuar exatamente sobre a marca d'água, que escala junto com o vídeo */
 @media (max-width: 600px) {
   .hero__media-caption {
-    right: 3%;
-    bottom: 6%;
+    right: 0;
+    bottom: 2%;
     padding: 7px 12px;
     font-size: 12px;
     gap: 6px;
-    max-width: calc(100% - 16px);
+    max-width: calc(100% - 8px);
   }
   .hero__media-caption-dot { width: 6px; height: 6px; }
 }
@@ -1134,7 +1134,7 @@ p { max-width: 62ch; }
   align-items: center;
   justify-content: center;
   width: 100%;
-  padding-block: var(--sp-16);
+  padding-block: var(--sp-32);
   color: var(--primary);
   background:
     linear-gradient(135deg, rgba(43, 58, 255, .08) 0%, rgba(127, 209, 255, .12) 100%),
@@ -1145,30 +1145,38 @@ p { max-width: 62ch; }
   display: flex;
   align-items: center;
   justify-content: center;
-  width: 56px;
-  height: 56px;
-  border-radius: var(--r-16);
+  width: 88px;
+  height: 88px;
+  border-radius: var(--r-20);
   background: #fff;
-  box-shadow: 0 4px 16px rgba(10, 14, 39, .12);
+  box-shadow: 0 6px 20px rgba(10, 14, 39, .14);
   overflow: hidden;
 }
 .case__logo {
-  max-width: 68%;
-  max-height: 68%;
+  max-width: 70%;
+  max-height: 70%;
   object-fit: contain;
   display: block;
 }
-.case__body { padding: var(--sp-16) var(--sp-24) var(--sp-24); text-align: center; }
+.case__body { padding: var(--sp-20) var(--sp-24) var(--sp-24); text-align: left; }
 .case__title { margin-top: var(--sp-12); }
-.case__text { margin-top: var(--sp-4); color: var(--text-muted); font-size: 15px; margin-inline: auto; }
+.case__text { margin-top: var(--sp-4); color: var(--text-muted); font-size: 15px; }
 .case__cta {
-  display: inline-flex;
+  display: flex;
   align-items: center;
-  gap: 4px;
-  margin-top: var(--sp-12);
-  font-size: 13px;
-  font-weight: 600;
-  color: var(--primary);
+  justify-content: center;
+  gap: 6px;
+  width: 100%;
+  min-height: 48px;
+  margin-top: var(--sp-16);
+  padding: var(--sp-12) var(--sp-20);
+  border-radius: var(--r-12);
+  background: var(--primary);
+  color: #fff;
+  font-size: 15px;
+  font-weight: 700;
+  box-sizing: border-box;
+  transition: background var(--dur) var(--ease), transform var(--dur) var(--ease), box-shadow var(--dur) var(--ease);
 }
 
 @media (hover: hover) and (pointer: fine) {
@@ -1177,7 +1185,10 @@ p { max-width: 62ch; }
     box-shadow: var(--shadow-lift);
     border-color: rgba(43, 58, 255, .35);
   }
-  .case:hover .case__media { color: #fff; background: linear-gradient(135deg, #2B3AFF 0%, #4D9FFF 100%); }
+  .case:hover .case__cta {
+    background: linear-gradient(135deg, #2B3AFF 0%, #4D9FFF 100%);
+    box-shadow: var(--glow-primary);
+  }
 }
 
 .badge {
@@ -1672,12 +1683,12 @@ p { max-width: 62ch; }
   .step__card,
   .card--service,
   .person { padding: var(--sp-16); }
-  .case__media { padding-block: var(--sp-8); }
-  .case__media svg { width: 24px; height: 24px; }
-  .case__logo-plate { width: 40px; height: 40px; border-radius: var(--r-12); }
+  .case__media { padding-block: var(--sp-16); }
+  .case__media svg { width: 34px; height: 34px; }
+  .case__logo-plate { width: 64px; height: 64px; border-radius: var(--r-16); }
   .case__body { padding: var(--sp-12) var(--sp-16) var(--sp-16); }
   .case__title { margin-top: var(--sp-8); font-size: 17px; }
-  .case__cta { margin-top: var(--sp-8); }
+  .case__cta { margin-top: var(--sp-8); min-height: 42px; font-size: 14px; }
   .form-card { padding: var(--sp-24); }
   .field + .field { margin-top: var(--sp-12); }
   .field__label { margin-bottom: 4px; font-size: 13px; }
@@ -1736,7 +1747,8 @@ p { max-width: 62ch; }
   .step__card,
   .card--service,
   .person { padding: var(--sp-24); }
-  .case__media { padding-block: var(--sp-16); }
+  .case__media { padding-block: var(--sp-24); }
+  .case__logo-plate { width: 80px; height: 80px; }
   .case__body { padding: var(--sp-16) var(--sp-24) var(--sp-24); }
   .case__title { margin-top: var(--sp-8); font-size: 18px; }
   .case__cta { margin-top: var(--sp-12); }
