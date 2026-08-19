@@ -920,7 +920,7 @@ p { max-width: 62ch; }
 .card--service {
   position: relative;
   background: rgba(255, 255, 255, .55);
-  border: 1px solid rgba(255, 255, 255, .7);
+  border: 1px solid rgba(43, 58, 255, .35);
   border-radius: var(--r-16);
   padding: var(--sp-24);
   text-align: center;
@@ -950,7 +950,7 @@ p { max-width: 62ch; }
     transform: translateY(-4px);
     background: rgba(255, 255, 255, .8);
     box-shadow: 0 22px 54px rgba(10, 14, 39, .14), 0 0 0 1px rgba(43, 58, 255, .12);
-    border-color: rgba(43, 58, 255, .35);
+    border-color: rgba(43, 58, 255, .55);
   }
   .card--service:hover .card__icon {
     background: linear-gradient(135deg, #2B3AFF 0%, #4D9FFF 100%);
@@ -1163,9 +1163,9 @@ p { max-width: 62ch; }
   overflow: hidden;
 }
 .case__logo {
-  width: 72%;
-  height: 72%;
-  object-fit: contain;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
   display: block;
 }
 .case__body {
