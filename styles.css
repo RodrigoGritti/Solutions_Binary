@@ -810,9 +810,10 @@ p { max-width: 62ch; }
 }
 .metric__value {
   display: block;
-  font-size: 32px;
+  font-size: 21px;
+  line-height: 1.2;
   font-weight: 800;
-  letter-spacing: -0.02em;
+  letter-spacing: -0.01em;
   color: #fff;
   background: linear-gradient(90deg, #fff 0%, var(--accent-light) 100%);
   -webkit-background-clip: text;
@@ -821,14 +822,15 @@ p { max-width: 62ch; }
 }
 .metric__label {
   display: block;
-  margin-top: 4px;
+  margin-top: 6px;
   font-size: 13px;
+  line-height: 1.4;
   font-weight: 500;
   color: var(--text-muted-on-dark);
 }
 @media (min-width: 768px) {
   .metrics__grid { grid-template-columns: repeat(4, 1fr); gap: var(--sp-32); }
-  .metric__value { font-size: 40px; }
+  .metric__value { font-size: 25px; }
   .metric__label { font-size: 14px; }
 }
 
@@ -1125,8 +1127,9 @@ p { max-width: 62ch; }
   flex-direction: column;
   height: 100%;
   background: var(--surface);
-  border: 1px solid var(--border);
+  border: 1px solid rgba(43, 58, 255, .35);
   border-radius: var(--r-16);
+  box-shadow: var(--shadow-lift);
   overflow: hidden;
   transition: transform var(--dur) var(--ease), box-shadow var(--dur) var(--ease), border-color var(--dur) var(--ease);
 }
@@ -1195,8 +1198,7 @@ p { max-width: 62ch; }
 @media (hover: hover) and (pointer: fine) {
   .case:hover {
     transform: translateY(-3px);
-    box-shadow: var(--shadow-lift);
-    border-color: rgba(43, 58, 255, .35);
+    border-color: rgba(43, 58, 255, .55);
   }
   .case:hover .case__cta {
     background: linear-gradient(135deg, #2B3AFF 0%, #4D9FFF 100%);
@@ -1734,8 +1736,8 @@ p { max-width: 62ch; }
   .hero__grid { gap: var(--sp-16); }
   .metrics { padding-block: var(--sp-16); }
   .metrics__grid { grid-template-columns: repeat(4, 1fr); gap: var(--sp-12) var(--sp-8); }
-  .metric__value { font-size: 22px; }
-  .metric__label { font-size: 10.5px; line-height: 1.2; }
+  .metric__value { font-size: 14px; line-height: 1.2; }
+  .metric__label { font-size: 9.5px; line-height: 1.25; }
 }
 
 /* no celular em pé a altura de tela não é mais um limite — a compactação
@@ -1783,7 +1785,7 @@ p { max-width: 62ch; }
   :root { --section-y: 20px; }
   .hero { padding-block: var(--sp-16); }
   .form-card { padding: var(--sp-16); }
-  .metric__value { font-size: 26px; }
+  .metric__value { font-size: 16px; }
   .metrics { padding-block: var(--sp-16); }
 }
 
