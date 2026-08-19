@@ -1163,9 +1163,9 @@ p { max-width: 62ch; }
   overflow: hidden;
 }
 .case__logo {
-  width: 100%;
-  height: 100%;
-  object-fit: cover;
+  width: 72%;
+  height: 72%;
+  object-fit: contain;
   display: block;
 }
 .case__body {
