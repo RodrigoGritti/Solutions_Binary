@@ -1121,13 +1121,22 @@ p { max-width: 62ch; }
 /* ---------- 12. CASES ---------- */
 .case {
   position: relative;
+  display: flex;
+  flex-direction: column;
+  height: 100%;
   background: var(--surface);
   border: 1px solid var(--border);
   border-radius: var(--r-16);
   overflow: hidden;
   transition: transform var(--dur) var(--ease), box-shadow var(--dur) var(--ease), border-color var(--dur) var(--ease);
 }
-.case__link { display: block; color: inherit; text-decoration: none; }
+.case__link {
+  display: flex;
+  flex-direction: column;
+  flex: 1;
+  color: inherit;
+  text-decoration: none;
+}
 .case__link:hover { text-decoration: none; }
 .case__media {
   display: flex;
@@ -1158,7 +1167,13 @@ p { max-width: 62ch; }
   object-fit: contain;
   display: block;
 }
-.case__body { padding: var(--sp-20) var(--sp-24) var(--sp-24); text-align: left; }
+.case__body {
+  display: flex;
+  flex-direction: column;
+  flex: 1;
+  padding: var(--sp-20) var(--sp-24) var(--sp-24);
+  text-align: left;
+}
 .case__title { margin-top: var(--sp-12); }
 .case__text { margin-top: var(--sp-4); color: var(--text-muted); font-size: 15px; }
 .case__cta {
@@ -1168,7 +1183,7 @@ p { max-width: 62ch; }
   gap: 6px;
   width: 100%;
   min-height: 48px;
-  margin-top: var(--sp-16);
+  margin-top: auto;
   padding: var(--sp-12) var(--sp-20);
   border-radius: var(--r-12);
   background: var(--primary);
@@ -1688,7 +1703,7 @@ p { max-width: 62ch; }
   .case__logo-plate { width: 64px; height: 64px; border-radius: var(--r-16); }
   .case__body { padding: var(--sp-12) var(--sp-16) var(--sp-16); }
   .case__title { margin-top: var(--sp-8); font-size: 17px; }
-  .case__cta { margin-top: var(--sp-8); min-height: 42px; font-size: 14px; }
+  .case__cta { min-height: 42px; font-size: 14px; }
   .form-card { padding: var(--sp-24); }
   .field + .field { margin-top: var(--sp-12); }
   .field__label { margin-bottom: 4px; font-size: 13px; }
@@ -1751,7 +1766,6 @@ p { max-width: 62ch; }
   .case__logo-plate { width: 80px; height: 80px; }
   .case__body { padding: var(--sp-16) var(--sp-24) var(--sp-24); }
   .case__title { margin-top: var(--sp-8); font-size: 18px; }
-  .case__cta { margin-top: var(--sp-12); }
   .form-card { padding: var(--sp-24); }
   .field + .field { margin-top: var(--sp-16); }
   .field__label { margin-bottom: 6px; font-size: 14px; }
