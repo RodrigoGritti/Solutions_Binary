@@ -728,6 +728,21 @@ p { max-width: 62ch; }
   }
 }
 
+/* celular em pé: a moldura do vídeo fica bem mais estreita que no resto dos
+   layouts, então a legenda precisa encolher e ancorar em % (não em px fixo)
+   pra continuar exatamente sobre a marca d'água, que escala junto com o vídeo */
+@media (max-width: 600px) {
+  .hero__media-caption {
+    right: 3%;
+    bottom: 6%;
+    padding: 7px 12px;
+    font-size: 12px;
+    gap: 6px;
+    max-width: calc(100% - 16px);
+  }
+  .hero__media-caption-dot { width: 6px; height: 6px; }
+}
+
 .hero__proof {
   order: 3;
   display: flex;
