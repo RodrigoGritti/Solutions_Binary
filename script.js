@@ -532,13 +532,17 @@ const prefersReducedMotion = () =>
         <span class="mock-site__cta">Fale conosco</span>
       </div>
       <div class="mock-site__hero">
-        <h3>${n} — ${t} feito sob medida</h3>
-        <p>Presença online profissional para o seu ${r}.</p>
-        <span class="mock-site__btn">Começar agora</span>
+        <div class="mock-site__hero-text">
+          <h3>${n} — ${t} feito sob medida</h3>
+          <p>Presença online profissional para o seu ${r}.</p>
+          <span class="mock-site__btn">Começar agora</span>
+        </div>
+        <div class="mock-site__hero-visual" aria-hidden="true"></div>
       </div>
       <div class="mock-site__features">
         <div class="mock-site__feature"></div><div class="mock-site__feature"></div><div class="mock-site__feature"></div>
       </div>
+      <div class="mock-site__footer">© ${new Date().getFullYear()} ${n} — todos os direitos reservados</div>
     </div>`;
   }
 
@@ -555,6 +559,11 @@ const prefersReducedMotion = () =>
         <span class="mock-cardapio__logo">${logoUrl ? `<img src="${logoUrl}" alt="">` : escapeHtml(initialOf(nome))}</span>
         <div><strong>${escapeHtml(nome)}</strong><small>${escapeHtml(extra)}</small></div>
       </div>
+      <div class="mock-cardapio__meta">
+        <span>⭐ 4.8 (230)</span>
+        <span>🛵 25-35 min</span>
+        <span>💳 Pix e cartão</span>
+      </div>
       <div class="mock-cardapio__items">${itemsHtml}</div>
       <span class="mock-cardapio__cta">Pedir no WhatsApp</span>
     </div>`;
@@ -562,40 +571,56 @@ const prefersReducedMotion = () =>
 
   function mockAutomacao({ nome, ramo, extra }) {
     const bubbles = [
-      { in: true, text: `Olá! Vim pelo ${extra} e queria saber se vocês atendem ${ramo.toLowerCase()}.` },
-      { in: false, text: `Oi! Sim, atendemos sim 😊 Sou o assistente virtual da ${nome}. Como posso te ajudar hoje?` },
-      { in: true, text: "Queria saber os horários e como faço pra agendar." },
-      { in: false, text: "Consigo te passar tudo certinho agora mesmo, sem precisar esperar um atendente 👍" },
+      { in: true, text: `Olá! Vim pelo ${extra} e queria saber se vocês atendem ${ramo.toLowerCase()}.`, time: "14:31" },
+      { in: false, text: `Oi! Sim, atendemos sim 😊 Sou o assistente virtual da ${nome}. Como posso te ajudar hoje?`, time: "14:31" },
+      { in: true, text: "Queria saber os horários e como faço pra agendar.", time: "14:32" },
+      { in: false, text: "Consigo te passar tudo certinho agora mesmo, sem precisar esperar um atendente 👍", time: "14:32" },
     ];
-    const bubblesHtml = bubbles.map((b) => `<div class="mock-wa__bubble mock-wa__bubble--${b.in ? "in" : "out"}">${escapeHtml(b.text)}</div>`).join("");
+    const bubblesHtml = bubbles.map((b) => `<div class="mock-wa__bubble mock-wa__bubble--${b.in ? "in" : "out"}">${escapeHtml(b.text)}<span class="mock-wa__time">${b.time}</span></div>`).join("");
     return `<div class="mock-wa">
       <div class="mock-wa__head">
         <span class="mock-wa__avatar">${escapeHtml(initialOf(nome))}</span>
         <div><strong>${escapeHtml(nome)}</strong><small>online</small></div>
       </div>
-      <div class="mock-wa__body">${bubblesHtml}</div>
+      <div class="mock-wa__body">${bubblesHtml}
+        <div class="mock-wa__typing" aria-hidden="true"><span></span><span></span><span></span></div>
+      </div>
     </div>`;
   }
 
   function mockProcessos({ nome, extra }) {
     return `<div class="mock-kanban">
-      <div class="mock-kanban__head"><strong>${escapeHtml(nome)}</strong><small>Controle de ${escapeHtml(extra.toLowerCase())}</small></div>
-      <div class="mock-kanban__cols">
-        <div class="mock-kanban__col"><h4>Pendente</h4><span class="mock-kanban__card"></span><span class="mock-kanban__card"></span></div>
-        <div class="mock-kanban__col"><h4>Em andamento</h4><span class="mock-kanban__card"></span></div>
-        <div class="mock-kanban__col"><h4>Concluído</h4><span class="mock-kanban__card"></span><span class="mock-kanban__card"></span></div>
+      <div class="mock-kanban__side" aria-hidden="true"><span></span><span></span><span></span></div>
+      <div class="mock-kanban__main">
+        <div class="mock-kanban__head">
+          <div><strong>${escapeHtml(nome)}</strong><small>Controle de ${escapeHtml(extra.toLowerCase())}</small></div>
+          <span class="mock-kanban__filter">Esta semana</span>
+        </div>
+        <div class="mock-kanban__cols">
+          <div class="mock-kanban__col"><h4>Pendente</h4><span class="mock-kanban__card"></span><span class="mock-kanban__card"></span></div>
+          <div class="mock-kanban__col"><h4>Em andamento</h4><span class="mock-kanban__card"></span></div>
+          <div class="mock-kanban__col"><h4>Concluído</h4><span class="mock-kanban__card"></span><span class="mock-kanban__card"></span></div>
+        </div>
       </div>
     </div>`;
   }
 
+  const DASH_KPIS = {
+    "Vendas": [["128", "Pedidos"], ["R$ 12,4k", "Faturamento"], ["+18%", "Crescimento"]],
+    "Financeiro": [["R$ 48,2k", "Receita"], ["R$ 31,6k", "Despesas"], ["R$ 16,6k", "Saldo"]],
+    "Operação": [["94%", "Eficiência"], ["312", "Produção"], ["6%", "Ociosidade"]],
+    "Marketing": [["842", "Leads"], ["12%", "Conversão"], ["R$ 38", "Custo por lead"]],
+  };
+
   function mockDashboards({ nome, extra }) {
+    const kpis = DASH_KPIS[extra] || DASH_KPIS["Vendas"];
+    const kpisHtml = kpis.map(([v, l]) => `<div class="mock-dash__kpi"><span>${escapeHtml(v)}</span><small>${escapeHtml(l)}</small></div>`).join("");
     return `<div class="mock-dash">
-      <div class="mock-dash__head"><strong>${escapeHtml(nome)}</strong><small>Painel de ${escapeHtml(extra.toLowerCase())}</small></div>
-      <div class="mock-dash__kpis">
-        <div class="mock-dash__kpi"><span>128</span><small>Pedidos</small></div>
-        <div class="mock-dash__kpi"><span>R$ 12,4k</span><small>Faturamento</small></div>
-        <div class="mock-dash__kpi"><span>+18%</span><small>Crescimento</small></div>
+      <div class="mock-dash__head">
+        <div><strong>${escapeHtml(nome)}</strong><small>Painel de ${escapeHtml(extra.toLowerCase())}</small></div>
+        <span class="mock-dash__export">Exportar</span>
       </div>
+      <div class="mock-dash__kpis">${kpisHtml}</div>
       <div class="mock-dash__charts">
         <div class="mock-dash__bars"><span style="--h:40%"></span><span style="--h:70%"></span><span style="--h:55%"></span><span style="--h:90%"></span><span style="--h:65%"></span></div>
         <div class="mock-dash__donut"></div>
