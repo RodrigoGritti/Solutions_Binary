@@ -1288,12 +1288,16 @@ p { max-width: 62ch; }
   background: linear-gradient(135deg, var(--pv) 0%, color-mix(in srgb, var(--pv) 40%, #fff) 100%);
   position: relative;
   overflow: hidden;
+  display: flex;
+  align-items: center;
+  justify-content: center;
 }
 .mock-site__hero-visual::before, .mock-site__hero-visual::after {
-  content: ""; position: absolute; border-radius: 50%; background: rgba(255,255,255,.25);
+  content: ""; position: absolute; border-radius: 50%; background: rgba(255,255,255,.2);
 }
 .mock-site__hero-visual::before { width: 60px; height: 60px; top: -20px; right: 10px; }
 .mock-site__hero-visual::after { width: 34px; height: 34px; bottom: -10px; left: 30%; }
+.mock-site__hero-visual svg { position: relative; z-index: 1; filter: drop-shadow(0 2px 5px rgba(0,0,0,.18)); }
 .mock-site__features { display: grid; grid-template-columns: repeat(3, 1fr); gap: 10px; padding: 16px 20px; }
 .mock-site__feature { height: 58px; border-radius: 10px; background: #F3F4F8; border: 1px solid #eee; position: relative; }
 .mock-site__feature::before { content: ""; position: absolute; top: 10px; left: 10px; width: 22px; height: 22px; border-radius: 6px; background: var(--pv); opacity: .85; }
@@ -1316,13 +1320,23 @@ p { max-width: 62ch; }
 .mock-cardapio__items { padding: 8px 16px; }
 .mock-cardapio__item { display: flex; align-items: center; gap: 10px; padding: 10px 0; border-bottom: 1px solid #F3E6D2; }
 .mock-cardapio__item:last-child { border-bottom: 0; }
-.mock-cardapio__thumb { width: 40px; height: 40px; border-radius: 8px; background: color-mix(in srgb, var(--pv) 18%, #FFF8F0); flex: none; }
+.mock-cardapio__thumb { width: 40px; height: 40px; border-radius: 8px; background: color-mix(in srgb, var(--pv) 18%, #FFF8F0); flex: none; display: flex; align-items: center; justify-content: center; color: var(--pv); }
 .mock-cardapio__item strong { display: block; font-size: 13px; color: #402a18; }
 .mock-cardapio__item small { color: #a3876c; font-size: 11px; }
 .mock-cardapio__price { margin-left: auto; font-size: 13px; font-weight: 800; color: var(--pv); white-space: nowrap; }
 .mock-cardapio__cta { display: block; margin: 8px 16px 16px; text-align: center; background: var(--pv); color: #fff; font-size: 13px; font-weight: 700; padding: 12px; border-radius: 10px; }
 
 /* --- mock: Automação (chat, papel de parede do WhatsApp) --- */
+.mock-theme-chip {
+  width: 22px; height: 22px; border-radius: 50%; flex: none;
+  display: flex; align-items: center; justify-content: center;
+  margin-left: auto;
+}
+.mock-theme-chip--on-color { background: rgba(255,255,255,.22); color: #fff; }
+.mock-theme-chip--on-light { background: color-mix(in srgb, var(--pv) 15%, #fff); color: var(--pv); }
+.mock-theme-chip--on-dark { background: rgba(255,255,255,.08); color: var(--pv); }
+.mock-theme-chip--inline { margin-left: 6px; display: inline-flex; vertical-align: middle; }
+
 .mock-wa__head { display: flex; align-items: center; gap: 10px; padding: 14px 16px; background: var(--pv); color: #fff; }
 .mock-wa__avatar { width: 30px; height: 30px; border-radius: 50%; background: rgba(255,255,255,.25); display: flex; align-items: center; justify-content: center; font-weight: 800; font-size: 13px; flex: none; }
 .mock-wa__head strong { display: block; font-size: 13px; }

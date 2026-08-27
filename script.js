@@ -507,6 +507,76 @@ const prefersReducedMotion = () =>
     return t ? t[0].toUpperCase() : "?";
   }
 
+  // Detecta o ramo do negócio (texto livre) e devolve um ícone temático —
+  // sem foto/API externa nenhuma, só um desenho consistente com o resto do
+  // site, pra dar a sensação de "isso é a cara do meu negócio".
+  function normalizeRamo(s) {
+    return String(s).toLowerCase().normalize("NFD").replace(/[\u0300-\u036f]/g, "");
+  }
+
+  const BUSINESS_THEMES = {
+    hospedagem: {
+      keywords: ["pousada", "hotel", "chale", "hospedagem", "resort", "hostel", "hospedaria", "estalagem", "airbnb"],
+      icon: '<path d="M4 11 12 4l8 7"/><path d="M6 10v10h12V10"/><path d="M10 20v-6h4v6"/>',
+    },
+    comida: {
+      keywords: ["restaurante", "lanchonete", "pizza", "hamburgueria", "churrascaria", "bar ", "comida", "cozinha", "bistro", "sushi"],
+      icon: '<path d="M8 3v6a2 2 0 0 0 4 0V3"/><path d="M10 9v12"/><path d="M17 3c-1.5 1-2 3-2 5s.5 4 2 4 2-2 2-4-.5-4-2-5Z"/><path d="M17 12v9"/>',
+    },
+    doces: {
+      keywords: ["doceria", "confeitaria", "bolo", "doce", "padaria", "confeito", "brigadeiro", "cupcake"],
+      icon: '<path d="M7 12h10l-1.2 8.5a1 1 0 0 1-1 .5H9.2a1 1 0 0 1-1-.5Z"/><path d="M8 12a4 4 0 0 1 8 0"/><path d="M12 8V5"/><circle cx="12" cy="4" r="1"/>',
+    },
+    beleza: {
+      keywords: ["salao", "beleza", "cabelo", "estetica", "barbearia", "manicure", "spa", "maquiagem"],
+      icon: '<circle cx="6" cy="6" r="2.3"/><circle cx="6" cy="18" r="2.3"/><path d="m20 5-13 13M8 12l12 8"/>',
+    },
+    fitness: {
+      keywords: ["academia", "fitness", "pilates", "crossfit", "personal", "musculacao", "treino"],
+      icon: '<path d="M6.5 7v10M17.5 7v10"/><path d="M2.5 10v4M21.5 10v4"/><path d="M6.5 12h11"/>',
+    },
+    moda: {
+      keywords: ["moda", "roupa", "boutique", "calcado", "vestuario", "confeccao", "estilo"],
+      icon: '<path d="M12 3a2 2 0 1 1 2 2"/><path d="M12 5 2.5 12.5 4 15l8-4 8 4 1.5-2.5Z"/><path d="M4.5 15 3 20h18l-1.5-5"/>',
+    },
+    pet: {
+      keywords: ["petshop", "pet ", "veterinar", "banho e tosa", "cachorro", "gato"],
+      icon: '<circle cx="7.5" cy="9" r="1.5"/><circle cx="12" cy="6.5" r="1.5"/><circle cx="16.5" cy="9" r="1.5"/><path d="M12 12c-2.8 0-5 2-5 4.3S9 21 12 21s5-2 5-4.7S14.8 12 12 12Z"/>',
+    },
+    saude: {
+      keywords: ["farmacia", "clinica", "saude", "consultorio", "dentista", "fisioterapia", "medic"],
+      icon: '<rect x="3.5" y="3.5" width="17" height="17" rx="4"/><path d="M12 8v8M8 12h8"/>',
+    },
+    automotivo: {
+      keywords: ["oficina", "mecanica", "auto ", "autopecas", "carro", "moto", "pecas"],
+      icon: '<path d="M14.7 6.3a4 4 0 0 0-5.4 5.4L4 17l3 3 5.3-5.3a4 4 0 0 0 5.4-5.4l-2.8 2.8-2-2Z"/>',
+    },
+    escritorio: {
+      keywords: ["advocacia", "contabilidade", "escritorio", "consultoria", "imobiliaria", "advogado", "contador"],
+      icon: '<rect x="3" y="7" width="18" height="13" rx="2"/><path d="M8 7V5a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"/><path d="M3 13h18"/>',
+    },
+  };
+
+  function detectBusinessTheme(ramo) {
+    const n = normalizeRamo(ramo);
+    for (const key in BUSINESS_THEMES) {
+      if (BUSINESS_THEMES[key].keywords.some((k) => n.includes(k))) return key;
+    }
+    return null;
+  }
+
+  function themeIconSvg(theme, size) {
+    if (!theme) return "";
+    return `<svg viewBox="0 0 24 24" width="${size}" height="${size}" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round">${BUSINESS_THEMES[theme].icon}</svg>`;
+  }
+
+  const CARDAPIO_ICONS = {
+    "Restaurante": '<path d="M6 3v5a1.7 1.7 0 0 0 3.4 0V3"/><path d="M7.7 8v9"/><path d="M14 3c-1.2.8-1.7 2.5-1.7 4s.5 3.2 1.7 4"/><path d="M14 11v6"/>',
+    "Doceria": '<path d="M6 11h9l-1 6.5a1 1 0 0 1-1 .5H8a1 1 0 0 1-1-.5Z"/><path d="M6.8 11a3.2 3.2 0 0 1 6.4 0"/><path d="M10 7.5V5"/>',
+    "Marmitaria": '<rect x="4" y="9" width="13" height="9" rx="1.5"/><path d="M4 9V7.5A1.5 1.5 0 0 1 5.5 6h10A1.5 1.5 0 0 1 17 7.5V9"/>',
+    "Lanchonete": '<path d="M4 10a6 6 0 0 1 12 0Z"/><rect x="3.5" y="10" width="13" height="2" rx="1"/><path d="M4.5 14h11l-.6 2.5a1.2 1.2 0 0 1-1.2.9H6.3a1.2 1.2 0 0 1-1.2-.9Z"/>',
+  };
+
   const CATS = {
     website: { label: "Website", extraLabel: "Tipo de site", extraOptions: ["Institucional", "Loja virtual", "Portfólio"] },
     cardapio: { label: "Cardápio digital", extraLabel: "Tipo de cardápio", extraOptions: ["Restaurante", "Doceria", "Marmitaria", "Lanchonete"] },
@@ -524,6 +594,7 @@ const prefersReducedMotion = () =>
 
   function mockWebsite({ nome, ramo, extra, logoUrl }) {
     const n = escapeHtml(nome), r = escapeHtml(ramo.toLowerCase()), t = escapeHtml(extra.toLowerCase());
+    const theme = detectBusinessTheme(ramo);
     return `<div class="mock-site">
       <div class="mock-site__nav">
         <span class="mock-site__logo">${logoUrl ? `<img src="${logoUrl}" alt="">` : ""}${n}</span>
@@ -537,7 +608,7 @@ const prefersReducedMotion = () =>
           <p>Presença online profissional para o seu ${r}.</p>
           <span class="mock-site__btn">Começar agora</span>
         </div>
-        <div class="mock-site__hero-visual" aria-hidden="true"></div>
+        <div class="mock-site__hero-visual" style="color:#fff" aria-hidden="true">${themeIconSvg(theme, 40)}</div>
       </div>
       <div class="mock-site__features">
         <div class="mock-site__feature"></div><div class="mock-site__feature"></div><div class="mock-site__feature"></div>
@@ -548,9 +619,11 @@ const prefersReducedMotion = () =>
 
   function mockCardapio({ nome, extra, logoUrl }) {
     const items = CARDAPIO_ITEMS[extra] || CARDAPIO_ITEMS["Restaurante"];
+    const iconPath = CARDAPIO_ICONS[extra] || CARDAPIO_ICONS["Restaurante"];
+    const itemIcon = `<svg viewBox="0 0 20 20" width="18" height="18" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">${iconPath}</svg>`;
     const itemsHtml = items.map(([n, d, p]) => `
       <div class="mock-cardapio__item">
-        <span class="mock-cardapio__thumb"></span>
+        <span class="mock-cardapio__thumb">${itemIcon}</span>
         <div><strong>${escapeHtml(n)}</strong><small>${escapeHtml(d)}</small></div>
         <span class="mock-cardapio__price">R$ ${p}</span>
       </div>`).join("");
@@ -577,10 +650,12 @@ const prefersReducedMotion = () =>
       { in: false, text: "Consigo te passar tudo certinho agora mesmo, sem precisar esperar um atendente 👍", time: "14:32" },
     ];
     const bubblesHtml = bubbles.map((b) => `<div class="mock-wa__bubble mock-wa__bubble--${b.in ? "in" : "out"}">${escapeHtml(b.text)}<span class="mock-wa__time">${b.time}</span></div>`).join("");
+    const theme = detectBusinessTheme(ramo);
     return `<div class="mock-wa">
       <div class="mock-wa__head">
         <span class="mock-wa__avatar">${escapeHtml(initialOf(nome))}</span>
         <div><strong>${escapeHtml(nome)}</strong><small>online</small></div>
+        ${theme ? `<span class="mock-theme-chip mock-theme-chip--on-color" aria-hidden="true">${themeIconSvg(theme, 13)}</span>` : ""}
       </div>
       <div class="mock-wa__body">${bubblesHtml}
         <div class="mock-wa__typing" aria-hidden="true"><span></span><span></span><span></span></div>
@@ -588,12 +663,14 @@ const prefersReducedMotion = () =>
     </div>`;
   }
 
-  function mockProcessos({ nome, extra }) {
+  function mockProcessos({ nome, ramo, extra }) {
+    const theme = detectBusinessTheme(ramo);
+    const chip = theme ? `<span class="mock-theme-chip mock-theme-chip--on-light mock-theme-chip--inline" aria-hidden="true">${themeIconSvg(theme, 12)}</span>` : "";
     return `<div class="mock-kanban">
       <div class="mock-kanban__side" aria-hidden="true"><span></span><span></span><span></span></div>
       <div class="mock-kanban__main">
         <div class="mock-kanban__head">
-          <div><strong>${escapeHtml(nome)}</strong><small>Controle de ${escapeHtml(extra.toLowerCase())}</small></div>
+          <div><strong>${escapeHtml(nome)}${chip}</strong><small>Controle de ${escapeHtml(extra.toLowerCase())}</small></div>
           <span class="mock-kanban__filter">Esta semana</span>
         </div>
         <div class="mock-kanban__cols">
@@ -612,12 +689,14 @@ const prefersReducedMotion = () =>
     "Marketing": [["842", "Leads"], ["12%", "Conversão"], ["R$ 38", "Custo por lead"]],
   };
 
-  function mockDashboards({ nome, extra }) {
+  function mockDashboards({ nome, ramo, extra }) {
     const kpis = DASH_KPIS[extra] || DASH_KPIS["Vendas"];
     const kpisHtml = kpis.map(([v, l]) => `<div class="mock-dash__kpi"><span>${escapeHtml(v)}</span><small>${escapeHtml(l)}</small></div>`).join("");
+    const theme = detectBusinessTheme(ramo);
+    const chip = theme ? `<span class="mock-theme-chip mock-theme-chip--on-dark mock-theme-chip--inline" aria-hidden="true">${themeIconSvg(theme, 12)}</span>` : "";
     return `<div class="mock-dash">
       <div class="mock-dash__head">
-        <div><strong>${escapeHtml(nome)}</strong><small>Painel de ${escapeHtml(extra.toLowerCase())}</small></div>
+        <div><strong>${escapeHtml(nome)}${chip}</strong><small>Painel de ${escapeHtml(extra.toLowerCase())}</small></div>
         <span class="mock-dash__export">Exportar</span>
       </div>
       <div class="mock-dash__kpis">${kpisHtml}</div>
