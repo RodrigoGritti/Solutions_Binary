@@ -474,6 +474,218 @@ const prefersReducedMotion = () =>
 })();
 
 /* -------------------------------------------------------------
+   7.5 Prévia interativa por categoria de serviço
+   Sem chamada de IA nenhuma (sem custo por uso): monta um mockup
+   temático na hora, a partir do que a pessoa preencheu. Cada
+   categoria tem seu próprio "template" de card/tela/chat.
+   ------------------------------------------------------------- */
+(function initPreviewWizard() {
+  const wizard = document.querySelector(".preview-wizard");
+  if (!wizard) return;
+
+  const steps = {
+    category: wizard.querySelector('[data-step="category"]'),
+    form: wizard.querySelector('[data-step="form"]'),
+    loading: wizard.querySelector('[data-step="loading"]'),
+    result: wizard.querySelector('[data-step="result"]'),
+  };
+
+  function showStep(name) {
+    Object.keys(steps).forEach((k) => {
+      steps[k].hidden = k !== name;
+    });
+  }
+
+  function escapeHtml(s) {
+    return String(s).replace(/[&<>"']/g, (c) => ({
+      "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;",
+    }[c]));
+  }
+
+  function initialOf(nome) {
+    const t = String(nome).trim();
+    return t ? t[0].toUpperCase() : "?";
+  }
+
+  const CATS = {
+    website: { label: "Website", extraLabel: "Tipo de site", extraOptions: ["Institucional", "Loja virtual", "Portfólio"] },
+    cardapio: { label: "Cardápio digital", extraLabel: "Tipo de cardápio", extraOptions: ["Restaurante", "Doceria", "Marmitaria", "Lanchonete"] },
+    automacao: { label: "Automação", extraLabel: "Canal principal", extraOptions: ["WhatsApp", "Instagram", "E-mail"] },
+    processos: { label: "Gestão de processos", extraLabel: "O que quer controlar", extraOptions: ["Estoque", "Agendamentos", "Pedidos", "Documentos"] },
+    dashboards: { label: "Dashboards e BI", extraLabel: "Área que quer acompanhar", extraOptions: ["Vendas", "Financeiro", "Operação", "Marketing"] },
+  };
+
+  const CARDAPIO_ITEMS = {
+    "Restaurante": [["Prato executivo", "Feito na hora", "32,90"], ["Combo do dia", "Entrada + prato + sobremesa", "45,00"], ["Sobremesa da casa", "Receita própria", "14,50"]],
+    "Doceria": [["Brigadeiro gourmet", "Caixa com 6 un.", "28,00"], ["Bolo no pote", "Sabor do dia", "16,90"], ["Caixa surpresa", "Seleção especial", "39,90"]],
+    "Marmitaria": [["Marmita fitness", "300g, low carb", "24,90"], ["Marmita tradicional", "Arroz, feijão e carne", "19,90"], ["Combo família", "Serve até 4 pessoas", "69,90"]],
+    "Lanchonete": [["Combo lanche", "Lanche + batata + bebida", "28,90"], ["Batata especial", "Com cheddar e bacon", "18,00"], ["Milkshake", "Vários sabores", "14,90"]],
+  };
+
+  function mockWebsite({ nome, ramo, extra, logoUrl }) {
+    const n = escapeHtml(nome), r = escapeHtml(ramo.toLowerCase()), t = escapeHtml(extra.toLowerCase());
+    return `<div class="mock-site">
+      <div class="mock-site__nav">
+        <span class="mock-site__logo">${logoUrl ? `<img src="${logoUrl}" alt="">` : ""}${n}</span>
+        <span class="mock-site__navlink">Início</span>
+        <span class="mock-site__navlink">Serviços</span>
+        <span class="mock-site__cta">Fale conosco</span>
+      </div>
+      <div class="mock-site__hero">
+        <h3>${n} — ${t} feito sob medida</h3>
+        <p>Presença online profissional para o seu ${r}.</p>
+        <span class="mock-site__btn">Começar agora</span>
+      </div>
+      <div class="mock-site__features">
+        <div class="mock-site__feature"></div><div class="mock-site__feature"></div><div class="mock-site__feature"></div>
+      </div>
+    </div>`;
+  }
+
+  function mockCardapio({ nome, extra, logoUrl }) {
+    const items = CARDAPIO_ITEMS[extra] || CARDAPIO_ITEMS["Restaurante"];
+    const itemsHtml = items.map(([n, d, p]) => `
+      <div class="mock-cardapio__item">
+        <span class="mock-cardapio__thumb"></span>
+        <div><strong>${escapeHtml(n)}</strong><small>${escapeHtml(d)}</small></div>
+        <span class="mock-cardapio__price">R$ ${p}</span>
+      </div>`).join("");
+    return `<div class="mock-cardapio">
+      <div class="mock-cardapio__head">
+        <span class="mock-cardapio__logo">${logoUrl ? `<img src="${logoUrl}" alt="">` : escapeHtml(initialOf(nome))}</span>
+        <div><strong>${escapeHtml(nome)}</strong><small>${escapeHtml(extra)}</small></div>
+      </div>
+      <div class="mock-cardapio__items">${itemsHtml}</div>
+      <span class="mock-cardapio__cta">Pedir no WhatsApp</span>
+    </div>`;
+  }
+
+  function mockAutomacao({ nome, ramo, extra }) {
+    const bubbles = [
+      { in: true, text: `Olá! Vim pelo ${extra} e queria saber se vocês atendem ${ramo.toLowerCase()}.` },
+      { in: false, text: `Oi! Sim, atendemos sim 😊 Sou o assistente virtual da ${nome}. Como posso te ajudar hoje?` },
+      { in: true, text: "Queria saber os horários e como faço pra agendar." },
+      { in: false, text: "Consigo te passar tudo certinho agora mesmo, sem precisar esperar um atendente 👍" },
+    ];
+    const bubblesHtml = bubbles.map((b) => `<div class="mock-wa__bubble mock-wa__bubble--${b.in ? "in" : "out"}">${escapeHtml(b.text)}</div>`).join("");
+    return `<div class="mock-wa">
+      <div class="mock-wa__head">
+        <span class="mock-wa__avatar">${escapeHtml(initialOf(nome))}</span>
+        <div><strong>${escapeHtml(nome)}</strong><small>online</small></div>
+      </div>
+      <div class="mock-wa__body">${bubblesHtml}</div>
+    </div>`;
+  }
+
+  function mockProcessos({ nome, extra }) {
+    return `<div class="mock-kanban">
+      <div class="mock-kanban__head"><strong>${escapeHtml(nome)}</strong><small>Controle de ${escapeHtml(extra.toLowerCase())}</small></div>
+      <div class="mock-kanban__cols">
+        <div class="mock-kanban__col"><h4>Pendente</h4><span class="mock-kanban__card"></span><span class="mock-kanban__card"></span></div>
+        <div class="mock-kanban__col"><h4>Em andamento</h4><span class="mock-kanban__card"></span></div>
+        <div class="mock-kanban__col"><h4>Concluído</h4><span class="mock-kanban__card"></span><span class="mock-kanban__card"></span></div>
+      </div>
+    </div>`;
+  }
+
+  function mockDashboards({ nome, extra }) {
+    return `<div class="mock-dash">
+      <div class="mock-dash__head"><strong>${escapeHtml(nome)}</strong><small>Painel de ${escapeHtml(extra.toLowerCase())}</small></div>
+      <div class="mock-dash__kpis">
+        <div class="mock-dash__kpi"><span>128</span><small>Pedidos</small></div>
+        <div class="mock-dash__kpi"><span>R$ 12,4k</span><small>Faturamento</small></div>
+        <div class="mock-dash__kpi"><span>+18%</span><small>Crescimento</small></div>
+      </div>
+      <div class="mock-dash__charts">
+        <div class="mock-dash__bars"><span style="--h:40%"></span><span style="--h:70%"></span><span style="--h:55%"></span><span style="--h:90%"></span><span style="--h:65%"></span></div>
+        <div class="mock-dash__donut"></div>
+      </div>
+    </div>`;
+  }
+
+  const MOCK_BUILDERS = {
+    website: mockWebsite, cardapio: mockCardapio, automacao: mockAutomacao,
+    processos: mockProcessos, dashboards: mockDashboards,
+  };
+
+  const extraSelect = document.getElementById("pv-extra");
+  const extraLabel = document.getElementById("pv-extra-label");
+  const nomeInput = document.getElementById("pv-nome");
+  const ramoInput = document.getElementById("pv-ramo");
+  const logoInput = document.getElementById("pv-logo");
+  const logoPreview = document.getElementById("pv-logo-preview");
+  const form = document.getElementById("previewForm");
+  const frame = document.getElementById("previewFrame");
+  const mockEl = document.getElementById("previewMock");
+  const waLink = document.getElementById("previewWaLink");
+  const catButtons = $$(".preview-cat", wizard);
+  const colorButtons = $$(".preview-swatch", wizard);
+
+  let state = { cat: null, color: "#2B3AFF", logoUrl: "" };
+
+  catButtons.forEach((btn) => {
+    btn.addEventListener("click", () => {
+      catButtons.forEach((b) => b.classList.remove("is-active"));
+      btn.classList.add("is-active");
+      state.cat = btn.getAttribute("data-cat");
+      const cfg = CATS[state.cat];
+      extraLabel.textContent = cfg.extraLabel;
+      extraSelect.innerHTML = cfg.extraOptions.map((o) => `<option value="${o}">${o}</option>`).join("");
+      showStep("form");
+    });
+  });
+
+  $$('[data-action="to-category"]', wizard).forEach((b) => b.addEventListener("click", () => showStep("category")));
+  $$('[data-action="to-form"]', wizard).forEach((b) => b.addEventListener("click", () => showStep("form")));
+  $$('[data-action="restart"]', wizard).forEach((b) => b.addEventListener("click", () => {
+    catButtons.forEach((b2) => b2.classList.remove("is-active"));
+    showStep("category");
+  }));
+
+  colorButtons.forEach((btn) => {
+    btn.addEventListener("click", () => {
+      colorButtons.forEach((b) => b.classList.remove("is-active"));
+      btn.classList.add("is-active");
+      state.color = btn.getAttribute("data-color");
+    });
+  });
+
+  logoInput.addEventListener("change", () => {
+    const file = logoInput.files && logoInput.files[0];
+    if (!file) return;
+    const reader = new FileReader();
+    reader.onload = () => {
+      state.logoUrl = String(reader.result);
+      logoPreview.innerHTML = `<img src="${state.logoUrl}" alt="">`;
+    };
+    reader.readAsDataURL(file);
+  });
+
+  form.addEventListener("submit", (e) => {
+    e.preventDefault();
+    const nome = nomeInput.value.trim();
+    const ramo = ramoInput.value.trim();
+    if (!nome) { nomeInput.focus(); return; }
+    if (!ramo) { ramoInput.focus(); return; }
+    const extra = extraSelect.value;
+
+    showStep("loading");
+
+    const delay = prefersReducedMotion() ? 150 : 1500;
+    window.setTimeout(() => {
+      frame.style.setProperty("--pv", state.color);
+      mockEl.innerHTML = MOCK_BUILDERS[state.cat]({ nome, ramo, extra, logoUrl: state.logoUrl });
+
+      const texto = `Olá! Testei a prévia de "${CATS[state.cat].label}" no site (empresa: ${nome}, ramo: ${ramo}) e quero saber mais sobre como isso ficaria pra mim de verdade.`;
+      waLink.setAttribute("href", "https://wa.me/" + WHATSAPP_NUMBER + "?text=" + encodeURIComponent(texto));
+
+      showStep("result");
+      frame.scrollIntoView({ behavior: prefersReducedMotion() ? "auto" : "smooth", block: "center" });
+    }, delay);
+  });
+})();
+
+/* -------------------------------------------------------------
    8. Cena do hero: rede de partículas + núcleo de IA (canvas 2D)
    Leve de propósito — sem WebGL/Three.js: laço pausa fora da tela
    e respeita prefers-reduced-motion.
