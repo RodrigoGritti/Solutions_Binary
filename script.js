@@ -18,7 +18,7 @@ const SUPABASE_ANON_KEY = "SUA_ANON_KEY_AQUI";
 
 /* Mensagem pré-preenchida ao abrir o WhatsApp */
 const WHATSAPP_MESSAGE =
-  "Olá! Vim pelo site e quero saber mais sobre as soluções da Solutions Binary.";
+  "Olá! Vim pelo site da Solutions Binary e quero automatizar uma tarefa do meu negócio.";
 
 /* Biblioteca do Supabase carregada sob demanda (ESM, sem bundler) */
 const SUPABASE_ESM_URL = "https://esm.sh/@supabase/supabase-js@2";
@@ -581,8 +581,8 @@ const prefersReducedMotion = () =>
     website: { label: "Website", extraLabel: "Tipo de site", extraOptions: ["Institucional", "Loja virtual", "Portfólio"] },
     cardapio: { label: "Cardápio digital", extraLabel: "Tipo de cardápio", extraOptions: ["Restaurante", "Doceria", "Marmitaria", "Lanchonete"] },
     automacao: { label: "Automação", extraLabel: "Canal principal", extraOptions: ["WhatsApp", "Instagram", "E-mail"] },
-    processos: { label: "Gestão de processos", extraLabel: "O que quer controlar", extraOptions: ["Estoque", "Agendamentos", "Pedidos", "Documentos"] },
-    dashboards: { label: "Dashboards e BI", extraLabel: "Área que quer acompanhar", extraOptions: ["Vendas", "Financeiro", "Operação", "Marketing"] },
+    processos: { label: "Organizar processos", extraLabel: "O que quer controlar", extraOptions: ["Estoque", "Agendamentos", "Pedidos", "Documentos"] },
+    dashboards: { label: "Dashboards simples", extraLabel: "Área que quer acompanhar", extraOptions: ["Vendas", "Financeiro", "Operação", "Marketing"] },
   };
 
   const CARDAPIO_ITEMS = {

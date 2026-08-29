@@ -1817,6 +1817,160 @@ p { max-width: 62ch; }
   will-change: auto;
 }
 
+/* ---------- 18. SEÇÃO PROBLEMA ---------- */
+.problem-grid {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: var(--sp-16);
+}
+.problem-card {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-left: 3px solid var(--primary);
+  border-radius: var(--r-12);
+  padding: var(--sp-20) var(--sp-24);
+  text-align: left;
+}
+.problem-card__title { color: var(--ink); }
+.problem-card__text {
+  margin-top: var(--sp-8);
+  color: var(--text-muted);
+  font-size: 15px;
+}
+
+@media (min-width: 640px) {
+  .problem-grid { grid-template-columns: repeat(2, 1fr); }
+}
+@media (min-width: 1024px) {
+  .problem-grid { grid-template-columns: repeat(3, 1fr); gap: var(--sp-24); }
+}
+
+/* ---------- 19. FAIXA "SOLUÇÕES SOB MEDIDA" ---------- */
+.service-custom {
+  position: relative;
+  z-index: 1;
+  margin-top: var(--sp-24);
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: var(--sp-16);
+  padding: var(--sp-24);
+  border-radius: var(--r-16);
+  background: var(--tint);
+  border: 1px solid rgba(43, 58, 255, .18);
+}
+.service-custom__title { color: var(--tint-ink); }
+.service-custom__text {
+  margin-top: var(--sp-4);
+  color: var(--text-muted);
+  font-size: 15px;
+}
+@media (min-width: 900px) {
+  .service-custom {
+    flex-direction: row;
+    align-items: center;
+    gap: var(--sp-32);
+    padding: var(--sp-24) var(--sp-32);
+  }
+  .service-custom__body { flex: 1; }
+  .service-custom .btn { flex: none; }
+}
+
+/* ---------- 20. NOTA DO FLUXO (Como funciona) ---------- */
+.ai-flow__note {
+  margin: -4px auto var(--sp-24);
+  max-width: 48ch;
+  text-align: center;
+  color: #fff;
+  font-weight: 600;
+  font-size: 15px;
+  line-height: 1.5;
+}
+
+/* ---------- 21. PARA QUEM ---------- */
+.audience-grid {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: var(--sp-16);
+}
+.audience-card {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--r-16);
+  padding: var(--sp-20) var(--sp-24);
+  text-align: left;
+}
+.audience-card__title { color: var(--ink); }
+.audience-card__text {
+  margin-top: var(--sp-8);
+  color: var(--text-muted);
+  font-size: 15px;
+}
+@media (min-width: 640px) {
+  .audience-grid { grid-template-columns: repeat(2, 1fr); }
+}
+@media (min-width: 1024px) {
+  .audience-grid { grid-template-columns: repeat(3, 1fr); gap: var(--sp-24); }
+}
+
+@media (hover: hover) and (pointer: fine) {
+  .problem-card,
+  .audience-card {
+    transition: transform var(--dur) var(--ease), box-shadow var(--dur) var(--ease), border-color var(--dur) var(--ease);
+  }
+  .problem-card:hover,
+  .audience-card:hover {
+    transform: translateY(-3px);
+    box-shadow: var(--shadow-md);
+    border-color: rgba(43, 58, 255, .45);
+  }
+}
+
+/* ---------- 22. CTA FINAL ---------- */
+.section--compact {
+  min-height: 0;
+  scroll-snap-align: none;
+  scroll-snap-stop: normal;
+  padding-block: var(--sp-48);
+}
+.cta-final {
+  max-width: 62ch;
+  margin-inline: auto;
+  text-align: center;
+}
+.cta-final__title {
+  font-size: 24px;
+  font-weight: 700;
+  letter-spacing: -0.02em;
+  line-height: 1.2;
+  color: var(--ink);
+}
+.cta-final__text {
+  margin: var(--sp-12) auto 0;
+  color: var(--text-muted);
+}
+.cta-final__actions {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: var(--sp-12);
+  margin-top: var(--sp-24);
+}
+@media (min-width: 640px) {
+  .cta-final__actions { flex-direction: row; justify-content: center; }
+}
+@media (min-width: 768px) {
+  .cta-final__title { font-size: 30px; }
+}
+
+/* compacta os cards novos quando a altura da tela aperta */
+@media (max-height: 1100px) {
+  .problem-card,
+  .audience-card,
+  .service-custom { padding: var(--sp-16); }
+  .service-custom { margin-top: var(--sp-16); }
+}
+
 /* =============================================================
    BREAKPOINTS (mobile-first)
    ============================================================= */
