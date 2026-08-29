@@ -1906,6 +1906,13 @@ p { max-width: 62ch; }
   color: var(--text-muted);
   font-size: 15px;
 }
+/* na faixa azul, os cards seguem o mesmo tom "elevado" da seção Como funciona */
+.section--navy .audience-card {
+  background: var(--ink-elevated);
+  border-color: var(--border-on-dark);
+}
+.section--navy .audience-card__title { color: #fff; }
+.section--navy .audience-card__text { color: var(--text-muted-on-dark); }
 @media (min-width: 640px) {
   .audience-grid { grid-template-columns: repeat(2, 1fr); }
 }
