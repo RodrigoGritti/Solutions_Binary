@@ -13,21 +13,20 @@
   gtag('config', 'G-0FR0XL10DJ');
 </script>
 
-<title>Planos e preços — Solutions Binary</title>
-<meta name="description" content="Preços de sites, cardápios digitais, automações, WhatsApp inteligente e dashboards. Implantação a partir de R$297 + mensalidade previsível. Sem letra miúda.">
+<title>Contato — Solutions Binary</title>
+<meta name="description" content="Conte o que você quer melhorar. Preencha o formulário ou chame no WhatsApp — a gente analisa e responde com uma ideia em até 1 dia útil.">
 <meta name="theme-color" content="#F7F7F8">
 <meta name="author" content="Solutions Binary">
-<link rel="canonical" href="https://solutionsbinary.com.br/precos">
+<link rel="canonical" href="https://solutionsbinary.com.br/contato">
 <meta property="og:type" content="website">
 <meta property="og:locale" content="pt_BR">
 <meta property="og:site_name" content="Solutions Binary">
-<meta property="og:title" content="Preços — Solutions Binary">
-<meta property="og:description" content="Implantação a partir de R$297 + mensalidade previsível. Veja o que cada plano inclui e as perguntas frequentes.">
-<meta property="og:url" content="https://solutionsbinary.com.br/precos">
+<meta property="og:title" content="Contato — Solutions Binary">
+<meta property="og:description" content="Conte o que você quer melhorar. Formulário rápido ou WhatsApp.">
+<meta property="og:url" content="https://solutionsbinary.com.br/contato">
 <link rel="icon" type="image/png" href="assets/favicon.png">
 <link rel="stylesheet" href="styles.css">
 <script>document.documentElement.classList.add('js');</script>
-<!-- FAQ (JSON-LD) é gerado por script.js a partir de data.js -->
 <script src="data.js" defer></script>
 </head>
 <body>
@@ -44,13 +43,13 @@
       <ul class="nav__list">
         <li><a class="nav__link" href="solucoes.html">Soluções</a></li>
         <li><a class="nav__link" href="projetos.html">Projetos</a></li>
-        <li><a class="nav__link is-active" href="precos.html">Planos</a></li>
+        <li><a class="nav__link" href="precos.html">Planos</a></li>
         <li><a class="nav__link" href="previa.html">Ver um modelo</a></li>
         <li><a class="nav__link" href="sobre.html">Sobre</a></li>
-        <li><a class="nav__link" href="contato.html">Contato</a></li>
+        <li><a class="nav__link is-active" href="contato.html">Contato</a></li>
       </ul>
     </nav>
-    <a class="btn btn--primary btn--pill nav__cta" href="contato.html" data-analytics="click_demo">Quero uma solução</a>
+    <a class="btn btn--primary btn--pill nav__cta" data-wa data-wa-context="demo" data-analytics="click_whatsapp" href="https://wa.me/5548999591614" target="_blank" rel="noopener">Falar no WhatsApp</a>
     <button class="nav__burger" id="navBurger" type="button" aria-expanded="false" aria-controls="mobileMenu" aria-label="Abrir menu de navegação">
       <span class="nav__burger-box" aria-hidden="true"><span class="nav__burger-bar"></span></span>
     </button>
@@ -77,67 +76,103 @@
 </div>
 
 <main id="conteudo">
-  <section class="section section--surface" aria-labelledby="page-title">
+  <section class="section section--navy section--contact" id="contato" aria-labelledby="contato-title">
+    <svg class="section__deco section__deco--contact" viewBox="0 0 360 360" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true">
+      <circle cx="50" cy="310" r="5" fill="currentColor" stroke="none"/>
+      <path d="M50 310 m-40,0 a40,40 0 1,1 80,0" stroke-width="1.75" opacity=".9"/>
+      <path d="M50 310 m-75,0 a75,75 0 1,1 150,0" stroke-width="1.5" opacity=".6"/>
+      <path d="M50 310 m-110,0 a110,110 0 1,1 220,0" stroke-width="1.25" opacity=".35"/>
+      <rect x="220" y="40" width="110" height="76" rx="16"/>
+      <path d="M250 116 L235 138 L268 116"/>
+      <circle cx="253" cy="78" r="4" fill="currentColor" stroke="none"/>
+      <circle cx="275" cy="78" r="4" fill="currentColor" stroke="none"/>
+      <circle cx="297" cy="78" r="4" fill="currentColor" stroke="none"/>
+    </svg>
     <div class="container">
       <header class="section__head">
         <p class="eyebrow" data-reveal><a class="link-arrow" href="index.html">← Voltar ao início</a></p>
-        <h1 class="section__title" id="page-title" data-reveal>Planos e preços</h1>
-        <p class="lead section__lead" data-reveal>Entrada acessível + mensalidade previsível. A implantação cria o projeto; a mensalidade mantém tudo funcionando — hospedagem, suporte, manutenção e acompanhamento. Comece pequeno.</p>
+        <h1 class="section__title" id="contato-title" data-reveal>Conte o que você quer melhorar</h1>
+        <p class="lead section__lead section__lead--on-dark" data-reveal>Preencha rápido ou chame no WhatsApp. A gente analisa e responde com uma ideia em até 1 dia útil.</p>
       </header>
 
-      <div class="pricing-table" id="precosTable" data-reveal>
-        <noscript><p class="lead" style="text-align:center">Fale com a gente no WhatsApp para a tabela completa: <a href="https://wa.me/5548999591614">(48) 99959-1614</a>.</p></noscript>
-      </div>
-      <p class="pricing-note" id="pricingNote" data-reveal></p>
+      <div class="form-card" data-reveal>
+        <div class="form-card__inner" id="formPanel">
+          <form id="leadForm" novalidate>
+            <div class="field">
+              <label class="field__label" for="nome">Nome</label>
+              <input class="field__input" type="text" id="nome" name="nome" autocomplete="name" placeholder="Como podemos te chamar?" required aria-describedby="nome-erro">
+              <p class="field__error" id="nome-erro" hidden></p>
+            </div>
 
-      <div class="billing-explainer" id="billingExplainer" data-reveal></div>
-    </div>
-  </section>
+            <div class="field-row">
+              <div class="field">
+                <label class="field__label" for="empresa">Empresa <span class="field__optional">(opcional)</span></label>
+                <input class="field__input" type="text" id="empresa" name="empresa" autocomplete="organization" placeholder="Nome do seu negócio">
+              </div>
+              <div class="field">
+                <label class="field__label" for="cidade">Cidade <span class="field__optional">(opcional)</span></label>
+                <input class="field__input" type="text" id="cidade" name="cidade" autocomplete="address-level2" placeholder="Ex.: Amparo/SP">
+              </div>
+            </div>
 
-  <section class="section section--sunken" aria-labelledby="cmp-title">
-    <div class="container">
-      <header class="section__head">
-        <h2 class="section__title" id="cmp-title" data-reveal>Comparativo — Cardápio</h2>
-      </header>
-      <div class="table-scroll" id="compareCardapio" data-reveal></div>
-    </div>
-  </section>
+            <div class="field">
+              <label class="field__label" for="telefone">WhatsApp</label>
+              <input class="field__input" type="tel" id="telefone" name="telefone" inputmode="tel" autocomplete="tel" placeholder="(11) 91234-5678" maxlength="16" required aria-describedby="telefone-erro">
+              <p class="field__error" id="telefone-erro" hidden></p>
+            </div>
 
-  <!-- Programa Clientes Fundadores — render só se data.js habilitar -->
-  <section class="section section--navy" id="fundadores" aria-labelledby="fundadores-title" hidden>
-    <div class="container">
-      <div class="founders" id="foundersBlock" data-reveal></div>
-    </div>
-  </section>
+            <div class="field">
+              <label class="field__label" for="servico">O que você precisa?</label>
+              <div class="field__select-wrap">
+                <select class="field__input field__select" id="servico" name="servico" required aria-describedby="servico-erro">
+                  <option value="" selected disabled>Selecione uma opção</option>
+                  <option value="Site">Site</option>
+                  <option value="Cardápio digital">Cardápio digital</option>
+                  <option value="Automação">Automação</option>
+                  <option value="WhatsApp Inteligente">WhatsApp Inteligente</option>
+                  <option value="Dashboard">Dashboard</option>
+                  <option value="Não sei ainda">Não sei ainda</option>
+                </select>
+              </div>
+              <p class="field__error" id="servico-erro" hidden></p>
+            </div>
 
-  <!-- Indique e ganhe — render só se data.js habilitar -->
-  <section class="section section--surface section--compact" id="indique" aria-labelledby="indique-title" hidden>
-    <div class="container">
-      <div class="referral" id="referralBlock" data-reveal></div>
-    </div>
-  </section>
+            <div class="field">
+              <label class="field__label" for="mensagem">Conte rapidamente o que você gostaria de melhorar <span class="field__optional">(opcional)</span></label>
+              <textarea class="field__input field__textarea" id="mensagem" name="mensagem" rows="4" placeholder="Ex.: todo dia eu copio os pedidos do WhatsApp para uma planilha." aria-describedby="mensagem-erro"></textarea>
+              <p class="field__error" id="mensagem-erro" hidden></p>
+            </div>
 
-  <section class="section section--sunken" aria-labelledby="faq-title">
-    <div class="container">
-      <header class="section__head">
-        <h2 class="section__title" id="faq-title" data-reveal>Perguntas frequentes sobre preços</h2>
-      </header>
-      <div class="faq" id="faqList" data-reveal>
-        <noscript><p class="lead" style="text-align:center">Fale com a gente no WhatsApp: <a href="https://wa.me/5548999591614">(48) 99959-1614</a>.</p></noscript>
-      </div>
-    </div>
-  </section>
+            <div class="form-alert" id="formAlert" role="alert" hidden>
+              <p class="form-alert__text" id="formAlertText"></p>
+              <a class="form-alert__link" data-wa data-wa-context="demo" href="https://wa.me/5548999591614" target="_blank" rel="noopener">Prefere falar no WhatsApp? Clique aqui.</a>
+            </div>
 
-  <section class="section section--navy section--compact" aria-labelledby="p-cta-title">
-    <div class="container">
-      <div class="cta-final" data-reveal>
-        <h2 class="cta-final__title" id="p-cta-title" style="color:#fff">Quer um valor para o seu caso?</h2>
-        <p class="cta-final__text" style="color:var(--text-muted-on-dark)">Conte o que você precisa e a gente responde com uma ideia e um preço.</p>
-        <div class="cta-final__actions">
-          <a class="btn btn--primary" href="contato.html" data-analytics="click_demo">Quero uma solução</a>
-          <a class="btn btn--secondary on-dark" data-wa data-wa-context="demo" data-analytics="click_whatsapp" href="https://wa.me/5548999591614" target="_blank" rel="noopener">Falar no WhatsApp</a>
+            <button class="btn btn--primary btn--block" type="submit" id="formSubmit" data-analytics="submit_lead">
+              <span class="btn__spinner" aria-hidden="true"></span>
+              <span class="btn__label" id="formSubmitLabel">Receber uma ideia</span>
+            </button>
+
+            <p class="form-note">Ao enviar, você concorda em ser contatado pela Solutions Binary sobre esta solicitação.</p>
+          </form>
+        </div>
+
+        <div class="form-success" id="formSuccess" role="status" tabindex="-1" hidden>
+          <span class="form-success__icon" aria-hidden="true">
+            <svg viewBox="0 0 24 24" width="28" height="28" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="m20 6-11 11-5-5"/></svg>
+          </span>
+          <h2 class="form-success__title">Quase lá!</h2>
+          <p class="form-success__text">Abrimos o WhatsApp numa nova aba com sua mensagem pronta — é só conferir e enviar por lá que a gente responde na hora.</p>
+          <a class="btn btn--primary btn--block" data-wa href="https://wa.me/5548999591614?text=Ol%C3%A1!%20Vim%20pelo%20site%20e%20quero%20saber%20mais%20sobre%20as%20solu%C3%A7%C3%B5es%20da%20Solutions%20Binary." target="_blank" rel="noopener">
+            <svg class="ico-wa" viewBox="0 0 24 24" width="20" height="20" fill="currentColor" aria-hidden="true" focusable="false"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51a12.8 12.8 0 0 0-.57-.01c-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.872.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347M12.05 21.785h-.004a9.87 9.87 0 0 1-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 0 1-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884a9.82 9.82 0 0 1 6.988 2.896 9.825 9.825 0 0 1 2.892 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0 0 12.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.548 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 0 0 5.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 0 0-3.48-8.413"/></svg>
+            <span>Falar no WhatsApp</span>
+          </a>
         </div>
       </div>
+
+      <p class="contato-alt" data-reveal>
+        Prefere e-mail? <a href="mailto:solutionsbinary4@gmail.com">solutionsbinary4@gmail.com</a>
+      </p>
     </div>
   </section>
 </main>
@@ -182,7 +217,7 @@
 </a>
 
 <div class="mcta" id="mcta" aria-label="Ações rápidas">
-  <a class="mcta__btn mcta__btn--primary" href="contato.html" data-analytics="click_demo">Quero uma solução</a>
+  <a class="mcta__btn mcta__btn--primary" href="#leadForm" data-analytics="click_demo">Preencher formulário</a>
   <a class="mcta__btn mcta__btn--wa" data-wa data-wa-context="demo" data-analytics="click_whatsapp" href="https://wa.me/5548999591614" target="_blank" rel="noopener" aria-label="Falar no WhatsApp">
     <svg viewBox="0 0 24 24" width="22" height="22" fill="currentColor" aria-hidden="true"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51a12.8 12.8 0 0 0-.57-.01c-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.872.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347M12.05 21.785h-.004a9.87 9.87 0 0 1-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 0 1-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884a9.82 9.82 0 0 1 6.988 2.896 9.825 9.825 0 0 1 2.892 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0 0 12.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.548 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 0 0 5.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 0 0-3.48-8.413"/></svg>
   </a>

@@ -73,16 +73,16 @@
 
     <nav class="nav__desktop" aria-label="Navegação principal">
       <ul class="nav__list">
-        <li><a class="nav__link" href="#solucoes">Soluções</a></li>
-        <li><a class="nav__link" href="#precos">Preços</a></li>
-        <li><a class="nav__link" href="#cases">Cases</a></li>
-        <li><a class="nav__link" href="#como-funciona">Como funciona</a></li>
-        <li><a class="nav__link" href="#sobre">Sobre</a></li>
-        <li><a class="nav__link" href="#contato">Contato</a></li>
+        <li><a class="nav__link" href="solucoes.html">Soluções</a></li>
+        <li><a class="nav__link" href="projetos.html">Projetos</a></li>
+        <li><a class="nav__link" href="precos.html">Planos</a></li>
+        <li><a class="nav__link" href="previa.html">Ver um modelo</a></li>
+        <li><a class="nav__link" href="sobre.html">Sobre</a></li>
+        <li><a class="nav__link" href="contato.html">Contato</a></li>
       </ul>
     </nav>
 
-    <a class="btn btn--primary btn--pill nav__cta" href="#contato" data-analytics="click_demo">Pedir demonstração</a>
+    <a class="btn btn--primary btn--pill nav__cta" href="contato.html" data-analytics="click_demo">Quero uma solução</a>
 
     <button class="nav__burger" id="navBurger" type="button" aria-expanded="false" aria-controls="mobileMenu" aria-label="Abrir menu de navegação">
       <span class="nav__burger-box" aria-hidden="true"><span class="nav__burger-bar"></span></span>
@@ -93,13 +93,12 @@
 <div class="mobile-menu" id="mobileMenu" hidden>
   <nav class="mobile-menu__nav" aria-label="Navegação principal (mobile)">
     <ul class="mobile-menu__list">
-      <li><a class="mobile-menu__link" href="#solucoes">Soluções</a></li>
-      <li><a class="mobile-menu__link" href="#precos">Preços</a></li>
-      <li><a class="mobile-menu__link" href="#previa">Ver uma demonstração</a></li>
-      <li><a class="mobile-menu__link" href="#cases">Cases</a></li>
-      <li><a class="mobile-menu__link" href="#como-funciona">Como funciona</a></li>
-      <li><a class="mobile-menu__link" href="#sobre">Sobre</a></li>
-      <li><a class="mobile-menu__link" href="#contato">Contato</a></li>
+      <li><a class="mobile-menu__link" href="solucoes.html">Soluções</a></li>
+      <li><a class="mobile-menu__link" href="projetos.html">Projetos</a></li>
+      <li><a class="mobile-menu__link" href="precos.html">Planos</a></li>
+      <li><a class="mobile-menu__link" href="previa.html">Ver um modelo</a></li>
+      <li><a class="mobile-menu__link" href="sobre.html">Sobre</a></li>
+      <li><a class="mobile-menu__link" href="contato.html">Contato</a></li>
     </ul>
   </nav>
   <div class="mobile-menu__footer">
@@ -120,13 +119,13 @@
     <div class="container hero__grid">
       <div class="hero__copy">
         <p class="eyebrow" data-reveal>Tecnologia simples. Resultados reais.</p>
-        <h1 class="hero__title" id="hero-title" data-reveal>Tecnologia simples<br>para o seu negócio.</h1>
-        <p class="hero__desc" data-reveal>Criamos sites, cardápios digitais e automações para ajudar pequenos negócios a economizar tempo, organizar processos e atender melhor seus clientes.</p>
+        <h1 class="hero__title" id="hero-title" data-reveal>Tecnologia simples para fazer seu negócio vender e trabalhar melhor.</h1>
+        <p class="hero__desc" data-reveal>Sites, cardápios digitais e automações sob medida para o seu negócio.</p>
         <div class="hero__actions" data-reveal>
-          <a class="btn btn--primary" href="#precos" data-analytics="click_pricing">Ver soluções e preços</a>
+          <a class="btn btn--primary" href="contato.html" data-analytics="click_demo">Quero uma solução</a>
+          <a class="btn btn--secondary" href="projetos.html" data-analytics="view_case">Ver projetos</a>
         </div>
         <p class="hero__fineprint" data-reveal>Mostre seu negócio para a gente e veja uma ideia funcionando antes de contratar.</p>
-        <ul class="hero__pricing" id="heroPricing" data-reveal aria-label="A partir de"></ul>
       </div>
 
       <div class="hero__media" data-reveal>
@@ -161,34 +160,31 @@
       </ul>
     </div>
   </section>
-
-  <!-- ============ MÉTRICAS ============ -->
-  <section class="metrics" aria-label="O que muda no seu dia a dia">
-    <div class="container">
-      <ul class="metrics__grid" role="list">
-        <li class="metric" data-reveal>
-          <span class="metric__value">Menos trabalho manual</span>
-          <span class="metric__label">tarefas que hoje tomam seu tempo passam a rodar sozinhas</span>
-        </li>
-        <li class="metric" data-reveal>
-          <span class="metric__value">Resposta na hora</span>
-          <span class="metric__label">mensagens e atendimento que não deixam o cliente esperando</span>
-        </li>
-        <li class="metric" data-reveal>
-          <span class="metric__value">Tudo em um lugar</span>
-          <span class="metric__label">pedidos e informações organizados, sem caçar em várias planilhas</span>
-        </li>
-        <li class="metric" data-reveal>
-          <span class="metric__value">Mais tempo pro negócio</span>
-          <span class="metric__label">menos horas presas em tarefa repetitiva, mais foco no que importa</span>
-        </li>
-      </ul>
-    </div>
-  </section>
   </div>
 
-  <!-- ============ PROBLEMA ============ -->
-  <section class="section section--surface" id="problema" aria-labelledby="problema-title">
+  <!-- ============ PRINCIPAIS SOLUÇÕES ============ -->
+  <section class="section section--surface" id="solucoes" aria-labelledby="solucoes-title">
+    <div class="container">
+      <header class="section__head">
+        <h2 class="section__title" id="solucoes-title" data-reveal>O que a gente faz</h2>
+        <p class="lead section__lead" data-reveal>Três frentes principais. Comece pelo essencial e cresça quando fizer sentido.</p>
+      </header>
+
+      <div class="product-grid" id="productGrid" data-reveal>
+        <noscript>
+          <p class="lead" style="text-align:center">Sites, cardápios digitais e automações para pequenos negócios.
+          Fale com a gente no WhatsApp: <a href="https://wa.me/5548999591614">(48) 99959-1614</a>.</p>
+        </noscript>
+      </div>
+
+      <p class="solucoes__more" data-reveal>
+        <a class="link-arrow" href="solucoes.html">Ver todas as soluções →</a>
+      </p>
+    </div>
+  </section>
+
+  <!-- ============ PROBLEMAS QUE RESOLVEMOS ============ -->
+  <section class="section section--sunken" id="problema" aria-labelledby="problema-title">
     <div class="container">
       <header class="section__head">
         <h2 class="section__title" id="problema-title" data-reveal>Você faz alguma dessas tarefas todo dia?</h2>
@@ -197,7 +193,7 @@
 
       <ul class="problem-grid" role="list">
         <li class="problem-card" data-reveal>
-          <p class="problem-card__quote">“Preciso copiar os pedidos do WhatsApp para uma planilha.”</p>
+          <p class="problem-card__quote">“Copio pedidos e informações de um lugar para uma planilha, na mão.”</p>
         </li>
         <li class="problem-card" data-reveal>
           <p class="problem-card__quote">“Respondo as mesmas perguntas no WhatsApp o dia inteiro.”</p>
@@ -205,417 +201,18 @@
         <li class="problem-card" data-reveal>
           <p class="problem-card__quote">“Todo mês eu monto o mesmo relatório na mão.”</p>
         </li>
-        <li class="problem-card" data-reveal>
-          <p class="problem-card__quote">“Meu cardápio muda de preço toda hora e vive desatualizado.”</p>
-        </li>
-        <li class="problem-card" data-reveal>
-          <p class="problem-card__quote">“Minha empresa ainda não tem um site.”</p>
-        </li>
         <li class="problem-card problem-card--answer" data-reveal>
-          <p class="problem-card__quote">É exatamente esse tipo de problema que a gente resolve.</p>
+          <p class="problem-card__quote">É exatamente esse tipo de tarefa que a gente automatiza.</p>
         </li>
       </ul>
     </div>
   </section>
 
-  <!-- ============ PARA QUEM ============ -->
-  <section class="section section--navy" id="para-quem" aria-labelledby="para-quem-title">
-    <svg class="section__deco section__deco--about" viewBox="0 0 360 360" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true">
-      <circle cx="150" cy="180" r="90"/>
-      <circle cx="240" cy="180" r="90"/>
-      <line x1="150" y1="180" x2="240" y2="180" stroke-width="1.5"/>
-      <circle cx="195" cy="180" r="6" fill="currentColor" stroke="none"/>
-    </svg>
+  <!-- ============ PROJETOS EM DESTAQUE ============ -->
+  <section class="section section--surface" id="projetos" aria-labelledby="projetos-title">
     <div class="container">
       <header class="section__head">
-        <h2 class="section__title" id="para-quem-title" data-reveal>Para quem é a Solutions Binary?</h2>
-        <p class="lead section__lead section__lead--on-dark" data-reveal>Para quem toca um negócio pequeno e não tem tempo a perder com tarefa repetitiva.</p>
-      </header>
-
-      <ul class="audience-grid" role="list">
-        <li class="audience-card" data-reveal>
-          <h3 class="audience-card__title">Comércio local</h3>
-          <p class="audience-card__text">Automação, atendimento e presença digital.</p>
-        </li>
-        <li class="audience-card" data-reveal>
-          <h3 class="audience-card__title">Restaurantes e lanchonetes</h3>
-          <p class="audience-card__text">Cardápios digitais, WhatsApp e organização de pedidos.</p>
-        </li>
-        <li class="audience-card" data-reveal>
-          <h3 class="audience-card__title">Prestadores de serviço</h3>
-          <p class="audience-card__text">Atendimento, agenda, leads e automação.</p>
-        </li>
-        <li class="audience-card" data-reveal>
-          <h3 class="audience-card__title">Pequenos escritórios</h3>
-          <p class="audience-card__text">Documentos, relatórios e tarefas administrativas.</p>
-        </li>
-        <li class="audience-card" data-reveal>
-          <h3 class="audience-card__title">Pequenas e médias empresas</h3>
-          <p class="audience-card__text">Processos repetitivos, dados e integração de ferramentas.</p>
-        </li>
-        <li class="audience-card" data-reveal>
-          <h3 class="audience-card__title">Profissionais autônomos</h3>
-          <p class="audience-card__text">Sites, atendimento e automação do dia a dia.</p>
-        </li>
-        <li class="audience-card" data-reveal>
-          <h3 class="audience-card__title">Pousadas e hospedagens</h3>
-          <p class="audience-card__text">Site, reservas por WhatsApp e informações sempre atualizadas.</p>
-        </li>
-        <li class="audience-card" data-reveal>
-          <h3 class="audience-card__title">Lojas</h3>
-          <p class="audience-card__text">Catálogo online, pedidos e presença digital.</p>
-        </li>
-      </ul>
-
-      <p class="solucoes__more" data-reveal>
-        <a class="link-arrow" data-wa data-wa-context="comercio" data-analytics="click_whatsapp" href="https://wa.me/5548999591614" target="_blank" rel="noopener">Tem uma empresa? Fale com a gente →</a>
-      </p>
-    </div>
-  </section>
-
-  <!-- ============ POSICIONAMENTO ============ -->
-  <section class="section section--sunken section--compact" id="posicionamento" aria-labelledby="posicionamento-title">
-    <div class="container">
-      <div class="positioning" id="positioning" data-reveal>
-        <h2 id="posicionamento-title">Comece pequeno. Evolua conforme seu negócio cresce.</h2>
-        <p>Tecnologia profissional sem precisar começar com um projeto caro. Entrada acessível, mensalidade previsível e acompanhamento contínuo.</p>
-      </div>
-    </div>
-  </section>
-
-  <!-- ============ SOLUÇÕES / ESCOLHA O QUE VOCÊ PRECISA ============ -->
-  <section class="section section--surface" id="solucoes" aria-labelledby="solucoes-title">
-    <div class="container">
-      <header class="section__head">
-        <h2 class="section__title" id="solucoes-title" data-reveal>Escolha o que você precisa</h2>
-        <p class="lead section__lead" data-reveal>Cada solução tem entrada acessível e mensalidade que mantém tudo funcionando. Comece pequeno e cresça quando fizer sentido.</p>
-      </header>
-
-      <div class="product-grid" id="productGrid" data-reveal>
-        <noscript>
-          <p class="lead" style="text-align:center">Site a partir de R$397 + R$49/mês, cardápio digital a partir de R$297 + R$149/mês e automação a partir de R$297.
-          Fale com a gente no WhatsApp: <a href="https://wa.me/5548999591614">(48) 99959-1614</a>.</p>
-        </noscript>
-      </div>
-
-      <p class="solucoes__more" data-reveal>
-        <a class="link-arrow" href="#precos">Ver todos os preços e o que cada plano inclui →</a>
-      </p>
-    </div>
-  </section>
-
-  <!-- ============ AUTOMAÇÃO EM DESTAQUE ============ -->
-  <section class="section section--navy" id="automacao" aria-labelledby="automacao-title">
-    <div class="container">
-      <header class="section__head">
-        <h2 class="section__title" id="automacao-title" data-reveal>Da tarefa manual ao processo automático</h2>
-        <p class="lead section__lead section__lead--on-dark" data-reveal>Se der para automatizar, a gente monta o fluxo e a tarefa passa a funcionar sozinha — a partir de R$297.</p>
-      </header>
-
-      <ol class="auto-flow" data-reveal aria-label="Tarefa manual, automação, resultado">
-        <li class="auto-flow__step">
-          <span class="auto-flow__ico" aria-hidden="true">
-            <svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M12 20h9"/><path d="M16.5 3.5a2.1 2.1 0 0 1 3 3L7 19l-4 1 1-4Z"/></svg>
-          </span>
-          <strong>Tarefa manual</strong>
-          <span>Copiar, colar, digitar, repetir todo dia.</span>
-        </li>
-        <li class="auto-flow__arrow" aria-hidden="true">
-          <svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M13 6l6 6-6 6"/></svg>
-        </li>
-        <li class="auto-flow__step">
-          <span class="auto-flow__ico" aria-hidden="true">
-            <svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="3.5"/><path d="M12 2v3M12 19v3M2 12h3M19 12h3M4.9 4.9l2.1 2.1M17 17l2.1 2.1M19.1 4.9 17 7M7 17l-2.1 2.1"/></svg>
-          </span>
-          <strong>Automação</strong>
-          <span>Um fluxo faz o trabalho sozinho, nos bastidores.</span>
-        </li>
-        <li class="auto-flow__arrow" aria-hidden="true">
-          <svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M13 6l6 6-6 6"/></svg>
-        </li>
-        <li class="auto-flow__step">
-          <span class="auto-flow__ico" aria-hidden="true">
-            <svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6 9 17l-5-5"/></svg>
-          </span>
-          <strong>Resultado</strong>
-          <span>Menos erro, mais tempo livre, tudo organizado.</span>
-        </li>
-      </ol>
-
-      <ul class="auto-examples" data-reveal role="list">
-        <li>Formulário que cai direto na planilha</li>
-        <li>E-mail e notificação automáticos</li>
-        <li>Relatório montado sozinho</li>
-        <li>Ferramentas conversando entre si</li>
-      </ul>
-
-      <div class="section__cta" data-reveal>
-        <a class="btn btn--primary" data-wa data-wa-context="automacao" data-analytics="click_whatsapp" href="https://wa.me/5548999591614" target="_blank" rel="noopener">Mostrar minha tarefa</a>
-      </div>
-    </div>
-  </section>
-
-  <!-- ============ PREÇOS ============ -->
-  <section class="section section--surface" id="precos" aria-labelledby="precos-title">
-    <div class="container">
-      <header class="section__head">
-        <h2 class="section__title" id="precos-title" data-reveal>Preço claro, sem letra miúda</h2>
-        <p class="lead section__lead" data-reveal>Os valores de cada solução estão logo acima. Aqui é só o que compõe o preço.</p>
-      </header>
-
-      <div class="billing-explainer" id="billingExplainer" data-reveal></div>
-
-      <div class="section__cta" data-reveal>
-        <a class="btn btn--primary" href="precos.html" data-analytics="click_pricing">Ver a tabela completa e perguntas frequentes</a>
-      </div>
-    </div>
-  </section>
-
-  <!-- ============ CLIENTES FUNDADORES (render só se data.js habilitar) ============ -->
-  <section class="section section--navy" id="fundadores" aria-labelledby="fundadores-title" hidden>
-    <div class="container">
-      <div class="founders" id="foundersBlock" data-reveal></div>
-    </div>
-  </section>
-
-  <!-- ============ COMO FUNCIONA ============ -->
-  <section class="section section--navy" id="como-funciona" aria-labelledby="como-title">
-    <svg class="section__deco section__deco--flow" viewBox="0 0 520 420" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
-      <path d="M50 370 L50 300 L170 300 L170 220"/>
-      <path d="M170 220 L170 150 L300 150 L300 90"/>
-      <path d="M300 90 L300 40 L440 40"/>
-      <circle cx="50" cy="370" r="9"/>
-      <circle cx="170" cy="300" r="7"/>
-      <circle cx="170" cy="220" r="9"/>
-      <circle cx="300" cy="150" r="7"/>
-      <circle cx="300" cy="90" r="9"/>
-      <circle cx="440" cy="40" r="10" fill="currentColor" stroke="none"/>
-    </svg>
-    <div class="container">
-      <header class="section__head">
-        <h2 class="section__title" id="como-title" data-reveal>Como funciona</h2>
-        <p class="lead section__lead section__lead--on-dark" data-reveal>Sem proposta genérica e sem enrolação: a gente entende a sua rotina antes de sugerir qualquer coisa.</p>
-      </header>
-
-      <div class="ai-flow" data-reveal aria-hidden="true">
-        <div class="ai-flow__col">
-          <span class="ai-flow__label">Hoje</span>
-          <ul class="ai-flow__items">
-            <li><svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="18" height="18" rx="2"/><path d="M3 10h18M10 3v18"/></svg>Planilhas</li>
-            <li><svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="5" width="18" height="14" rx="2"/><path d="m4 6 8 7 8-7"/></svg>E-mails</li>
-            <li><svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4" width="18" height="13" rx="4"/><path d="m7 17-1 3 4-3"/></svg>WhatsApp</li>
-            <li><svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"><ellipse cx="12" cy="5" rx="8" ry="3"/><path d="M4 5v14c0 1.7 3.6 3 8 3s8-1.3 8-3V5"/><path d="M4 12c0 1.7 3.6 3 8 3s8-1.3 8-3"/></svg>Sistemas soltos</li>
-            <li><svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"><path d="m8 6-5 6 5 6M16 6l5 6-5 6"/></svg>APIs</li>
-          </ul>
-        </div>
-
-        <div class="ai-flow__core">
-          <span class="ai-flow__line"></span>
-          <span class="ai-flow__badge">
-            <span class="ai-flow__badge-pulse"></span>
-            <img class="ai-flow__badge-icon" src="assets/logo-icon.png" alt="" width="837" height="376">
-            Binary AI
-          </span>
-          <span class="ai-flow__line"></span>
-        </div>
-
-        <div class="ai-flow__col">
-          <span class="ai-flow__label">Com automação</span>
-          <ul class="ai-flow__items">
-            <li><svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"><rect x="4" y="10" width="4" height="10" rx="1"/><rect x="10" y="4" width="4" height="16" rx="1"/><rect x="16" y="13" width="4" height="7" rx="1"/></svg>Dashboards</li>
-            <li><svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"><rect x="5" y="3" width="14" height="18" rx="2"/><path d="M8 8h8M8 12h8M8 16h5"/></svg>Relatórios</li>
-            <li><svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"><rect x="4" y="3" width="7" height="7" rx="1.6"/><rect x="13" y="3" width="7" height="7" rx="1.6"/><rect x="4" y="14" width="7" height="7" rx="1.6"/><rect x="13" y="14" width="7" height="7" rx="1.6"/></svg>Apps</li>
-            <li><svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="4"/><path d="M12 3v3M12 18v3M3 12h3M18 12h3"/></svg>Automação</li>
-            <li><svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"><path d="M4 16 10 10 14 14 20 6"/><path d="M15 6h5v5"/></svg>Indicadores</li>
-          </ul>
-        </div>
-      </div>
-
-      <p class="ai-flow__note" data-reveal>Você cuida do seu negócio. A automação cuida das tarefas repetitivas.</p>
-
-      <ol class="grid grid--steps grid--steps-6" role="list">
-        <li class="step" data-reveal>
-          <span class="step__num" aria-hidden="true">01</span>
-          <div class="step__card">
-            <h3 class="step__title">Você conta o problema</h3>
-            <p class="step__text">Uma tarefa que toma tempo, um processo bagunçado, uma ideia de site. É disso que a gente precisa saber.</p>
-          </div>
-        </li>
-        <li class="step" data-reveal>
-          <span class="step__num" aria-hidden="true">02</span>
-          <div class="step__card">
-            <h3 class="step__title">Analisamos</h3>
-            <p class="step__text">Procuramos a forma mais simples de resolver — sem transformar em projeto gigante.</p>
-          </div>
-        </li>
-        <li class="step" data-reveal>
-          <span class="step__num" aria-hidden="true">03</span>
-          <div class="step__card">
-            <h3 class="step__title">Mostramos uma solução</h3>
-            <p class="step__text">Quando dá, criamos uma demonstração baseada no seu negócio para você ver a ideia antes de decidir.</p>
-          </div>
-        </li>
-        <li class="step" data-reveal>
-          <span class="step__num" aria-hidden="true">04</span>
-          <div class="step__card">
-            <h3 class="step__title">Desenvolvemos</h3>
-            <p class="step__text">Construímos em etapas curtas, com você acompanhando cada entrega.</p>
-          </div>
-        </li>
-        <li class="step" data-reveal>
-          <span class="step__num" aria-hidden="true">05</span>
-          <div class="step__card">
-            <h3 class="step__title">Colocamos para funcionar</h3>
-            <p class="step__text">Publicamos, testamos junto e deixamos rodando de verdade.</p>
-          </div>
-        </li>
-        <li class="step" data-reveal>
-          <span class="step__num" aria-hidden="true">06</span>
-          <div class="step__card">
-            <h3 class="step__title">Acompanhamos quando necessário</h3>
-            <p class="step__text">Ajustes, melhorias e suporte conforme o negócio for crescendo.</p>
-          </div>
-        </li>
-      </ol>
-    </div>
-  </section>
-
-  <!-- ============ PRÉVIA INTERATIVA ============ -->
-  <section class="section section--surface" id="previa" aria-labelledby="previa-title">
-    <div class="container">
-      <header class="section__head">
-        <h2 class="section__title" id="previa-title" data-reveal>Veja antes de contratar</h2>
-        <p class="lead section__lead" data-reveal>Em alguns projetos a gente cria uma demonstração simples baseada no seu negócio para você visualizar a ideia antes de decidir. Escolha um tipo, responda 3 perguntas e veja na hora.</p>
-      </header>
-
-      <div class="preview-wizard" data-reveal>
-        <!-- PASSO 1: categoria -->
-        <div class="preview-wizard__step" data-step="category">
-          <ul class="preview-cats" role="list">
-            <li>
-              <button type="button" class="preview-cat" data-cat="website">
-                <svg viewBox="0 0 24 24" width="26" height="26" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="3" y="4" width="18" height="15" rx="2.5"/><path d="M3 9h18M6.4 6.5h.01M9.2 6.5h.01"/><path d="M9 22h6"/></svg>
-                Website
-              </button>
-            </li>
-            <li>
-              <button type="button" class="preview-cat" data-cat="cardapio">
-                <svg viewBox="0 0 24 24" width="26" height="26" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 5.5A2.5 2.5 0 0 1 6.5 3H20v18H6.5A2.5 2.5 0 0 1 4 18.5z"/><path d="M8 8h8M8 12h8M8 16h5"/></svg>
-                Cardápio digital
-              </button>
-            </li>
-            <li>
-              <button type="button" class="preview-cat" data-cat="automacao">
-                <svg viewBox="0 0 24 24" width="26" height="26" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="3" y="4" width="18" height="13" rx="4"/><path d="m7 17-1 3 4-3"/></svg>
-                Automação
-              </button>
-            </li>
-            <li>
-              <button type="button" class="preview-cat" data-cat="processos">
-                <svg viewBox="0 0 24 24" width="26" height="26" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="2.5" y="3.5" width="7" height="6" rx="1.8"/><rect x="14.5" y="14.5" width="7" height="6" rx="1.8"/><path d="M9.5 6.5h3.6A2.4 2.4 0 0 1 15.5 8.9v5.6"/><path d="m13 12.4 2.5 2.5 2.5-2.5"/><path d="M6 9.5v5.4a2.4 2.4 0 0 0 2.4 2.4H12"/></svg>
-                Organizar processos
-              </button>
-            </li>
-            <li>
-              <button type="button" class="preview-cat" data-cat="dashboards">
-                <svg viewBox="0 0 24 24" width="26" height="26" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="3" y="10" width="4" height="10" rx="1"/><rect x="10" y="4" width="4" height="16" rx="1"/><rect x="17" y="13" width="4" height="7" rx="1"/></svg>
-                Dashboards simples
-              </button>
-            </li>
-          </ul>
-        </div>
-
-        <!-- PASSO 2: formulário -->
-        <div class="preview-wizard__step" data-step="form" hidden>
-          <button type="button" class="preview-wizard__back" data-action="to-category">
-            <svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m15 18-6-6 6-6"/></svg>
-            Trocar categoria
-          </button>
-          <form class="preview-form" id="previewForm">
-            <div class="field">
-              <label class="field__label" for="pv-nome">Nome da empresa</label>
-              <input class="field__input" id="pv-nome" required maxlength="60" placeholder="Ex.: Padaria Boa Hora">
-            </div>
-            <div class="field">
-              <label class="field__label" for="pv-ramo">Ramo do negócio</label>
-              <input class="field__input" id="pv-ramo" required maxlength="60" placeholder="Ex.: padaria, salão de beleza, distribuidora...">
-            </div>
-            <div class="field">
-              <label class="field__label" id="pv-extra-label" for="pv-extra">Detalhe</label>
-              <div class="field__select-wrap">
-                <select class="field__input field__select" id="pv-extra"></select>
-              </div>
-            </div>
-            <div class="field">
-              <label class="field__label">Cor principal</label>
-              <div class="preview-swatches" id="pv-colors">
-                <button type="button" class="preview-swatch is-active" data-color="#2B3AFF" style="--sw:#2B3AFF" aria-label="Azul"></button>
-                <button type="button" class="preview-swatch" data-color="#0EA5A5" style="--sw:#0EA5A5" aria-label="Verde-água"></button>
-                <button type="button" class="preview-swatch" data-color="#E1543D" style="--sw:#E1543D" aria-label="Terracota"></button>
-                <button type="button" class="preview-swatch" data-color="#7C3AED" style="--sw:#7C3AED" aria-label="Roxo"></button>
-                <button type="button" class="preview-swatch" data-color="#D6A419" style="--sw:#D6A419" aria-label="Dourado"></button>
-                <button type="button" class="preview-swatch" data-color="#111827" style="--sw:#111827" aria-label="Preto"></button>
-              </div>
-            </div>
-            <div class="field">
-              <label class="field__label" for="pv-logo">Logo <span class="field__optional">(opcional)</span></label>
-              <div class="preview-logo-row">
-                <span class="preview-logo-preview" id="pv-logo-preview">
-                  <svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="3" y="3" width="18" height="18" rx="3"/><circle cx="9" cy="9" r="1.5"/><path d="m21 15-5-5L5 21"/></svg>
-                </span>
-                <input class="field__file" type="file" id="pv-logo" accept="image/*">
-              </div>
-            </div>
-            <button type="submit" class="btn btn--primary btn--block">Gerar prévia</button>
-          </form>
-        </div>
-
-        <!-- PASSO 3: carregando -->
-        <div class="preview-wizard__step" data-step="loading" hidden>
-          <div class="preview-loading">
-            <span class="preview-loading__spinner" aria-hidden="true"></span>
-            <p id="previewLoadingMsg" aria-live="polite">A IA está montando sua prévia…</p>
-            <p class="preview-loading__hint">Leva de 15 a 30 segundos — vale a espera.</p>
-          </div>
-        </div>
-
-        <!-- PASSO 4: resultado -->
-        <div class="preview-wizard__step" data-step="result" hidden>
-          <button type="button" class="preview-wizard__back" data-action="to-form">
-            <svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m15 18-6-6 6-6"/></svg>
-            Ajustar respostas
-          </button>
-          <div class="preview-frame" id="previewFrame">
-            <div class="preview-frame__chrome">
-              <span class="preview-frame__dot"></span><span class="preview-frame__dot"></span><span class="preview-frame__dot"></span>
-            </div>
-            <div id="previewMock"></div>
-          </div>
-          <div class="preview-cta">
-            <p>Gostou do que viu? A gente constrói isso de verdade pra você.</p>
-            <a class="btn btn--primary btn--block" id="previewWaLink" href="#" target="_blank" rel="noopener">Quero isso pro meu negócio</a>
-            <button type="button" class="btn btn--secondary btn--block" data-action="restart">Testar outra categoria</button>
-          </div>
-        </div>
-      </div>
-    </div>
-  </section>
-
-  <!-- ============ CASES ============ -->
-  <section class="section section--sunken" id="cases" aria-labelledby="cases-title">
-    <svg class="section__deco section__deco--cases" viewBox="0 0 400 320" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true">
-      <rect x="30" y="30" width="100" height="76" rx="10"/>
-      <rect x="150" y="20" width="100" height="76" rx="10"/>
-      <rect x="270" y="40" width="100" height="76" rx="10"/>
-      <rect x="60" y="140" width="100" height="76" rx="10"/>
-      <rect x="190" y="150" width="100" height="76" rx="10"/>
-      <circle cx="44" cy="44" r="4" fill="currentColor" stroke="none"/>
-      <circle cx="284" cy="54" r="4" fill="currentColor" stroke="none"/>
-      <circle cx="204" cy="164" r="4" fill="currentColor" stroke="none"/>
-    </svg>
-    <div class="container">
-      <header class="section__head">
-        <h2 class="section__title" id="cases-title" data-reveal>Já está funcionando por aí</h2>
+        <h2 class="section__title" id="projetos-title" data-reveal>Já está funcionando por aí</h2>
         <p class="lead section__lead" data-reveal>Cada um começou com uma tarefa manual que tomava tempo. Veja o que mudou depois.</p>
       </header>
 
@@ -632,24 +229,6 @@
                 <div><dt>Problema</dt><dd>Pedidos soltos no WhatsApp, difíceis de organizar.</dd></div>
                 <div><dt>Solução</dt><dd>Cardápio digital em que o cliente monta o pedido.</dd></div>
                 <div><dt>Resultado</dt><dd>O pedido chega pronto e padronizado.</dd></div>
-              </dl>
-              <span class="case__tech">Web · WhatsApp</span>
-              <span class="case__cta">Ver projeto →</span>
-            </div>
-          </a>
-        </li>
-        <li class="case" data-reveal>
-          <a class="case__link" href="https://jantinhagoiana.netlify.app" target="_blank" rel="noopener" data-analytics="view_case">
-            <span class="case__media" aria-hidden="true">
-              <span class="case__logo-plate"><img class="case__logo" src="assets/logos/jantinha-goiana-square.png" alt="" loading="lazy"></span>
-            </span>
-            <div class="case__body">
-              <span class="badge">Cardápio</span>
-              <h3 class="case__title">Jantinha Goiana 62</h3>
-              <dl class="case__psr">
-                <div><dt>Problema</dt><dd>Cardápio impresso, refeito a cada mudança de preço.</dd></div>
-                <div><dt>Solução</dt><dd>Cardápio digital atualizado pelo próprio dono.</dd></div>
-                <div><dt>Resultado</dt><dd>Preço sempre certo, sem reimpressão.</dd></div>
               </dl>
               <span class="case__tech">Web · WhatsApp</span>
               <span class="case__cta">Ver projeto →</span>
@@ -675,24 +254,6 @@
           </a>
         </li>
         <li class="case" data-reveal>
-          <a class="case__link" href="https://www.sensorystar.com.br" target="_blank" rel="noopener" data-analytics="view_case">
-            <span class="case__media" aria-hidden="true">
-              <span class="case__logo-plate"><img class="case__logo" src="assets/logos/sensory-star.jpeg" alt="" loading="lazy"></span>
-            </span>
-            <div class="case__body">
-              <span class="badge">Website</span>
-              <h3 class="case__title">Sensory Star</h3>
-              <dl class="case__psr">
-                <div><dt>Problema</dt><dd>Cada pedido era combinado mensagem por mensagem.</dd></div>
-                <div><dt>Solução</dt><dd>Catálogo online com pedido finalizado no WhatsApp.</dd></div>
-                <div><dt>Resultado</dt><dd>Menos idas e vindas para fechar a venda.</dd></div>
-              </dl>
-              <span class="case__tech">Web · WhatsApp</span>
-              <span class="case__cta">Ver projeto →</span>
-            </div>
-          </a>
-        </li>
-        <li class="case" data-reveal>
           <a class="case__link" href="https://portal-atlanta-react.vercel.app" target="_blank" rel="noopener" data-analytics="view_case">
             <span class="case__media" aria-hidden="true">
               <svg viewBox="0 0 24 24" width="30" height="30" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="10" width="4" height="10" rx="1"/><rect x="10" y="4" width="4" height="16" rx="1"/><rect x="17" y="13" width="4" height="7" rx="1"/></svg>
@@ -706,42 +267,6 @@
                 <div><dt>Resultado</dt><dd>Cada pessoa acha o número certo num lugar só.</dd></div>
               </dl>
               <span class="case__tech">Web · Dados</span>
-              <span class="case__cta">Ver projeto →</span>
-            </div>
-          </a>
-        </li>
-        <li class="case" data-reveal>
-          <a class="case__link" href="https://fort-armarios.vercel.app" target="_blank" rel="noopener" data-analytics="view_case">
-            <span class="case__media" aria-hidden="true">
-              <svg viewBox="0 0 56 56" width="88" height="88"><rect width="56" height="56" rx="16" fill="#C8102E"/><text x="28" y="38" font-family="Arial, Helvetica, sans-serif" font-size="30" font-weight="800" fill="#fff" text-anchor="middle">F</text></svg>
-            </span>
-            <div class="case__body">
-              <span class="badge">Processos</span>
-              <h3 class="case__title">Controle de Armários — Fort Atacadista</h3>
-              <dl class="case__psr">
-                <div><dt>Problema</dt><dd>Controle de armários feito no papel, loja por loja.</dd></div>
-                <div><dt>Solução</dt><dd>Uma tela única para registrar e consultar na hora.</dd></div>
-                <div><dt>Resultado</dt><dd>Informação sempre atualizada, sem planilha.</dd></div>
-              </dl>
-              <span class="case__tech">Web · Automação</span>
-              <span class="case__cta">Ver projeto →</span>
-            </div>
-          </a>
-        </li>
-        <li class="case" data-reveal>
-          <a class="case__link" href="https://demandasgg.netlify.app" target="_blank" rel="noopener" data-analytics="view_case">
-            <span class="case__media" aria-hidden="true">
-              <svg viewBox="0 0 56 56" width="88" height="88"><rect width="56" height="56" rx="16" fill="#C8102E"/><text x="28" y="38" font-family="Arial, Helvetica, sans-serif" font-size="30" font-weight="800" fill="#fff" text-anchor="middle">F</text></svg>
-            </span>
-            <div class="case__body">
-              <span class="badge">Processos</span>
-              <h3 class="case__title">Gestão de Demandas RH — Fort Atacadista</h3>
-              <dl class="case__psr">
-                <div><dt>Problema</dt><dd>Solicitações das lojas se perdiam em e-mail e planilha.</dd></div>
-                <div><dt>Solução</dt><dd>Um painel para organizar, priorizar e acompanhar.</dd></div>
-                <div><dt>Resultado</dt><dd>O RH vê tudo num lugar e nada fica para trás.</dd></div>
-              </dl>
-              <span class="case__tech">Web · Processos</span>
               <span class="case__cta">Ver projeto →</span>
             </div>
           </a>
@@ -765,76 +290,55 @@
           </a>
         </li>
       </ul>
+
+      <p class="solucoes__more" data-reveal>
+        <a class="link-arrow" href="projetos.html">Ver todos os projetos →</a>
+      </p>
     </div>
   </section>
 
-  <!-- ============ DIAGNÓSTICO ============ -->
-  <section class="section section--navy section--compact" id="diagnostico" aria-labelledby="diag-title">
+  <!-- ============ VEJA ANTES DE CONTRATAR ============ -->
+  <section class="section section--sunken" id="previa" aria-labelledby="previa-title">
     <div class="container">
-      <div class="diagnostic" data-reveal>
-        <h2 class="diagnostic__title" id="diag-title">Não sabe o que precisa? Mostre o problema.</h2>
-        <p class="diagnostic__text">Conte uma tarefa que dá trabalho hoje. Em uma conversa rápida a gente diz se existe uma forma simples de facilitar. <strong>15 minutos, sem compromisso.</strong></p>
-        <div class="diagnostic__actions">
-          <a class="btn btn--primary" data-wa data-wa-context="diagnostico" data-analytics="click_whatsapp" href="https://wa.me/5548999591614" target="_blank" rel="noopener">Diagnóstico gratuito</a>
-          <a class="btn btn--secondary on-dark" href="#contato">Prefiro preencher o formulário</a>
-        </div>
+      <header class="section__head">
+        <h2 class="section__title" id="previa-title" data-reveal>Veja uma ideia para o seu negócio antes de contratar</h2>
+        <p class="lead section__lead" data-reveal>Conte um pouco sobre sua empresa e veja como sua solução pode ficar. Escolha um tipo, responda 3 perguntas e veja na hora.</p>
+      </header>
+
+      <ol class="preview-steps" data-reveal aria-hidden="true">
+        <li class="preview-steps__item is-current"><span>1</span> Escolha a solução</li>
+        <li class="preview-steps__item"><span>2</span> Conte sobre sua empresa</li>
+        <li class="preview-steps__item"><span>3</span> Veja sua ideia</li>
+      </ol>
+
+      <div class="section__cta" data-reveal>
+        <a class="btn btn--primary" href="previa.html" data-analytics="view_solution">Ver um modelo agora</a>
       </div>
     </div>
   </section>
 
-  <!-- ============ SOBRE NÓS ============ -->
-  <section class="section section--surface" id="sobre" aria-labelledby="sobre-title">
-    <svg class="section__deco section__deco--about" viewBox="0 0 360 360" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true">
-      <circle cx="150" cy="180" r="90"/>
-      <circle cx="240" cy="180" r="90"/>
-      <line x1="150" y1="180" x2="240" y2="180" stroke-width="1.5"/>
-      <circle cx="195" cy="180" r="6" fill="currentColor" stroke="none"/>
-      <path d="M115 165 L98 180 L115 195" stroke-width="1.75"/>
-      <path d="M140 165 L123 180 L140 195" stroke-width="1.75"/>
-      <circle cx="270" cy="160" r="5"/>
-      <circle cx="290" cy="185" r="5"/>
-      <circle cx="265" cy="205" r="5"/>
-      <line x1="270" y1="160" x2="290" y2="185" stroke-width="1.5"/>
-      <line x1="290" y1="185" x2="265" y2="205" stroke-width="1.5"/>
-    </svg>
+  <!-- ============ RESUMO DE PLANOS ============ -->
+  <section class="section section--surface section--compact" id="posicionamento" aria-labelledby="posicionamento-title">
+    <div class="container">
+      <div class="positioning" id="positioning" data-reveal>
+        <h2 id="posicionamento-title">Comece pequeno. Evolua conforme seu negócio cresce.</h2>
+        <p>Tecnologia profissional sem precisar começar com um projeto caro. Entrada acessível, mensalidade previsível e acompanhamento contínuo.</p>
+      </div>
+    </div>
+  </section>
+
+  <section class="section section--sunken" id="precos" aria-labelledby="precos-title">
     <div class="container">
       <header class="section__head">
-        <h2 class="section__title" id="sobre-title" data-reveal>Dois sócios, um time enxuto e direto</h2>
-        <p class="lead section__lead" data-reveal>Criamos soluções digitais para facilitar tarefas, organizar processos e ajudar pequenos negócios a trabalharem melhor. Você fala com quem faz — sem camadas de atendimento.</p>
+        <h2 class="section__title" id="precos-title" data-reveal>Implantação + mensalidade, sem letra miúda</h2>
+        <p class="lead section__lead" data-reveal>Uma entrada para criar o projeto e uma mensalidade para manter tudo funcionando.</p>
       </header>
 
-      <ul class="grid grid--people" role="list">
-        <li class="person" data-reveal>
-          <span class="person__avatar">
-            <img class="person__photo" src="assets/rafael.jpg" alt="Foto de Rafael da Silva" width="480" height="480">
-          </span>
-          <div class="person__body">
-            <h3 class="person__name">Rafael da Silva</h3>
-            <p class="person__role">Sites e páginas</p>
-            <p class="person__text">Cuida da parte que o seu cliente vê: sites rápidos, cardápios digitais e páginas que funcionam bem no celular.</p>
-            <ul class="chips" role="list">
-              <li class="chip">Sites</li>
-              <li class="chip">Cardápios digitais</li>
-              <li class="chip">Páginas</li>
-            </ul>
-          </div>
-        </li>
-        <li class="person" data-reveal>
-          <span class="person__avatar">
-            <img class="person__photo" src="assets/rodrigo.jpg" alt="Foto de Rodrigo de Almeida Gritti" width="480" height="480">
-          </span>
-          <div class="person__body">
-            <h3 class="person__name">Rodrigo de Almeida Gritti</h3>
-            <p class="person__role">Automações e IA</p>
-            <p class="person__text">Cuida da parte dos bastidores: automações que rodam sozinhas — mensagens, planilhas, relatórios e a conversa entre as ferramentas que você já usa.</p>
-            <ul class="chips" role="list">
-              <li class="chip">Automação</li>
-              <li class="chip">WhatsApp</li>
-              <li class="chip">Relatórios</li>
-            </ul>
-          </div>
-        </li>
-      </ul>
+      <div class="billing-explainer" id="billingExplainer" data-reveal></div>
+
+      <div class="section__cta" data-reveal>
+        <a class="btn btn--primary" href="precos.html" data-analytics="click_pricing">Ver planos, preços e perguntas frequentes</a>
+      </div>
     </div>
   </section>
 
@@ -848,28 +352,8 @@
     </div>
   </section>
 
-  <!-- ============ TECNOLOGIA POR TRÁS ============ -->
-  <section class="section section--sunken section--compact" id="tecnologia" aria-labelledby="tech-title">
-    <div class="container">
-      <div class="tech" data-reveal>
-        <h2 class="tech__title" id="tech-title">A tecnologia por trás das soluções</h2>
-        <p class="tech__text">Você compra o resultado. Nos bastidores, a gente usa o que fizer sentido para cada projeto:</p>
-        <ul class="tech-badges" role="list">
-          <li>IA</li><li>n8n</li><li>APIs</li><li>Cloud</li><li>Automação</li><li>Web</li><li>Dados</li>
-        </ul>
-      </div>
-    </div>
-  </section>
-
-  <!-- ============ INDIQUE E GANHE ============ -->
-  <section class="section section--surface section--compact" id="indique" aria-labelledby="indique-title" hidden>
-    <div class="container">
-      <div class="referral" id="referralBlock" data-reveal></div>
-    </div>
-  </section>
-
-  <!-- ============ CONTATO ============ -->
-  <section class="section section--navy section--contact" id="contato" aria-labelledby="contato-title">
+  <!-- ============ CTA FINAL ============ -->
+  <section class="section section--navy section--compact section--contact" id="cta-final" aria-labelledby="cta-final-title">
     <svg class="section__deco section__deco--contact" viewBox="0 0 360 360" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true">
       <circle cx="50" cy="310" r="5" fill="currentColor" stroke="none"/>
       <path d="M50 310 m-40,0 a40,40 0 1,1 80,0" stroke-width="1.75" opacity=".9"/>
@@ -882,83 +366,12 @@
       <circle cx="297" cy="78" r="4" fill="currentColor" stroke="none"/>
     </svg>
     <div class="container">
-      <header class="section__head">
-        <h2 class="section__title" id="contato-title" data-reveal>Conte o que você quer melhorar</h2>
-        <p class="lead section__lead section__lead--on-dark" data-reveal>Preencha rápido ou chame no WhatsApp. A gente analisa e responde com uma ideia em até 1 dia útil.</p>
-      </header>
-
-      <div class="form-card" data-reveal>
-        <div class="form-card__inner" id="formPanel">
-          <form id="leadForm" novalidate>
-            <div class="field">
-              <label class="field__label" for="nome">Nome</label>
-              <input class="field__input" type="text" id="nome" name="nome" autocomplete="name" placeholder="Como podemos te chamar?" required aria-describedby="nome-erro">
-              <p class="field__error" id="nome-erro" hidden></p>
-            </div>
-
-            <div class="field-row">
-              <div class="field">
-                <label class="field__label" for="empresa">Empresa <span class="field__optional">(opcional)</span></label>
-                <input class="field__input" type="text" id="empresa" name="empresa" autocomplete="organization" placeholder="Nome do seu negócio">
-              </div>
-              <div class="field">
-                <label class="field__label" for="cidade">Cidade <span class="field__optional">(opcional)</span></label>
-                <input class="field__input" type="text" id="cidade" name="cidade" autocomplete="address-level2" placeholder="Ex.: Amparo/SP">
-              </div>
-            </div>
-
-            <div class="field">
-              <label class="field__label" for="telefone">WhatsApp</label>
-              <input class="field__input" type="tel" id="telefone" name="telefone" inputmode="tel" autocomplete="tel" placeholder="(11) 91234-5678" maxlength="16" required aria-describedby="telefone-erro">
-              <p class="field__error" id="telefone-erro" hidden></p>
-            </div>
-
-            <div class="field">
-              <label class="field__label" for="servico">O que você precisa?</label>
-              <div class="field__select-wrap">
-                <select class="field__input field__select" id="servico" name="servico" required aria-describedby="servico-erro">
-                  <option value="" selected disabled>Selecione uma opção</option>
-                  <option value="Site">Site</option>
-                  <option value="Cardápio digital">Cardápio digital</option>
-                  <option value="Automação">Automação</option>
-                  <option value="WhatsApp Inteligente">WhatsApp Inteligente</option>
-                  <option value="Dashboard">Dashboard</option>
-                  <option value="Não sei ainda">Não sei ainda</option>
-                </select>
-              </div>
-              <p class="field__error" id="servico-erro" hidden></p>
-            </div>
-
-            <div class="field">
-              <label class="field__label" for="mensagem">Conte rapidamente o que você gostaria de melhorar <span class="field__optional">(opcional)</span></label>
-              <textarea class="field__input field__textarea" id="mensagem" name="mensagem" rows="4" placeholder="Ex.: todo dia eu copio os pedidos do WhatsApp para uma planilha." aria-describedby="mensagem-erro"></textarea>
-              <p class="field__error" id="mensagem-erro" hidden></p>
-            </div>
-
-            <div class="form-alert" id="formAlert" role="alert" hidden>
-              <p class="form-alert__text" id="formAlertText"></p>
-              <a class="form-alert__link" data-wa data-wa-context="demo" href="https://wa.me/5548999591614" target="_blank" rel="noopener">Prefere falar no WhatsApp? Clique aqui.</a>
-            </div>
-
-            <button class="btn btn--primary btn--block" type="submit" id="formSubmit" data-analytics="submit_lead">
-              <span class="btn__spinner" aria-hidden="true"></span>
-              <span class="btn__label" id="formSubmitLabel">Receber uma ideia</span>
-            </button>
-
-            <p class="form-note">Ao enviar, você concorda em ser contatado pela Solutions Binary sobre esta solicitação.</p>
-          </form>
-        </div>
-
-        <div class="form-success" id="formSuccess" role="status" tabindex="-1" hidden>
-          <span class="form-success__icon" aria-hidden="true">
-            <svg viewBox="0 0 24 24" width="28" height="28" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="m20 6-11 11-5-5"/></svg>
-          </span>
-          <h3 class="form-success__title">Quase lá!</h3>
-          <p class="form-success__text">Abrimos o WhatsApp numa nova aba com sua mensagem pronta — é só conferir e enviar por lá que a gente responde na hora.</p>
-          <a class="btn btn--primary btn--block" data-wa href="https://wa.me/5548999591614?text=Ol%C3%A1!%20Vim%20pelo%20site%20e%20quero%20saber%20mais%20sobre%20as%20solu%C3%A7%C3%B5es%20da%20Solutions%20Binary." target="_blank" rel="noopener">
-            <svg class="ico-wa" viewBox="0 0 24 24" width="20" height="20" fill="currentColor" aria-hidden="true" focusable="false"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51a12.8 12.8 0 0 0-.57-.01c-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.872.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347M12.05 21.785h-.004a9.87 9.87 0 0 1-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 0 1-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884a9.82 9.82 0 0 1 6.988 2.896 9.825 9.825 0 0 1 2.892 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0 0 12.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.548 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 0 0 5.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 0 0-3.48-8.413"/></svg>
-            <span>Falar no WhatsApp</span>
-          </a>
+      <div class="cta-final" data-reveal>
+        <h2 class="cta-final__title" id="cta-final-title" style="color:#fff">Tem uma ideia? A gente transforma em solução.</h2>
+        <p class="cta-final__text" style="color:var(--text-muted-on-dark)">Conte o que dá trabalho hoje e a gente responde com um caminho — em até 1 dia útil.</p>
+        <div class="cta-final__actions">
+          <a class="btn btn--primary" href="contato.html" data-analytics="click_demo">Falar com a Solutions Binary</a>
+          <a class="btn btn--secondary on-dark" data-wa data-wa-context="demo" data-analytics="click_whatsapp" href="https://wa.me/5548999591614" target="_blank" rel="noopener">Falar no WhatsApp</a>
         </div>
       </div>
     </div>
@@ -983,14 +396,12 @@
     <nav class="footer__nav" aria-label="Navegação do rodapé">
       <h3 class="footer__heading">Navegue</h3>
       <ul class="footer__list">
-        <li><a href="#solucoes">Soluções</a></li>
-        <li><a href="#precos">Preços</a></li>
-        <li><a href="#previa">Demonstração</a></li>
-        <li><a href="#cases">Cases</a></li>
-        <li><a href="#como-funciona">Como funciona</a></li>
-        <li><a href="#para-quem">Para quem é</a></li>
-        <li><a href="#sobre">Sobre</a></li>
-        <li><a href="#contato">Contato</a></li>
+        <li><a href="solucoes.html">Soluções</a></li>
+        <li><a href="projetos.html">Projetos</a></li>
+        <li><a href="precos.html">Planos</a></li>
+        <li><a href="previa.html">Ver um modelo</a></li>
+        <li><a href="sobre.html">Sobre</a></li>
+        <li><a href="contato.html">Contato</a></li>
       </ul>
     </nav>
 
@@ -1018,7 +429,7 @@
 
 <!-- Barra de ação fixa (mobile) -->
 <div class="mcta" id="mcta" aria-label="Ações rápidas">
-  <a class="mcta__btn mcta__btn--primary" href="#contato" data-analytics="click_demo">Pedir demonstração</a>
+  <a class="mcta__btn mcta__btn--primary" href="contato.html" data-analytics="click_demo">Quero uma solução</a>
   <a class="mcta__btn mcta__btn--wa" data-wa data-wa-context="demo" data-analytics="click_whatsapp" href="https://wa.me/5548999591614" target="_blank" rel="noopener" aria-label="Falar no WhatsApp">
     <svg viewBox="0 0 24 24" width="22" height="22" fill="currentColor" aria-hidden="true"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51a12.8 12.8 0 0 0-.57-.01c-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.872.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347M12.05 21.785h-.004a9.87 9.87 0 0 1-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 0 1-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884a9.82 9.82 0 0 1 6.988 2.896 9.825 9.825 0 0 1 2.892 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0 0 12.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.548 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 0 0 5.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 0 0-3.48-8.413"/></svg>
   </a>

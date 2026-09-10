@@ -68,6 +68,8 @@ window.SB = {
         summary: "Um site profissional, rápido no celular, com WhatsApp — no ar em poucos dias.",
         ctaLabel: "Quero meu site",
         waContext: "site",
+        primary: true,
+        learnUrl: "solucoes.html#site",
         demoUrl: "https://www.imperiotenis.com.br",
         plans: [
           {
@@ -114,6 +116,8 @@ window.SB = {
         icon: "cardapio",
         summary: "Seu cardápio sempre atualizado sem precisar refazer arte. Você mantém um sistema funcionando todos os dias.",
         featured: true,
+        primary: true,
+        learnUrl: "cardapio.html",
         ctaLabel: "Quero meu cardápio",
         waContext: "cardapio",
         demoUrl: "https://trufasdade.netlify.app",
@@ -192,6 +196,8 @@ window.SB = {
         icon: "automacao",
         summary: "Planilha vira e-mail, formulário vira banco, relatório sai pronto — o repetitivo no piloto automático.",
         featured: true,
+        primary: true,
+        learnUrl: "automacoes.html",
         ctaLabel: "Quero automatizar",
         waContext: "automacao",
         plans: [

@@ -115,6 +115,10 @@ body {
 
 body.is-locked { overflow: hidden; }
 
+/* o atributo [hidden] precisa vencer o display:flex de .section
+   (seções data-driven que só aparecem quando o data.js tem conteúdo) */
+[hidden] { display: none !important; }
+
 img, svg { display: block; max-width: 100%; }
 img { height: auto; }
 
@@ -2064,6 +2068,7 @@ p { max-width: 62ch; }
   .hero__desc { font-size: 19px; line-height: 1.65; }
 
   .nav__desktop { display: block; }
+  .nav__link { padding: 0 var(--sp-8); font-size: 14px; }
   .nav__cta {
     display: inline-flex;
     min-height: 44px;
@@ -2272,6 +2277,20 @@ html { scroll-snap-type: none; }
 .link-arrow { font-weight: 700; }
 .solucoes__more { text-align: center; margin-top: var(--sp-24); margin-inline: auto; max-width: none; }
 
+/* ---- HERO: botão secundário com fundo branco (contraste no fundo escuro) ---- */
+.hero__actions .btn--secondary {
+  background: #fff;
+  color: var(--ink);
+  border-color: #fff;
+}
+@media (hover: hover) and (pointer: fine) {
+  .hero__actions .btn--secondary:hover { background: rgba(255, 255, 255, .88); }
+}
+.hero__actions .btn--secondary:focus-visible {
+  outline: 3px solid rgba(255, 255, 255, .6);
+  outline-offset: 2px;
+}
+
 /* ---- HERO: fineprint + faixa "a partir de" ---- */
 .hero__fineprint {
   margin: var(--sp-16) auto 0;
@@ -2393,35 +2412,8 @@ html { scroll-snap-type: none; }
   .auto-flow__arrow { transform: none; }
 }
 
-/* ---- PREÇOS: tabela ---- */
-.pricing-table { display: flex; flex-direction: column; gap: var(--sp-12); max-width: 900px; margin: 0 auto; }
-.ptable__row {
-  display: grid;
-  grid-template-columns: 1fr;
-  gap: 6px;
-  padding: var(--sp-16) var(--sp-20);
-  background: var(--surface);
-  border: 1px solid var(--border);
-  border-radius: var(--r-12);
-}
-.ptable__name { font-weight: 800; color: var(--ink); font-size: 16px; }
-.ptable__tag {
-  display: inline-block; margin-left: 6px; vertical-align: middle;
-  font-size: 11px; font-weight: 700; color: var(--tint-ink);
-  background: var(--tint); border-radius: var(--r-full); padding: 2px 8px;
-}
-.ptable__k {
-  display: block; font-size: 11px; text-transform: uppercase; letter-spacing: .05em;
-  color: var(--text-muted); font-weight: 700; margin-bottom: 1px;
-}
-.ptable__setup strong { font-size: 17px; }
-.ptable__setup s { color: var(--text-muted); }
-.ptable__monthly, .ptable__feat { color: var(--text-muted); font-size: 14px; }
-.ptable__note { display: block; margin-top: 4px; font-size: 12px; color: var(--text-muted); }
-@media (min-width: 780px) {
-  .ptable__row { grid-template-columns: 1.3fr 1fr 1fr 2fr; align-items: start; gap: var(--sp-16); }
-}
-.pricing-note { text-align: center; color: var(--text-muted); font-size: 13px; margin-top: var(--sp-16); }
+/* ---- PLANOS: nota abaixo dos cartões ---- */
+.pricing-note { text-align: center; color: var(--text-muted); font-size: 13px; margin-top: var(--sp-24); }
 
 .billing-explainer {
   max-width: 640px; margin: var(--sp-48) auto 0;
@@ -2676,15 +2668,6 @@ html { scroll-snap-type: none; }
 }
 .auto-flow__ico { grid-row: auto; }
 
-/* tabela de preços: centralizada no mobile, alinhada à esquerda só
-   na versão larga (mais fácil de ler em colunas) */
-.ptable__row { text-align: center; }
-.ptable__k { text-align: center; }
-@media (min-width: 780px) {
-  .ptable__row { text-align: left; }
-  .ptable__k { text-align: left; }
-}
-
 /* explicador implantação × mensalidade */
 .billing-explainer { text-align: center; }
 .billing-explainer__list { justify-content: center; }
@@ -2706,3 +2689,154 @@ html { scroll-snap-type: none; }
 /* FAQ: pergunta continua à esquerda (padrão de acordeão),
    resposta centralizada para acompanhar o resto */
 .faq p { text-align: center; }
+
+/* =============================================================
+   FILTRO DE PROJETOS (projetos.html)
+   ============================================================= */
+.proj-filter {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: var(--sp-8);
+  margin: 0 auto var(--sp-32);
+  max-width: 640px;
+}
+.proj-filter__btn {
+  font: inherit;
+  font-size: 13px;
+  font-weight: 600;
+  color: var(--text-muted);
+  background: var(--surface);
+  border: 1.25px solid var(--border-strong);
+  border-radius: var(--r-full);
+  padding: 8px 16px;
+  cursor: pointer;
+  transition: color var(--dur) var(--ease), border-color var(--dur) var(--ease),
+    background var(--dur) var(--ease);
+}
+.proj-filter__btn:hover { color: var(--text); border-color: var(--primary); }
+.proj-filter__btn.is-active {
+  color: #fff;
+  background: var(--primary);
+  border-color: var(--primary);
+}
+.proj-filter__btn:focus-visible {
+  outline: 2px solid var(--primary);
+  outline-offset: 2px;
+}
+.proj-empty {
+  text-align: center;
+  color: var(--text-muted);
+  font-weight: 600;
+  margin-top: var(--sp-24);
+}
+
+/* =============================================================
+   PASSOS DA PRÉVIA (index.html — "Veja antes de contratar")
+   ============================================================= */
+.preview-steps {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: var(--sp-8) var(--sp-24);
+  max-width: 640px;
+  margin: 0 auto var(--sp-32);
+}
+.preview-steps__item {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--sp-8);
+  font-size: 13px;
+  font-weight: 600;
+  color: var(--text-muted);
+}
+.preview-steps__item span {
+  display: grid;
+  place-items: center;
+  width: 22px;
+  height: 22px;
+  border-radius: var(--r-full);
+  background: var(--border-strong);
+  color: var(--surface);
+  font-size: 12px;
+  font-weight: 700;
+}
+.preview-steps__item.is-current { color: var(--text); }
+.preview-steps__item.is-current span { background: var(--primary); }
+.preview-steps__item.is-done span { background: var(--success); }
+
+/* =============================================================
+   PLANOS (precos.html) — cartões de preço agrupados por família
+   ============================================================= */
+.pricing-table { display: flex; flex-direction: column; gap: var(--sp-48); max-width: 960px; margin: 0 auto; }
+.price-group { scroll-margin-top: calc(var(--nav-h) + 16px); }
+.price-group__title {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: var(--sp-8);
+  font-size: 18px;
+  font-weight: 800;
+  color: var(--ink);
+  margin: 0 auto var(--sp-24);
+}
+.price-group__ico {
+  display: grid;
+  place-items: center;
+  width: 34px;
+  height: 34px;
+  border-radius: var(--r-10);
+  background: var(--tint);
+  color: var(--tint-ink);
+}
+.price-group__ico svg { width: 20px; height: 20px; }
+.price-card__cost {
+  display: flex;
+  flex-direction: column;
+  gap: var(--sp-4);
+  padding: var(--sp-12) 0;
+  border-block: 1px solid var(--border);
+  margin: var(--sp-4) 0 var(--sp-8);
+}
+.price-card__cost-row {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: var(--sp-12);
+  color: var(--ink);
+}
+.price-card__cost-row small { color: var(--text-muted); font-size: 13px; font-weight: 600; }
+.price-card__cost-row strong { font-size: 22px; font-weight: 800; }
+.price-card__cost-row s { color: var(--text-muted); font-weight: 400; font-size: 14px; margin-right: 4px; }
+.price-card__cost-row b { font-size: 15px; font-weight: 700; }
+.plan-card__more {
+  font-size: 13px;
+  font-weight: 700;
+  color: var(--primary);
+  margin-top: 2px;
+}
+.plan-card__more:hover { text-decoration: underline; }
+
+/* alternativa de e-mail na página de contato */
+.contato-alt {
+  text-align: center;
+  margin-top: var(--sp-24);
+  color: var(--text-muted-on-dark);
+  font-size: 14px;
+}
+.contato-alt a { color: #fff; font-weight: 700; }
+
+/* =============================================================
+   TIERS DE FUNCIONALIDADE (cardapio.html) — reaproveita .auto-examples
+   ============================================================= */
+.feature-tier { margin-top: var(--sp-24); }
+.feature-tier:first-of-type { margin-top: 0; }
+.feature-tier__label {
+  font-size: 13px;
+  font-weight: 700;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  color: var(--accent-light);
+  margin: 0 0 var(--sp-12);
+  text-align: center;
+}

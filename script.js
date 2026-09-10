@@ -519,9 +519,16 @@ function brl(n) {
     result: wizard.querySelector('[data-step="result"]'),
   };
 
+  const stepDots = $$(".preview-steps__item", wizard.parentElement || document);
+  const STEP_INDEX = { category: 0, form: 1, loading: 1, result: 2 };
   function showStep(name) {
     Object.keys(steps).forEach((k) => {
       steps[k].hidden = k !== name;
+    });
+    const idx = STEP_INDEX[name];
+    stepDots.forEach((el, i) => {
+      el.classList.toggle("is-current", i === idx);
+      el.classList.toggle("is-done", i < idx);
     });
   }
 
@@ -1399,12 +1406,18 @@ function brl(n) {
       .join("");
   }
 
-  /* ---- grade de produtos (home) ---- */
+  /* ---- grade de produtos (home) ----
+     Home = visão geral. Mostra só as famílias primárias como cards
+     (ícone + título + descrição + "Saiba mais"); as demais aparecem
+     como uma linha discreta de soluções complementares. O preço fica
+     na página de Planos, não na Home. */
   const grid = document.getElementById("productGrid");
   if (grid) {
-    grid.innerHTML = P.families
+    const primary = P.families.filter((f) => f.primary);
+    const others = P.families.filter((f) => !f.primary);
+    const mainList = (primary.length ? primary : P.families)
       .map((fam) => {
-        const c = cheapest(fam);
+        const learn = fam.learnUrl || ("solucoes.html#" + fam.slug);
         return (
           '<article class="product-card' +
           (fam.featured ? " product-card--featured" : "") +
@@ -1412,46 +1425,78 @@ function brl(n) {
           '<span class="product-card__ico" aria-hidden="true">' + iconSvg(fam.icon) + "</span>" +
           '<h3 class="product-card__name">' + esc(fam.name) + "</h3>" +
           '<p class="product-card__summary">' + esc(fam.summary) + "</p>" +
-          '<p class="product-card__price"><span class="price__from">a partir de</span> ' +
-          '<strong>' + brl(c.setup) + "</strong>" +
-          (monthlyLabel(c) ? ' <span class="price__monthly">' + monthlyLabel(c).replace("+ ", "") + "</span>" : "") +
-          "</p>" +
           '<div class="product-card__cta">' +
-          '<a class="btn btn--primary btn--sm" data-wa data-wa-context="' + esc(fam.waContext || "") + '" data-analytics="click_whatsapp" href="' + waHref(fam.waContext) + '" target="_blank" rel="noopener">' + esc(fam.ctaLabel || ("Falar sobre " + fam.name)) + "</a>" +
-          '<a class="btn btn--secondary btn--sm" href="solucoes.html#' + fam.slug + '" data-analytics="click_pricing">Ver detalhes</a>' +
+          '<a class="btn btn--secondary btn--sm" href="' + esc(learn) + '" data-analytics="view_solution">Saiba mais</a>' +
           "</div>" +
           "</article>"
         );
       })
       .join("");
+    const othersHtml =
+      primary.length && others.length
+        ? '<p class="product-grid__more">Também fazemos: ' +
+          others
+            .map((f) => '<a href="solucoes.html#' + f.slug + '">' + esc(f.name) + "</a>")
+            .join(" · ") +
+          "</p>"
+        : "";
+    grid.innerHTML = mainList + othersHtml;
   }
 
-  /* ---- tabela de preços (home + precos.html) ---- */
-  function renderTable(el, full) {
-    const rows = [];
-    P.families.forEach((fam) => {
-      fam.plans.forEach((plan) => {
-        const d = discountFor(fam, plan);
-        const setupHtml = d
-          ? '<s>' + brl(d.normalSetup) + "</s> <strong>" + brl(d.founderSetup) + "</strong>"
-          : "<strong>" + setupLabel(plan) + "</strong>";
-        const feat = full ? plan.features : plan.features.slice(0, 4);
-        rows.push(
-          '<div class="ptable__row">' +
-            '<div class="ptable__name">' + esc(plan.name) + (plan.tag ? ' <span class="ptable__tag">' + esc(plan.tag) + "</span>" : "") + "</div>" +
-            '<div class="ptable__setup"><span class="ptable__k">Implantação</span>' + setupHtml + "</div>" +
-            '<div class="ptable__monthly"><span class="ptable__k">Mensalidade</span>' + (monthlyLabel(plan).replace("+ ", "") || "—") + "</div>" +
-            '<div class="ptable__feat"><span class="ptable__k">Inclui</span>' + feat.map(esc).join(" · ") + (plan.note ? '<em class="ptable__note">' + esc(plan.note) + "</em>" : "") + "</div>" +
+  /* ---- planos (precos.html) — cartões com preço em destaque,
+     agrupados por família. Implantação e mensalidade separadas,
+     top 5 itens do "inclui" + link pra lista completa em Soluções. ---- */
+  function monthlyValue(plan) {
+    const m = monthlyLabel(plan).replace("+ ", "");
+    return m || "—";
+  }
+  function renderPricing(el) {
+    el.innerHTML = P.families
+      .map((fam) => {
+        const cards = fam.plans
+          .map((plan) => {
+            const d = discountFor(fam, plan);
+            const setupHtml = d
+              ? '<s>' + brl(d.normalSetup) + "</s> <strong>" + brl(d.founderSetup) + "</strong>"
+              : "<strong>" + setupLabel(plan) + "</strong>";
+            const wa = planWa(fam, plan);
+            const feat = plan.features.slice(0, 5);
+            const restCount = Math.max(0, plan.features.length - feat.length);
+            return (
+              '<div class="plan-card' +
+              (plan.tag ? " plan-card--tag" : "") +
+              (plan.featured ? " plan-card--featured" : "") +
+              '">' +
+              (plan.tag ? '<span class="plan-card__tag">' + esc(plan.tag) + "</span>" : "") +
+              '<h4 class="plan-card__name">' + esc(plan.name) + "</h4>" +
+              '<div class="price-card__cost">' +
+              '<span class="price-card__cost-row"><small>Implantação</small> ' + setupHtml + "</span>" +
+              '<span class="price-card__cost-row"><small>Mensalidade</small> <b>' + monthlyValue(plan) + "</b></span>" +
+              "</div>" +
+              '<ul class="plan-card__features">' + feat.map((f) => "<li>" + esc(f) + "</li>").join("") + "</ul>" +
+              (restCount
+                ? '<a class="plan-card__more" href="solucoes.html#' + fam.slug + '">+ ' + restCount + " itens — ver tudo que inclui</a>"
+                : '<a class="plan-card__more" href="solucoes.html#' + fam.slug + '">Ver detalhes da solução</a>') +
+              (plan.note ? '<p class="plan-card__note">' + esc(plan.note) + "</p>" : "") +
+              '<a class="btn btn--primary btn--sm plan-card__cta" data-wa data-wa-context="' + esc(wa) +
+              '" data-analytics="click_whatsapp" href="' + waHref(wa) + '" target="_blank" rel="noopener">' +
+              esc(planCta(fam, plan)) + "</a>" +
+              "</div>"
+            );
+          })
+          .join("");
+        return (
+          '<div class="price-group" id="' + fam.slug + '">' +
+          '<h3 class="price-group__title"><span class="price-group__ico" aria-hidden="true">' +
+          iconSvg(fam.icon) + "</span>" + esc(fam.name) + "</h3>" +
+          '<div class="catalog-family__plans">' + cards + "</div>" +
           "</div>"
         );
-      });
-    });
-    el.innerHTML = rows.join("");
+      })
+      .join("");
   }
-  const homeTable = document.getElementById("pricingTable");
-  if (homeTable) renderTable(homeTable, false);
   const fullTable = document.getElementById("precosTable");
-  if (fullTable) renderTable(fullTable, true);
+  if (fullTable) renderPricing(fullTable);
 
   const noteEl = document.getElementById("pricingNote");
   if (noteEl && P.note) noteEl.textContent = P.note;
@@ -1521,7 +1566,11 @@ function brl(n) {
           billingNoteHtml(fam) +
           '<div class="catalog-family__cta">' +
           '<a class="btn btn--primary" data-wa data-wa-context="' + esc(fam.waContext || "") + '" data-analytics="click_whatsapp" href="' + waHref(fam.waContext) + '" target="_blank" rel="noopener">' + esc(fam.ctaLabel || ("Falar sobre " + fam.name)) + "</a>" +
-          (fam.demoUrl ? '<a class="btn btn--secondary" href="' + esc(fam.demoUrl) + '" target="_blank" rel="noopener" data-analytics="click_demo">Ver um exemplo</a>' : "") +
+          (fam.learnUrl && /\.html$/.test(fam.learnUrl)
+            ? '<a class="btn btn--secondary" href="' + esc(fam.learnUrl) + '" data-analytics="view_solution">Ver a página de ' + esc(fam.name) + "</a>"
+            : fam.demoUrl
+            ? '<a class="btn btn--secondary" href="' + esc(fam.demoUrl) + '" target="_blank" rel="noopener" data-analytics="click_demo">Ver um exemplo</a>'
+            : "") +
           "</div>" +
           "</section>"
         );
@@ -1687,4 +1736,39 @@ function brl(n) {
     });
     mo.observe(burger, { attributes: true, attributeFilter: ["aria-expanded"] });
   }
+})();
+
+/* -------------------------------------------------------------
+   13. Filtro de projetos (projetos.html)
+   Só roda se #projFilter existir. Filtra .case por data-cat,
+   sem esconder nada de forma irreversível (só toggle de classe).
+   ------------------------------------------------------------- */
+(function initProjectFilter() {
+  const bar = document.getElementById("projFilter");
+  const grid = document.getElementById("projGrid");
+  if (!bar || !grid) return;
+
+  const buttons = $$(".proj-filter__btn", bar);
+  const cards = $$(".case", grid);
+  const empty = document.getElementById("projEmpty");
+
+  function apply(filter) {
+    let shown = 0;
+    cards.forEach((card) => {
+      const match = filter === "all" || card.getAttribute("data-cat") === filter;
+      card.hidden = !match;
+      if (match) shown++;
+    });
+    if (empty) empty.hidden = shown !== 0;
+    buttons.forEach((b) => {
+      const on = b.getAttribute("data-filter") === filter;
+      b.classList.toggle("is-active", on);
+      b.setAttribute("aria-pressed", on ? "true" : "false");
+    });
+  }
+
+  buttons.forEach((b) => {
+    b.setAttribute("aria-pressed", b.classList.contains("is-active") ? "true" : "false");
+    b.addEventListener("click", () => apply(b.getAttribute("data-filter")));
+  });
 })();
