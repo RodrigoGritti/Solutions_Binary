@@ -162,6 +162,7 @@ app.post("/api/preview", express.json({ limit: "64kb" }), async (req, res) => {
         model: MODEL,
         max_tokens: 4200,
         thinking: { type: "disabled" },
+        output_config: { effort: "medium" },
         messages: [{ role: "user", content: prompt }],
       }),
     });

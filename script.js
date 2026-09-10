@@ -820,6 +820,31 @@ function brl(n) {
     mockEl.appendChild(iframe);
   }
 
+  // mensagens rotativas enquanto a IA trabalha (a espera fica mais tolerável)
+  const LOADING_MSGS = [
+    "A IA está montando sua prévia…",
+    "Analisando o seu ramo…",
+    "Escolhendo a paleta a partir da sua cor…",
+    "Escrevendo os textos e as seções…",
+    "Ajustando o layout no capricho…",
+    "Quase lá…",
+  ];
+  let loadingTimer = null;
+  function startLoadingMsgs() {
+    const el = document.getElementById("previewLoadingMsg");
+    if (!el) return;
+    let i = 0;
+    el.textContent = LOADING_MSGS[0];
+    stopLoadingMsgs();
+    loadingTimer = window.setInterval(() => {
+      i = Math.min(i + 1, LOADING_MSGS.length - 1);
+      el.textContent = LOADING_MSGS[i];
+    }, 4500);
+  }
+  function stopLoadingMsgs() {
+    if (loadingTimer) { window.clearInterval(loadingTimer); loadingTimer = null; }
+  }
+
   form.addEventListener("submit", async (e) => {
     e.preventDefault();
     const nome = nomeInput.value.trim();
@@ -829,6 +854,7 @@ function brl(n) {
     const extra = extraSelect.value;
 
     showStep("loading");
+    startLoadingMsgs();
     buildWaLink(nome, ramo);
 
     let usedAi = false;
@@ -860,6 +886,7 @@ function brl(n) {
       /* rede/timeout — cai no template abaixo */
     }
 
+    stopLoadingMsgs();
     if (!usedAi) renderTemplate(nome, ramo, extra);
 
     showStep("result");

@@ -1243,6 +1243,7 @@ p { max-width: 62ch; }
   animation: spin 800ms linear infinite;
 }
 .preview-loading p { color: var(--text-muted); font-weight: 600; }
+.preview-loading__hint { font-weight: 400 !important; font-size: 13px; opacity: .8; }
 
 /* --- passo 4: resultado --- */
 .preview-frame {
