@@ -254,6 +254,7 @@ h2, .section__title {
   letter-spacing: -0.02em;
   line-height: 1.18;
   max-width: 20ch;
+  margin-inline: auto;
 }
 h3 { font-size: 19px; font-weight: 600; line-height: 1.35; letter-spacing: -0.01em; }
 
@@ -2446,7 +2447,7 @@ html { scroll-snap-type: none; }
 
 /* ---- DIAGNÓSTICO ---- */
 .diagnostic { max-width: 640px; margin: 0 auto; text-align: center; }
-.diagnostic__title { font-size: 24px; font-weight: 700; letter-spacing: -.02em; color: #fff; }
+.diagnostic__title { font-size: 24px; font-weight: 700; letter-spacing: -.02em; color: #fff; margin-inline: auto; }
 @media (min-width: 768px) { .diagnostic__title { font-size: 30px; } }
 .diagnostic__text { margin: var(--sp-12) auto 0; color: var(--text-muted-on-dark); }
 .diagnostic__text strong { color: #fff; }
@@ -2472,7 +2473,7 @@ html { scroll-snap-type: none; }
 
 /* ---- TECNOLOGIA POR TRÁS ---- */
 .tech { max-width: 640px; margin: 0 auto; text-align: center; }
-.tech__title { font-size: 20px; font-weight: 700; color: var(--ink); }
+.tech__title { font-size: 20px; font-weight: 700; color: var(--ink); margin-inline: auto; }
 .tech__text { margin: var(--sp-8) auto 0; color: var(--text-muted); font-size: 14px; }
 .tech-badges { display: flex; flex-wrap: wrap; gap: var(--sp-8); justify-content: center; margin-top: var(--sp-16); }
 .tech-badges li {
