@@ -2415,7 +2415,7 @@ html { scroll-snap-type: none; }
   background: var(--surface-sunken);
   border-radius: var(--r-16);
 }
-.billing-explainer h3 { margin-bottom: var(--sp-8); }
+.billing-explainer h3 { margin-bottom: var(--sp-8); margin-inline: auto; }
 .billing-explainer p { color: var(--text-muted); font-size: 14px; margin-top: var(--sp-8); }
 .billing-explainer__list { display: flex; flex-wrap: wrap; gap: var(--sp-8); margin-top: var(--sp-12); }
 .billing-explainer__list li {
@@ -2459,7 +2459,7 @@ html { scroll-snap-type: none; }
   display: inline-block; font-size: 12px; font-weight: 800; letter-spacing: .08em; text-transform: uppercase;
   color: var(--ink); background: var(--accent-light); border-radius: var(--r-full); padding: 4px 12px;
 }
-.founders h2 { margin-top: var(--sp-12); color: #fff; }
+.founders h2 { margin-top: var(--sp-12); margin-inline: auto; color: #fff; }
 .founders p { margin: var(--sp-12) auto 0; color: var(--text-muted-on-dark); }
 .founders__benefits { display: flex; flex-wrap: wrap; gap: var(--sp-8); justify-content: center; margin: var(--sp-16) auto; }
 .founders__benefits li {
@@ -2482,7 +2482,7 @@ html { scroll-snap-type: none; }
 
 /* ---- INDIQUE E GANHE ---- */
 .referral { max-width: 560px; margin: 0 auto; text-align: center; }
-.referral h2 { color: var(--ink); }
+.referral h2 { margin-inline: auto; color: var(--ink); }
 .referral p { margin: var(--sp-8) auto 0; color: var(--text-muted); }
 .referral__note { font-size: 13px; }
 .referral .btn { margin-top: var(--sp-16); }
@@ -2542,7 +2542,7 @@ html { scroll-snap-type: none; }
   display: inline-grid; place-items: center; width: 52px; height: 52px;
   border-radius: var(--r-12); background: var(--tint); color: var(--primary); margin-bottom: var(--sp-12);
 }
-.catalog-family__head h2 { color: var(--ink); }
+.catalog-family__head h2 { margin-inline: auto; color: var(--ink); }
 .catalog-family__head p { margin: var(--sp-8) auto 0; color: var(--text-muted); }
 .catalog-family__plans { display: grid; grid-template-columns: 1fr; gap: var(--sp-16); align-items: stretch; }
 @media (min-width: 720px) { .catalog-family__plans { grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); } }
@@ -2601,7 +2601,7 @@ html { scroll-snap-type: none; }
 
 /* ---- POSICIONAMENTO ---- */
 .positioning { max-width: 62ch; margin: 0 auto; text-align: center; }
-.positioning h2 { color: var(--ink); }
+.positioning h2 { margin-inline: auto; color: var(--ink); }
 .positioning p { margin: var(--sp-12) auto 0; color: var(--text-muted); max-width: 56ch; }
 .positioning__pillars {
   display: flex; flex-wrap: wrap; justify-content: center;
@@ -2618,7 +2618,7 @@ html { scroll-snap-type: none; }
   background: var(--tint); border: 1px solid rgba(43, 58, 255, .2);
   border-radius: var(--r-16); text-align: center;
 }
-.billing-note h3 { color: var(--ink); }
+.billing-note h3 { margin-inline: auto; color: var(--ink); }
 .billing-note p { color: var(--text-muted); font-size: 14px; margin-top: var(--sp-8); }
 .billing-note__list {
   display: flex; flex-wrap: wrap; justify-content: center;
