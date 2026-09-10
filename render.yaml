@@ -6,6 +6,15 @@ services:
     buildCommand: ""
     pullRequestPreviewsEnabled: false
     routes:
+      # URLs limpas para as páginas dedicadas (avaliadas antes do catch-all).
+      # Padrão para páginas de SEO local no futuro: adicionar uma linha aqui
+      # apontando /automacao-cidade -> /automacao-cidade.html
+      - type: rewrite
+        source: /solucoes
+        destination: /solucoes.html
+      - type: rewrite
+        source: /precos
+        destination: /precos.html
       - type: rewrite
         source: /*
         destination: /index.html

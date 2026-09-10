@@ -8,19 +8,17 @@
    CONFIGURAÇÃO — ajuste estas 3 constantes e o site está pronto
    ------------------------------------------------------------- */
 
-const WHATSAPP_NUMBER = "5548999591614";
-
-// TODO: substituir pela URL real do projeto Supabase (ex.: https://xxxxxxxx.supabase.co)
-const SUPABASE_URL = "https://SEU-PROJETO.supabase.co";
-
-// TODO: substituir pela anon key real do projeto Supabase
-const SUPABASE_ANON_KEY = "SUA_ANON_KEY_AQUI";
-
-/* Mensagem pré-preenchida ao abrir o WhatsApp */
+/* Config vem de data.js (window.SB). Fallbacks garantem o site
+   funcionando mesmo se data.js não carregar. */
+const SB = (window.SB = window.SB || {});
+const SB_WA = SB.whatsapp || {};
+const WHATSAPP_NUMBER = SB_WA.number || "5548999591614";
 const WHATSAPP_MESSAGE =
-  "Olá! Vim pelo site da Solutions Binary e quero automatizar uma tarefa do meu negócio.";
+  SB_WA.default || "Olá! Vim pelo site da Solutions Binary e quero saber mais.";
 
-/* Biblioteca do Supabase carregada sob demanda (ESM, sem bundler) */
+// Supabase opcional — enquanto não configurado, o formulário cai para o WhatsApp.
+const SUPABASE_URL = "https://SEU-PROJETO.supabase.co";
+const SUPABASE_ANON_KEY = "SUA_ANON_KEY_AQUI";
 const SUPABASE_ESM_URL = "https://esm.sh/@supabase/supabase-js@2";
 
 /* -------------------------------------------------------------
@@ -31,14 +29,25 @@ const $$ = (sel, ctx) => Array.prototype.slice.call((ctx || document).querySelec
 const prefersReducedMotion = () =>
   window.matchMedia("(prefers-reduced-motion: reduce)").matches;
 
+function waMessageFor(key) {
+  const m = SB_WA.messages || {};
+  return (key && m[key]) || WHATSAPP_MESSAGE;
+}
+function waHref(key) {
+  return "https://wa.me/" + WHATSAPP_NUMBER + "?text=" + encodeURIComponent(waMessageFor(key));
+}
+function brl(n) {
+  return "R$ " + Number(n).toLocaleString("pt-BR");
+}
+
 /* -------------------------------------------------------------
-   1. Links de WhatsApp (fonte da verdade: WHATSAPP_NUMBER)
+   1. Links de WhatsApp — href a partir de data.js.
+      [data-wa]                -> mensagem padrão
+      [data-wa][data-wa-context="cardapio"] -> mensagem contextual
    ------------------------------------------------------------- */
 (function initWhatsappLinks() {
-  const href =
-    "https://wa.me/" + WHATSAPP_NUMBER + "?text=" + encodeURIComponent(WHATSAPP_MESSAGE);
   $$("[data-wa]").forEach((el) => {
-    el.setAttribute("href", href);
+    el.setAttribute("href", waHref(el.getAttribute("data-wa-context")));
   });
 })();
 
@@ -397,7 +406,7 @@ const prefersReducedMotion = () =>
     submit.classList.toggle("is-loading", on);
     submit.disabled = on;
     submit.setAttribute("aria-busy", on ? "true" : "false");
-    submitLabel.textContent = on ? "Enviando..." : "Enviar mensagem";
+    submitLabel.textContent = on ? "Enviando..." : "Receber uma ideia";
   }
 
   function showAlert(message) {
@@ -423,6 +432,17 @@ const prefersReducedMotion = () =>
       return;
     }
 
+    const empresaEl = document.getElementById("empresa");
+    const cidadeEl = document.getElementById("cidade");
+    const empresa = empresaEl ? empresaEl.value.trim() : "";
+    const cidade = cidadeEl ? cidadeEl.value.trim() : "";
+    const utm =
+      (window.SBAnalytics && window.SBAnalytics.utmString && window.SBAnalytics.utmString()) || "";
+
+    if (window.track) {
+      window.track("submit_lead", { servico: fields.servico.value, cidade: cidade || undefined });
+    }
+
     if (!isConfigured()) {
       // Sem banco de dados configurado ainda: manda os dados preenchidos
       // direto pro WhatsApp cadastrado, em vez de simplesmente falhar.
@@ -433,12 +453,18 @@ const prefersReducedMotion = () =>
 
       let texto =
         "Olá! Meu nome é " + nome + " e vim pelo site da Solutions Binary.\n" +
-        "Tenho interesse em: " + servico + ".\n" +
-        "Meu telefone: " + telefone + ".";
+        (empresa ? "Empresa: " + empresa + "\n" : "") +
+        (cidade ? "Cidade: " + cidade + "\n" : "") +
+        "O que preciso: " + servico + ".\n" +
+        "Meu WhatsApp: " + telefone + ".";
       if (mensagem) texto += "\n\n" + mensagem;
+      if (utm) texto += "\n\n(" + utm + ")";
 
-      const waHref = "https://wa.me/" + WHATSAPP_NUMBER + "?text=" + encodeURIComponent(texto);
-      window.open(waHref, "_blank", "noopener");
+      window.open(
+        "https://wa.me/" + WHATSAPP_NUMBER + "?text=" + encodeURIComponent(texto),
+        "_blank",
+        "noopener"
+      );
 
       panel.hidden = true;
       success.hidden = false;
@@ -452,9 +478,12 @@ const prefersReducedMotion = () =>
       const supabase = await loadSupabase();
       const { error } = await supabase.from("leads").insert({
         nome: fields.nome.value.trim(),
+        empresa: empresa || null,
+        cidade: cidade || null,
         telefone: fields.telefone.value.trim(),
         servico_interesse: fields.servico.value,
         mensagem: fields.mensagem.value.trim() || null,
+        utm: utm || null,
       });
 
       if (error) throw error;
@@ -1147,4 +1176,378 @@ const prefersReducedMotion = () =>
     { threshold: 0.4 }
   );
   items.forEach((el) => io.observe(el));
+})();
+
+/* -------------------------------------------------------------
+   10. Analytics — preparado (sem GA4/GTM ainda).
+   window.track(nome, props) empilha em window.dataLayer.
+   Eventos: click_whatsapp, click_demo, click_pricing, view_case,
+   view_solution, submit_lead. UTMs guardadas em sessionStorage.
+   ------------------------------------------------------------- */
+(function initAnalytics() {
+  window.dataLayer = window.dataLayer || [];
+  window.track = function (name, props) {
+    try {
+      window.dataLayer.push(Object.assign({ event: name, ts: Date.now() }, props || {}));
+    } catch (e) {}
+  };
+
+  // --- UTMs: captura da URL e persiste na sessão ---
+  const UTM_KEYS = ["utm_source", "utm_medium", "utm_campaign", "utm_term", "utm_content", "gclid", "fbclid"];
+  let stored = {};
+  try {
+    stored = JSON.parse(sessionStorage.getItem("sb_utm") || "{}");
+  } catch (e) {}
+  const params = new URLSearchParams(location.search);
+  let touched = false;
+  UTM_KEYS.forEach((k) => {
+    const v = params.get(k);
+    if (v) {
+      stored[k] = v;
+      touched = true;
+    }
+  });
+  if (touched) {
+    try {
+      sessionStorage.setItem("sb_utm", JSON.stringify(stored));
+    } catch (e) {}
+  }
+  window.SBAnalytics = {
+    utm: stored,
+    utmString: function () {
+      return Object.keys(stored)
+        .map((k) => k + "=" + stored[k])
+        .join("; ");
+    },
+  };
+
+  // --- cliques marcados com [data-analytics] ---
+  document.addEventListener(
+    "click",
+    (e) => {
+      const el = e.target.closest("[data-analytics]");
+      if (!el) return;
+      const name = el.getAttribute("data-analytics");
+      if (!name || name.indexOf("view_") === 0) return;
+      window.track(name, {
+        text: (el.textContent || "").trim().slice(0, 60),
+        href: el.getAttribute("href") || undefined,
+      });
+    },
+    true
+  );
+
+  // --- visualizações: [data-analytics^="view_"] ---
+  if ("IntersectionObserver" in window) {
+    const vio = new IntersectionObserver(
+      (entries) => {
+        entries.forEach((entry) => {
+          if (entry.intersectionRatio < 0.5) return;
+          const el = entry.target;
+          vio.unobserve(el);
+          window.track(el.getAttribute("data-analytics"), {
+            label: (el.textContent || "").trim().slice(0, 60),
+          });
+        });
+      },
+      { threshold: 0.5 }
+    );
+    $$('[data-analytics^="view_"]').forEach((el) => vio.observe(el));
+  }
+})();
+
+/* -------------------------------------------------------------
+   11. Preços e produtos — render a partir de window.SB (data.js)
+   Funciona em index.html, solucoes.html e precos.html: cada
+   bloco só é montado se o elemento existir na página.
+   ------------------------------------------------------------- */
+(function initPricing() {
+  const P = SB.pricing;
+  if (!P || !Array.isArray(P.families)) return;
+
+  const ICONS = {
+    cardapio: '<path d="M4 5.5A2.5 2.5 0 0 1 6.5 3H20v18H6.5A2.5 2.5 0 0 1 4 18.5z"/><path d="M8 8h8M8 12h8M8 16h5"/>',
+    site: '<rect x="3" y="4" width="18" height="15" rx="2.5"/><path d="M3 9h18M6.4 6.5h.01M9.2 6.5h.01"/><path d="M9 22h6"/>',
+    automacao: '<circle cx="12" cy="12" r="3.5"/><path d="M12 2v3M12 19v3M2 12h3M19 12h3M4.9 4.9l2.1 2.1M17 17l2.1 2.1M19.1 4.9 17 7M7 17l-2.1 2.1"/>',
+    whatsapp: '<rect x="3" y="4" width="18" height="13" rx="4"/><path d="m7 17-1 3 4-3"/>',
+    dashboard: '<rect x="3" y="10" width="4" height="10" rx="1"/><rect x="10" y="4" width="4" height="16" rx="1"/><rect x="17" y="13" width="4" height="7" rx="1"/>',
+    custom: '<path d="M12 3l2.5 5 5.5.8-4 3.9.9 5.5L12 21l-4.9 2.6.9-5.5-4-3.9 5.5-.8z"/>',
+  };
+  function iconSvg(name) {
+    return (
+      '<svg viewBox="0 0 24 24" width="24" height="24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">' +
+      (ICONS[name] || ICONS.custom) +
+      "</svg>"
+    );
+  }
+  function esc(s) {
+    return String(s).replace(/[&<>"]/g, (c) => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;" }[c]));
+  }
+  function setupLabel(plan) {
+    return (plan.setupFrom ? "a partir de " : "") + brl(plan.setup);
+  }
+  function monthlyLabel(plan) {
+    if (plan.monthly) return "+ " + brl(plan.monthly) + "/mês";
+    if (plan.monthlyOptional) return "+ " + brl(plan.monthlyOptional) + "/mês (opcional)";
+    if (plan.monthlyRange) return "+ R$ " + plan.monthlyRange[0] + "–" + plan.monthlyRange[1] + "/mês";
+    return "";
+  }
+  function cheapest(fam) {
+    return fam.plans[0];
+  }
+  function discountFor(fam, plan) {
+    const fp = SB.founderProgram;
+    if (!fp || !fp.enabled || !fp.discounts) return null;
+    return fp.discounts[fam.slug + ":" + plan.name] || null;
+  }
+
+  /* ---- faixa "a partir de" do hero ---- */
+  const heroStrip = document.getElementById("heroPricing");
+  if (heroStrip) {
+    const pick = ["cardapio", "site", "automacao"];
+    heroStrip.innerHTML = pick
+      .map((slug) => {
+        const fam = P.families.find((f) => f.slug === slug);
+        if (!fam) return "";
+        return (
+          '<li><span class="hero__pricing-name">' +
+          esc(fam.name) +
+          '</span><span class="hero__pricing-val">' +
+          setupLabel(cheapest(fam)) +
+          "</span></li>"
+        );
+      })
+      .join("");
+  }
+
+  /* ---- grade de produtos (home) ---- */
+  const grid = document.getElementById("productGrid");
+  if (grid) {
+    grid.innerHTML = P.families
+      .map((fam) => {
+        const c = cheapest(fam);
+        return (
+          '<article class="product-card' +
+          (fam.featured ? " product-card--featured" : "") +
+          '" data-analytics="view_solution">' +
+          '<span class="product-card__ico" aria-hidden="true">' + iconSvg(fam.icon) + "</span>" +
+          '<h3 class="product-card__name">' + esc(fam.name) + "</h3>" +
+          '<p class="product-card__summary">' + esc(fam.summary) + "</p>" +
+          '<p class="product-card__price"><span class="price__from">a partir de</span> ' +
+          '<strong>' + brl(c.setup) + "</strong>" +
+          (monthlyLabel(c) ? ' <span class="price__monthly">' + monthlyLabel(c).replace("+ ", "") + "</span>" : "") +
+          "</p>" +
+          '<div class="product-card__cta">' +
+          '<a class="btn btn--primary btn--sm" href="solucoes.html#' + fam.slug + '" data-analytics="click_pricing">Ver detalhes</a>' +
+          '<a class="btn btn--secondary btn--sm" data-wa data-wa-context="' + esc(fam.waContext || "") + '" data-analytics="click_whatsapp" href="' + waHref(fam.waContext) + '" target="_blank" rel="noopener">WhatsApp</a>' +
+          "</div>" +
+          "</article>"
+        );
+      })
+      .join("");
+  }
+
+  /* ---- tabela de preços (home + precos.html) ---- */
+  function renderTable(el, full) {
+    const rows = [];
+    P.families.forEach((fam) => {
+      fam.plans.forEach((plan) => {
+        const d = discountFor(fam, plan);
+        const setupHtml = d
+          ? '<s>' + brl(d.normalSetup) + "</s> <strong>" + brl(d.founderSetup) + "</strong>"
+          : "<strong>" + setupLabel(plan) + "</strong>";
+        const feat = full ? plan.features : plan.features.slice(0, 4);
+        rows.push(
+          '<div class="ptable__row">' +
+            '<div class="ptable__name">' + esc(plan.name) + (plan.tag ? ' <span class="ptable__tag">' + esc(plan.tag) + "</span>" : "") + "</div>" +
+            '<div class="ptable__setup"><span class="ptable__k">Implantação</span>' + setupHtml + "</div>" +
+            '<div class="ptable__monthly"><span class="ptable__k">Mensalidade</span>' + (monthlyLabel(plan).replace("+ ", "") || "—") + "</div>" +
+            '<div class="ptable__feat"><span class="ptable__k">Inclui</span>' + feat.map(esc).join(" · ") + (plan.note ? '<em class="ptable__note">' + esc(plan.note) + "</em>" : "") + "</div>" +
+          "</div>"
+        );
+      });
+    });
+    el.innerHTML = rows.join("");
+  }
+  const homeTable = document.getElementById("pricingTable");
+  if (homeTable) renderTable(homeTable, false);
+  const fullTable = document.getElementById("precosTable");
+  if (fullTable) renderTable(fullTable, true);
+
+  const noteEl = document.getElementById("pricingNote");
+  if (noteEl && P.note) noteEl.textContent = P.note;
+
+  /* ---- explicador implantação × mensalidade ---- */
+  const be = document.getElementById("billingExplainer");
+  if (be && SB.billing) {
+    const b = SB.billing;
+    be.innerHTML =
+      "<h3>" + esc(b.title) + "</h3>" +
+      "<p>" + esc(b.setup) + "</p>" +
+      "<p>" + esc(b.monthly) + "</p>" +
+      '<ul class="billing-explainer__list">' + b.monthlyItems.map((i) => "<li>" + esc(i) + "</li>").join("") + "</ul>" +
+      (b.domain ? '<p class="billing-explainer__domain">' + esc(b.domain) + "</p>" : "");
+  }
+
+  /* ---- catálogo completo (solucoes.html) ---- */
+  const catalog = document.getElementById("catalog");
+  if (catalog) {
+    catalog.innerHTML = P.families
+      .map((fam) => {
+        const plans = fam.plans
+          .map((plan) => {
+            const d = discountFor(fam, plan);
+            const priceHtml = d
+              ? '<s>' + brl(d.normalSetup) + "</s> <strong>" + brl(d.founderSetup) + "</strong>"
+              : "<strong>" + setupLabel(plan) + "</strong>";
+            return (
+              '<div class="plan-card' + (plan.tag ? " plan-card--tag" : "") + '">' +
+              (plan.tag ? '<span class="plan-card__tag">' + esc(plan.tag) + "</span>" : "") +
+              '<h3 class="plan-card__name">' + esc(plan.name) + "</h3>" +
+              '<p class="plan-card__price">' + priceHtml + (monthlyLabel(plan) ? ' <span>' + esc(monthlyLabel(plan)) + "</span>" : "") + "</p>" +
+              '<ul class="plan-card__features">' + plan.features.map((f) => "<li>" + esc(f) + "</li>").join("") + "</ul>" +
+              (plan.note ? '<p class="plan-card__note">' + esc(plan.note) + "</p>" : "") +
+              "</div>"
+            );
+          })
+          .join("");
+        return (
+          '<section class="catalog-family" id="' + fam.slug + '">' +
+          '<header class="catalog-family__head">' +
+          '<span class="catalog-family__ico" aria-hidden="true">' + iconSvg(fam.icon) + "</span>" +
+          "<h2>" + esc(fam.name) + "</h2>" +
+          "<p>" + esc(fam.summary) + "</p>" +
+          "</header>" +
+          '<div class="catalog-family__plans">' + plans + "</div>" +
+          '<div class="catalog-family__cta">' +
+          '<a class="btn btn--primary" data-wa data-wa-context="' + esc(fam.waContext || "") + '" data-analytics="click_whatsapp" href="' + waHref(fam.waContext) + '" target="_blank" rel="noopener">Falar sobre ' + esc(fam.name) + "</a>" +
+          (fam.demoUrl ? '<a class="btn btn--secondary" href="' + esc(fam.demoUrl) + '" target="_blank" rel="noopener" data-analytics="click_demo">Ver um exemplo</a>' : "") +
+          "</div>" +
+          "</section>"
+        );
+      })
+      .join("");
+  }
+
+  /* ---- comparativo de cardápio (solucoes.html / precos.html) ---- */
+  const cmp = document.getElementById("compareCardapio");
+  const famC = P.families.find((f) => f.slug === "cardapio");
+  if (cmp && famC && famC.compare) {
+    const c = famC.compare;
+    cmp.innerHTML =
+      '<table class="compare-table"><thead><tr><th>Recurso</th>' +
+      c.plans.map((p) => "<th>" + esc(p) + "</th>").join("") +
+      "</tr></thead><tbody>" +
+      c.rows
+        .map((row, i) => {
+          return (
+            "<tr><th scope=\"row\">" + esc(row) + "</th>" +
+            c.matrix.map((col) => "<td>" + (col[i] ? '<span class="yes">✓</span>' : '<span class="no">—</span>') + "</td>").join("") +
+            "</tr>"
+          );
+        })
+        .join("") +
+      "</tbody></table>";
+  }
+
+  /* ---- programa Clientes Fundadores (só se habilitado) ---- */
+  const fp = SB.founderProgram;
+  const fSec = document.getElementById("fundadores");
+  const fBlock = document.getElementById("foundersBlock");
+  if (fp && fp.enabled && fSec && fBlock) {
+    fSec.hidden = false;
+    fBlock.innerHTML =
+      '<span class="founders__eyebrow">Vagas limitadas</span>' +
+      "<h2>" + esc(fp.headline) + "</h2>" +
+      "<p>" + esc(fp.text) + "</p>" +
+      '<ul class="founders__benefits">' + (fp.benefits || []).map((b) => "<li>" + esc(b) + "</li>").join("") + "</ul>" +
+      (fp.limitNote ? '<p class="founders__limit">' + esc(fp.limitNote) + "</p>" : "") +
+      '<a class="btn btn--primary" data-wa data-wa-context="founder" data-analytics="click_whatsapp" href="' + waHref("founder") + '" target="_blank" rel="noopener">Quero ser Cliente Fundador</a>';
+  }
+
+  /* ---- indique e ganhe ---- */
+  const rf = SB.referral;
+  const rSec = document.getElementById("indique");
+  const rBlock = document.getElementById("referralBlock");
+  if (rf && rf.enabled && rSec && rBlock) {
+    rSec.hidden = false;
+    rBlock.innerHTML =
+      "<h2>" + esc(rf.title || "Indique e ganhe") + "</h2>" +
+      "<p>" + esc(rf.text) + "</p>" +
+      (rf.rulesNote ? '<p class="referral__note">' + esc(rf.rulesNote) + "</p>" : "") +
+      '<a class="btn btn--secondary" data-wa data-wa-context="indicacao" data-analytics="click_whatsapp" href="' + waHref("indicacao") + '" target="_blank" rel="noopener">Quero indicar alguém</a>';
+  }
+
+  /* ---- depoimentos (só se houver) ---- */
+  const tList = document.getElementById("testimonialList");
+  const tSec = document.getElementById("depoimentos");
+  if (tList && tSec && Array.isArray(SB.testimonials) && SB.testimonials.length) {
+    tSec.hidden = false;
+    tList.innerHTML = SB.testimonials
+      .map(
+        (t) =>
+          '<li class="testimonial"><blockquote>' + esc(t.quote) + "</blockquote>" +
+          '<p class="testimonial__by">' + esc(t.name) + (t.business ? " — " + esc(t.business) : "") + (t.city ? ", " + esc(t.city) : "") + "</p></li>"
+      )
+      .join("");
+  }
+
+  // re-aplica os hrefs de WhatsApp nos elementos recém-criados
+  $$("[data-wa]").forEach((el) => el.setAttribute("href", waHref(el.getAttribute("data-wa-context"))));
+
+  // JSON-LD OfferCatalog gerado a partir do data.js (sem duplicar preços no HTML)
+  try {
+    const offers = P.families.map((fam) => ({
+      "@type": "Offer",
+      name: fam.name,
+      description: fam.summary,
+      price: String(cheapest(fam).setup),
+      priceCurrency: "BRL",
+      url: "https://solutionsbinary.com.br/solucoes#" + fam.slug,
+    }));
+    const ld = document.createElement("script");
+    ld.type = "application/ld+json";
+    ld.textContent = JSON.stringify({
+      "@context": "https://schema.org",
+      "@type": "OfferCatalog",
+      name: "Soluções Solutions Binary",
+      itemListElement: offers,
+    });
+    document.head.appendChild(ld);
+  } catch (e) {}
+})();
+
+/* -------------------------------------------------------------
+   12. Barra de ação fixa no mobile (.mcta)
+   Esconde quando a seção de contato está visível e quando o
+   menu mobile está aberto.
+   ------------------------------------------------------------- */
+(function initStickyCta() {
+  const bar = document.getElementById("mcta");
+  if (!bar) return;
+
+  function shown(on) {
+    bar.classList.toggle("is-hidden", !on);
+    document.body.classList.toggle("has-mcta", on);
+  }
+  shown(true);
+
+  const contato = document.getElementById("contato");
+  if (contato && "IntersectionObserver" in window) {
+    const io = new IntersectionObserver(
+      (entries) => {
+        entries.forEach((entry) => shown(entry.intersectionRatio < 0.35));
+      },
+      { threshold: [0, 0.35, 1] }
+    );
+    io.observe(contato);
+  }
+
+  const burger = document.getElementById("navBurger");
+  if (burger) {
+    const mo = new MutationObserver(() => {
+      if (burger.getAttribute("aria-expanded") === "true") shown(false);
+    });
+    mo.observe(burger, { attributes: true, attributeFilter: ["aria-expanded"] });
+  }
 })();
