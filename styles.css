@@ -2597,3 +2597,62 @@ html { scroll-snap-type: none; }
 .faq details[open] summary::after { content: "\2013"; }
 .faq details[open] summary { margin-bottom: var(--sp-8); }
 .faq p { color: var(--text-muted); font-size: 14px; }
+
+/* =============================================================
+   CENTRALIZAÇÃO dos blocos novos — mesmo padrão do resto do site
+   ============================================================= */
+
+/* cards de produto (home) */
+.product-card { text-align: center; align-items: center; }
+.product-card__ico { margin-inline: auto; }
+.product-card__summary { margin-inline: auto; }
+.product-card__price { width: 100%; }
+.product-card__cta { justify-content: center; width: 100%; }
+
+/* citações do "você faz essa tarefa todo dia?" */
+.problem-card { text-align: center; }
+.problem-card__quote { margin-inline: auto; }
+
+/* faixa "a partir de" no hero — centralizada também no desktop */
+.hero__pricing { justify-content: center; }
+@media (min-width: 1024px) { .hero__pricing { justify-content: center; } }
+
+/* automação em destaque — passos sempre centralizados */
+.auto-flow__step {
+  grid-template-columns: 1fr;
+  grid-template-rows: auto auto auto;
+  text-align: center;
+  justify-items: center;
+}
+.auto-flow__ico { grid-row: auto; }
+
+/* tabela de preços: centralizada no mobile, alinhada à esquerda só
+   na versão larga (mais fácil de ler em colunas) */
+.ptable__row { text-align: center; }
+.ptable__k { text-align: center; }
+@media (min-width: 780px) {
+  .ptable__row { text-align: left; }
+  .ptable__k { text-align: left; }
+}
+
+/* explicador implantação × mensalidade */
+.billing-explainer { text-align: center; }
+.billing-explainer__list { justify-content: center; }
+
+/* planos (solucoes.html) */
+.plan-card { text-align: center; align-items: center; }
+.plan-card__tag { left: 50%; transform: translateX(-50%); }
+.plan-card__features {
+  align-self: center;
+  align-items: flex-start;
+  text-align: left;
+  width: max-content;
+  max-width: 100%;
+}
+
+/* tabela comparativa: primeira coluna também centralizada */
+.compare-table tbody th { text-align: center; }
+
+/* FAQ: pergunta continua à esquerda (padrão de acordeão),
+   resposta centralizada para acompanhar o resto */
+.faq p { text-align: center; }
