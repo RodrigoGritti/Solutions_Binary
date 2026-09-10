@@ -146,26 +146,40 @@ app.post("/api/preview", express.json({ limit: "64kb" }), async (req, res) => {
     hasLogo,
   });
 
-  const controller = new AbortController();
-  const timer = setTimeout(() => controller.abort(), 45000);
+  const reqBody = JSON.stringify({
+    model: MODEL,
+    max_tokens: 4200,
+    thinking: { type: "disabled" },
+    output_config: { effort: "medium" },
+    messages: [{ role: "user", content: prompt }],
+  });
+
+  async function callAnthropic() {
+    const controller = new AbortController();
+    const timer = setTimeout(() => controller.abort(), 70000);
+    try {
+      return await fetch(ANTHROPIC_URL, {
+        method: "POST",
+        signal: controller.signal,
+        headers: {
+          "content-type": "application/json",
+          "x-api-key": ANTHROPIC_API_KEY,
+          "anthropic-version": "2023-06-01",
+        },
+        body: reqBody,
+      });
+    } finally {
+      clearTimeout(timer);
+    }
+  }
 
   try {
-    const r = await fetch(ANTHROPIC_URL, {
-      method: "POST",
-      signal: controller.signal,
-      headers: {
-        "content-type": "application/json",
-        "x-api-key": ANTHROPIC_API_KEY,
-        "anthropic-version": "2023-06-01",
-      },
-      body: JSON.stringify({
-        model: MODEL,
-        max_tokens: 4200,
-        thinking: { type: "disabled" },
-        output_config: { effort: "medium" },
-        messages: [{ role: "user", content: prompt }],
-      }),
-    });
+    let r = await callAnthropic();
+    // 1 retry em sobrecarga/limite transitório da Anthropic
+    if ([429, 500, 502, 503, 529].includes(r.status)) {
+      await new Promise((res2) => setTimeout(res2, 2500));
+      r = await callAnthropic();
+    }
 
     if (!r.ok) {
       const detail = await r.text().catch(() => "");
@@ -190,8 +204,6 @@ app.post("/api/preview", express.json({ limit: "64kb" }), async (req, res) => {
   } catch (err) {
     console.error("[preview] erro:", err && err.name, err && err.message);
     return res.status(200).json({ fallback: true, reason: "exception" });
-  } finally {
-    clearTimeout(timer);
   }
 });
 

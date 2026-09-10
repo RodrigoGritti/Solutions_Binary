@@ -860,7 +860,7 @@ function brl(n) {
     let usedAi = false;
     try {
       const ctrl = new AbortController();
-      const to = window.setTimeout(() => ctrl.abort(), 55000);
+      const to = window.setTimeout(() => ctrl.abort(), 90000);
       const resp = await fetch("/api/preview", {
         method: "POST",
         headers: { "content-type": "application/json" },
