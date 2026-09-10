@@ -1341,8 +1341,8 @@ function brl(n) {
           (monthlyLabel(c) ? ' <span class="price__monthly">' + monthlyLabel(c).replace("+ ", "") + "</span>" : "") +
           "</p>" +
           '<div class="product-card__cta">' +
-          '<a class="btn btn--primary btn--sm" href="solucoes.html#' + fam.slug + '" data-analytics="click_pricing">Ver detalhes</a>' +
-          '<a class="btn btn--secondary btn--sm" data-wa data-wa-context="' + esc(fam.waContext || "") + '" data-analytics="click_whatsapp" href="' + waHref(fam.waContext) + '" target="_blank" rel="noopener">WhatsApp</a>' +
+          '<a class="btn btn--primary btn--sm" data-wa data-wa-context="' + esc(fam.waContext || "") + '" data-analytics="click_whatsapp" href="' + waHref(fam.waContext) + '" target="_blank" rel="noopener">' + esc(fam.ctaLabel || ("Falar sobre " + fam.name)) + "</a>" +
+          '<a class="btn btn--secondary btn--sm" href="solucoes.html#' + fam.slug + '" data-analytics="click_pricing">Ver detalhes</a>' +
           "</div>" +
           "</article>"
         );
@@ -1393,6 +1393,24 @@ function brl(n) {
   }
 
   /* ---- catálogo completo (solucoes.html) ---- */
+  function planWa(fam, plan) {
+    return plan.waContext || fam.waContext || "";
+  }
+  function planCta(fam, plan) {
+    return plan.ctaLabel || fam.ctaLabel || ("Falar sobre " + fam.name);
+  }
+  function billingNoteHtml(fam) {
+    const bn = fam.billingNote;
+    if (!bn) return "";
+    return (
+      '<div class="billing-note" data-analytics="view_solution">' +
+      "<h3>" + esc(bn.title) + "</h3>" +
+      (bn.intro ? "<p>" + esc(bn.intro) + "</p>" : "") +
+      '<ul class="billing-note__list">' + (bn.items || []).map((i) => "<li>" + esc(i) + "</li>").join("") + "</ul>" +
+      (bn.message ? '<p class="billing-note__msg">' + esc(bn.message) + "</p>" : "") +
+      "</div>"
+    );
+  }
   const catalog = document.getElementById("catalog");
   if (catalog) {
     catalog.innerHTML = P.families
@@ -1403,13 +1421,15 @@ function brl(n) {
             const priceHtml = d
               ? '<s>' + brl(d.normalSetup) + "</s> <strong>" + brl(d.founderSetup) + "</strong>"
               : "<strong>" + setupLabel(plan) + "</strong>";
+            const wa = planWa(fam, plan);
             return (
-              '<div class="plan-card' + (plan.tag ? " plan-card--tag" : "") + '">' +
+              '<div class="plan-card' + (plan.tag ? " plan-card--tag" : "") + (plan.featured ? " plan-card--featured" : "") + '">' +
               (plan.tag ? '<span class="plan-card__tag">' + esc(plan.tag) + "</span>" : "") +
               '<h3 class="plan-card__name">' + esc(plan.name) + "</h3>" +
               '<p class="plan-card__price">' + priceHtml + (monthlyLabel(plan) ? ' <span>' + esc(monthlyLabel(plan)) + "</span>" : "") + "</p>" +
               '<ul class="plan-card__features">' + plan.features.map((f) => "<li>" + esc(f) + "</li>").join("") + "</ul>" +
               (plan.note ? '<p class="plan-card__note">' + esc(plan.note) + "</p>" : "") +
+              '<a class="btn btn--primary btn--sm plan-card__cta" data-wa data-wa-context="' + esc(wa) + '" data-analytics="click_whatsapp" href="' + waHref(wa) + '" target="_blank" rel="noopener">' + esc(planCta(fam, plan)) + "</a>" +
               "</div>"
             );
           })
@@ -1422,8 +1442,9 @@ function brl(n) {
           "<p>" + esc(fam.summary) + "</p>" +
           "</header>" +
           '<div class="catalog-family__plans">' + plans + "</div>" +
+          billingNoteHtml(fam) +
           '<div class="catalog-family__cta">' +
-          '<a class="btn btn--primary" data-wa data-wa-context="' + esc(fam.waContext || "") + '" data-analytics="click_whatsapp" href="' + waHref(fam.waContext) + '" target="_blank" rel="noopener">Falar sobre ' + esc(fam.name) + "</a>" +
+          '<a class="btn btn--primary" data-wa data-wa-context="' + esc(fam.waContext || "") + '" data-analytics="click_whatsapp" href="' + waHref(fam.waContext) + '" target="_blank" rel="noopener">' + esc(fam.ctaLabel || ("Falar sobre " + fam.name)) + "</a>" +
           (fam.demoUrl ? '<a class="btn btn--secondary" href="' + esc(fam.demoUrl) + '" target="_blank" rel="noopener" data-analytics="click_demo">Ver um exemplo</a>' : "") +
           "</div>" +
           "</section>"
@@ -1479,6 +1500,43 @@ function brl(n) {
       "<p>" + esc(rf.text) + "</p>" +
       (rf.rulesNote ? '<p class="referral__note">' + esc(rf.rulesNote) + "</p>" : "") +
       '<a class="btn btn--secondary" data-wa data-wa-context="indicacao" data-analytics="click_whatsapp" href="' + waHref("indicacao") + '" target="_blank" rel="noopener">Quero indicar alguém</a>';
+  }
+
+  /* ---- posicionamento (item 1) ---- */
+  const posEl = document.getElementById("positioning");
+  if (posEl && SB.positioning) {
+    const ps = SB.positioning;
+    posEl.innerHTML =
+      "<h2>" + esc(ps.headline) + "</h2>" +
+      (ps.sub ? "<p>" + esc(ps.sub) + "</p>" : "") +
+      (Array.isArray(ps.pillars) && ps.pillars.length
+        ? '<ul class="positioning__pillars">' + ps.pillars.map((p) => "<li>" + esc(p) + "</li>").join("") + "</ul>"
+        : "");
+  }
+
+  /* ---- FAQ de preços (item 18) — configurável em data.js ---- */
+  const faqEl = document.getElementById("faqList");
+  if (faqEl && SB.faq && Array.isArray(SB.faq.items)) {
+    faqEl.innerHTML = SB.faq.items
+      .map(
+        (it) =>
+          "<details><summary>" + esc(it.q) + "</summary><p>" + esc(it.a) + "</p></details>"
+      )
+      .join("");
+    try {
+      const ld = document.createElement("script");
+      ld.type = "application/ld+json";
+      ld.textContent = JSON.stringify({
+        "@context": "https://schema.org",
+        "@type": "FAQPage",
+        mainEntity: SB.faq.items.map((it) => ({
+          "@type": "Question",
+          name: it.q,
+          acceptedAnswer: { "@type": "Answer", text: it.a },
+        })),
+      });
+      document.head.appendChild(ld);
+    } catch (e) {}
   }
 
   /* ---- depoimentos (só se houver) ---- */

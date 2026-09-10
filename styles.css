@@ -2598,6 +2598,41 @@ html { scroll-snap-type: none; }
 .faq details[open] summary { margin-bottom: var(--sp-8); }
 .faq p { color: var(--text-muted); font-size: 14px; }
 
+/* ---- POSICIONAMENTO ---- */
+.positioning { max-width: 760px; margin: 0 auto; text-align: center; }
+.positioning h2 { color: var(--ink); }
+.positioning p { margin: var(--sp-12) auto 0; color: var(--text-muted); max-width: 56ch; }
+.positioning__pillars {
+  display: flex; flex-wrap: wrap; justify-content: center;
+  gap: var(--sp-8); margin-top: var(--sp-20); padding: 0; list-style: none;
+}
+.positioning__pillars li {
+  font-size: 13px; font-weight: 600; color: var(--tint-ink);
+  background: var(--tint); border-radius: var(--r-full); padding: 6px 14px;
+}
+
+/* ---- NOTA "O CARDÁPIO CONTINUA FUNCIONANDO POR VOCÊ" ---- */
+.billing-note {
+  max-width: 640px; margin: var(--sp-24) auto 0; padding: var(--sp-24);
+  background: var(--tint); border: 1px solid rgba(43, 58, 255, .2);
+  border-radius: var(--r-16); text-align: center;
+}
+.billing-note h3 { color: var(--ink); }
+.billing-note p { color: var(--text-muted); font-size: 14px; margin-top: var(--sp-8); }
+.billing-note__list {
+  display: flex; flex-wrap: wrap; justify-content: center;
+  gap: var(--sp-8); margin-top: var(--sp-12); padding: 0; list-style: none;
+}
+.billing-note__list li {
+  font-size: 12px; font-weight: 600; color: var(--tint-ink);
+  background: var(--surface); border-radius: var(--r-full); padding: 5px 12px;
+}
+.billing-note__msg { font-weight: 600; color: var(--ink) !important; margin-top: var(--sp-16) !important; }
+
+/* ---- CTA por plano no catálogo ---- */
+.plan-card__cta { margin-top: auto; align-self: stretch; text-align: center; }
+.plan-card--featured { border-color: var(--primary); box-shadow: var(--shadow-md); }
+
 /* =============================================================
    CENTRALIZAÇÃO dos blocos novos — mesmo padrão do resto do site
    ============================================================= */
