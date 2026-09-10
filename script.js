@@ -794,7 +794,33 @@ function brl(n) {
     reader.readAsDataURL(file);
   });
 
-  form.addEventListener("submit", (e) => {
+  function buildWaLink(nome, ramo) {
+    const texto = `Olá! Testei a prévia de "${CATS[state.cat].label}" no site (empresa: ${nome}, ramo: ${ramo}) e quero saber mais sobre como isso ficaria pra mim de verdade.`;
+    waLink.setAttribute("href", "https://wa.me/" + WHATSAPP_NUMBER + "?text=" + encodeURIComponent(texto));
+  }
+
+  // Renderiza o mockup por template (fallback — usado se a IA falhar)
+  function renderTemplate(nome, ramo, extra) {
+    frame.classList.remove("preview-frame--ai");
+    frame.style.setProperty("--pv", state.color);
+    mockEl.innerHTML = MOCK_BUILDERS[state.cat]({ nome, ramo, extra, logoUrl: state.logoUrl });
+  }
+
+  // Renderiza o HTML gerado pela IA dentro de um iframe isolado (sandbox)
+  function renderAi(html) {
+    frame.classList.add("preview-frame--ai");
+    mockEl.textContent = "";
+    const iframe = document.createElement("iframe");
+    iframe.className = "preview-iframe";
+    iframe.setAttribute("sandbox", "allow-scripts"); // sem allow-same-origin: fica em origem opaca, não toca a página
+    iframe.setAttribute("title", "Prévia gerada por IA");
+    let doc = String(html);
+    if (state.logoUrl) doc = doc.split("__LOGO__").join(state.logoUrl);
+    iframe.srcdoc = doc;
+    mockEl.appendChild(iframe);
+  }
+
+  form.addEventListener("submit", async (e) => {
     e.preventDefault();
     const nome = nomeInput.value.trim();
     const ramo = ramoInput.value.trim();
@@ -803,18 +829,41 @@ function brl(n) {
     const extra = extraSelect.value;
 
     showStep("loading");
+    buildWaLink(nome, ramo);
 
-    const delay = prefersReducedMotion() ? 150 : 1500;
-    window.setTimeout(() => {
-      frame.style.setProperty("--pv", state.color);
-      mockEl.innerHTML = MOCK_BUILDERS[state.cat]({ nome, ramo, extra, logoUrl: state.logoUrl });
+    let usedAi = false;
+    try {
+      const ctrl = new AbortController();
+      const to = window.setTimeout(() => ctrl.abort(), 55000);
+      const resp = await fetch("/api/preview", {
+        method: "POST",
+        headers: { "content-type": "application/json" },
+        signal: ctrl.signal,
+        body: JSON.stringify({
+          category: state.cat,
+          companyName: nome,
+          ramo: ramo,
+          extra: extra,
+          color: state.color,
+          hasLogo: !!state.logoUrl,
+        }),
+      });
+      window.clearTimeout(to);
+      if (resp.ok) {
+        const data = await resp.json().catch(() => null);
+        if (data && data.html) {
+          renderAi(data.html);
+          usedAi = true;
+        }
+      }
+    } catch (_) {
+      /* rede/timeout — cai no template abaixo */
+    }
 
-      const texto = `Olá! Testei a prévia de "${CATS[state.cat].label}" no site (empresa: ${nome}, ramo: ${ramo}) e quero saber mais sobre como isso ficaria pra mim de verdade.`;
-      waLink.setAttribute("href", "https://wa.me/" + WHATSAPP_NUMBER + "?text=" + encodeURIComponent(texto));
+    if (!usedAi) renderTemplate(nome, ramo, extra);
 
-      showStep("result");
-      frame.scrollIntoView({ behavior: prefersReducedMotion() ? "auto" : "smooth", block: "center" });
-    }, delay);
+    showStep("result");
+    frame.scrollIntoView({ behavior: prefersReducedMotion() ? "auto" : "smooth", block: "center" });
   });
 })();
 
