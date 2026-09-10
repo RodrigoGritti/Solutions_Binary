@@ -124,7 +124,7 @@ window.SB = {
         slug: "automacao",
         name: "Automação",
         icon: "automacao",
-        summary: "Tem uma tarefa que você faz todo dia? Talvez ela possa ser automática.",
+        summary: "Formulário na planilha, e-mail automático, relatório pronto — o repetitivo no piloto automático.",
         featured: true,
         waContext: "automacao",
         plans: [
