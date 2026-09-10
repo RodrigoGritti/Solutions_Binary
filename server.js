@@ -214,16 +214,23 @@ app.use(
   express.static(__dirname, {
     extensions: ["html"],
     setHeaders: (resp, filePath) => {
-      if (/\.(mp4|woff2|png|jpe?g)$/i.test(filePath)) {
+      if (/\.(mp4|woff2|png|jpe?g|svg)$/i.test(filePath)) {
         resp.setHeader("Cache-Control", "public, max-age=604800");
+      } else if (/\.(html|js|css)$/i.test(filePath)) {
+        // páginas e código: revalida sempre para não servir versão antiga após deploy
+        resp.setHeader("Cache-Control", "no-cache");
       }
     },
   })
 );
-app.get("/solucoes", (_req, res) => res.sendFile(path.join(__dirname, "solucoes.html")));
-app.get("/precos", (_req, res) => res.sendFile(path.join(__dirname, "precos.html")));
+function sendPage(res, file) {
+  res.setHeader("Cache-Control", "no-cache");
+  res.sendFile(path.join(__dirname, file));
+}
+app.get("/solucoes", (_req, res) => sendPage(res, "solucoes.html"));
+app.get("/precos", (_req, res) => sendPage(res, "precos.html"));
 // catch-all: qualquer rota desconhecida cai na home (igual ao comportamento antigo)
-app.get("*", (_req, res) => res.sendFile(path.join(__dirname, "index.html")));
+app.get("*", (_req, res) => sendPage(res, "index.html"));
 
 app.listen(PORT, () => {
   console.log("Solutions Binary no ar na porta " + PORT + " — modelo: " + MODEL + " — API " + (ANTHROPIC_API_KEY ? "ok" : "SEM CHAVE (usa fallback)"));
