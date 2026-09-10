@@ -2270,7 +2270,7 @@ html { scroll-snap-type: none; }
 
 .section__cta { margin-top: var(--sp-32); text-align: center; }
 .link-arrow { font-weight: 700; }
-.solucoes__more { text-align: center; margin-top: var(--sp-24); }
+.solucoes__more { text-align: center; margin-top: var(--sp-24); margin-inline: auto; max-width: none; }
 
 /* ---- HERO: fineprint + faixa "a partir de" ---- */
 .hero__fineprint {
