@@ -13,20 +13,21 @@
   gtag('config', 'G-0FR0XL10DJ');
 </script>
 
-<title>Soluções e planos — Solutions Binary</title>
-<meta name="description" content="Cardápio digital, site, automação, WhatsApp inteligente, dashboard e soluções sob medida. Veja o que cada plano inclui e o preço de cada um.">
+<title>Soluções e preços — Solutions Binary</title>
+<meta name="description" content="Sites, cardápios digitais, automações, WhatsApp inteligente, dashboards e soluções sob medida. Veja o que cada plano inclui, a implantação e a mensalidade.">
 <meta name="theme-color" content="#F7F7F8">
 <meta name="author" content="Solutions Binary">
 <link rel="canonical" href="https://solutionsbinary.com.br/solucoes">
 <meta property="og:type" content="website">
 <meta property="og:locale" content="pt_BR">
 <meta property="og:site_name" content="Solutions Binary">
-<meta property="og:title" content="Soluções e planos — Solutions Binary">
-<meta property="og:description" content="Cardápio digital, site, automação, WhatsApp inteligente e dashboard. Veja o que cada plano inclui.">
+<meta property="og:title" content="Soluções e preços — Solutions Binary">
+<meta property="og:description" content="Veja o que cada solução inclui, a implantação e a mensalidade.">
 <meta property="og:url" content="https://solutionsbinary.com.br/solucoes">
 <link rel="icon" type="image/png" href="assets/favicon.png">
 <link rel="stylesheet" href="styles.css">
 <script>document.documentElement.classList.add('js');</script>
+<!-- FAQ (JSON-LD) é gerado por script.js a partir de data.js -->
 <script src="data.js" defer></script>
 </head>
 <body>
@@ -41,9 +42,8 @@
     </a>
     <nav class="nav__desktop" aria-label="Navegação principal">
       <ul class="nav__list">
-        <li><a class="nav__link is-active" href="solucoes.html">Soluções</a></li>
+        <li><a class="nav__link is-active" href="solucoes.html">Soluções e preços</a></li>
         <li><a class="nav__link" href="projetos.html">Projetos</a></li>
-        <li><a class="nav__link" href="precos.html">Planos</a></li>
         <li><a class="nav__link" href="previa.html">Ver um modelo</a></li>
         <li><a class="nav__link" href="sobre.html">Sobre</a></li>
         <li><a class="nav__link" href="contato.html">Contato</a></li>
@@ -59,9 +59,8 @@
 <div class="mobile-menu" id="mobileMenu" hidden>
   <nav class="mobile-menu__nav" aria-label="Navegação principal (mobile)">
     <ul class="mobile-menu__list">
-      <li><a class="mobile-menu__link" href="solucoes.html">Soluções</a></li>
+      <li><a class="mobile-menu__link" href="solucoes.html">Soluções e preços</a></li>
       <li><a class="mobile-menu__link" href="projetos.html">Projetos</a></li>
-      <li><a class="mobile-menu__link" href="precos.html">Planos</a></li>
       <li><a class="mobile-menu__link" href="previa.html">Ver um modelo</a></li>
       <li><a class="mobile-menu__link" href="sobre.html">Sobre</a></li>
       <li><a class="mobile-menu__link" href="contato.html">Contato</a></li>
@@ -80,17 +79,27 @@
     <div class="container">
       <header class="section__head">
         <p class="eyebrow" data-reveal><a class="link-arrow" href="index.html">← Voltar ao início</a></p>
-        <h1 class="section__title" id="page-title" data-reveal>Soluções da Solutions Binary</h1>
-        <p class="lead section__lead" data-reveal>As três frentes principais — <a href="solucoes.html#site">Sites</a>, <a href="cardapio.html">Cardápios Digitais</a> e <a href="automacoes.html">Automações</a> — e as soluções complementares. Cada uma é um produto com preço claro.</p>
+        <h1 class="section__title" id="page-title" data-reveal>Soluções e preços</h1>
+        <p class="lead section__lead" data-reveal>As três frentes principais — <a href="solucoes.html#site">Sites</a>, <a href="cardapio.html">Cardápios Digitais</a> e <a href="automacoes.html">Automações</a> — e as soluções complementares. Cada uma é um produto com implantação e mensalidade claras.</p>
       </header>
 
       <div id="catalog" data-reveal>
         <noscript><p class="lead" style="text-align:center">Fale com a gente no WhatsApp: <a href="https://wa.me/5548999591614">(48) 99959-1614</a>.</p></noscript>
       </div>
+      <p class="pricing-note" id="pricingNote" data-reveal></p>
     </div>
   </section>
 
-  <section class="section section--sunken" aria-labelledby="cmp-title">
+  <section class="section section--sunken section--compact" aria-labelledby="billing-title">
+    <div class="container">
+      <header class="section__head">
+        <h2 class="section__title" id="billing-title" data-reveal>Como funciona o preço</h2>
+      </header>
+      <div class="billing-explainer" id="billingExplainer" data-reveal></div>
+    </div>
+  </section>
+
+  <section class="section section--surface" aria-labelledby="cmp-title">
     <div class="container">
       <header class="section__head">
         <h2 class="section__title" id="cmp-title" data-reveal>Cardápio: qual plano é o seu?</h2>
@@ -100,11 +109,36 @@
     </div>
   </section>
 
+  <!-- Programa Clientes Fundadores — render só se data.js habilitar -->
+  <section class="section section--navy" id="fundadores" aria-labelledby="fundadores-title" hidden>
+    <div class="container">
+      <div class="founders" id="foundersBlock" data-reveal></div>
+    </div>
+  </section>
+
+  <!-- Indique e ganhe — render só se data.js habilitar -->
+  <section class="section section--surface section--compact" id="indique" aria-labelledby="indique-title" hidden>
+    <div class="container">
+      <div class="referral" id="referralBlock" data-reveal></div>
+    </div>
+  </section>
+
+  <section class="section section--sunken" aria-labelledby="faq-title">
+    <div class="container">
+      <header class="section__head">
+        <h2 class="section__title" id="faq-title" data-reveal>Perguntas frequentes sobre preços</h2>
+      </header>
+      <div class="faq" id="faqList" data-reveal>
+        <noscript><p class="lead" style="text-align:center">Fale com a gente no WhatsApp: <a href="https://wa.me/5548999591614">(48) 99959-1614</a>.</p></noscript>
+      </div>
+    </div>
+  </section>
+
   <section class="section section--navy section--compact" aria-labelledby="s-cta-title">
     <div class="container">
       <div class="cta-final" data-reveal>
         <h2 class="cta-final__title" id="s-cta-title" style="color:#fff">Não sabe qual escolher?</h2>
-        <p class="cta-final__text" style="color:var(--text-muted-on-dark)">Conte o que você quer resolver e a gente indica o caminho mais simples.</p>
+        <p class="cta-final__text" style="color:var(--text-muted-on-dark)">Conte o que você quer resolver e a gente indica o caminho mais simples — com um preço.</p>
         <div class="cta-final__actions">
           <a class="btn btn--primary" href="contato.html" data-analytics="click_demo">Quero uma solução</a>
           <a class="btn btn--secondary on-dark" data-wa data-wa-context="demo" data-analytics="click_whatsapp" href="https://wa.me/5548999591614" target="_blank" rel="noopener">Falar no WhatsApp</a>
@@ -127,9 +161,8 @@
     <nav class="footer__nav" aria-label="Navegação do rodapé">
       <h3 class="footer__heading">Navegue</h3>
       <ul class="footer__list">
-        <li><a href="solucoes.html">Soluções</a></li>
+        <li><a href="solucoes.html">Soluções e preços</a></li>
         <li><a href="projetos.html">Projetos</a></li>
-        <li><a href="precos.html">Planos</a></li>
         <li><a href="previa.html">Ver um modelo</a></li>
         <li><a href="sobre.html">Sobre</a></li>
         <li><a href="contato.html">Contato</a></li>

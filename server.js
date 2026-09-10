@@ -228,7 +228,8 @@ function sendPage(res, file) {
   res.sendFile(path.join(__dirname, file));
 }
 app.get("/solucoes", (_req, res) => sendPage(res, "solucoes.html"));
-app.get("/precos", (_req, res) => sendPage(res, "precos.html"));
+// /precos e /planos foram unificados em /solucoes (mantém links antigos vivos)
+app.get(["/precos", "/precos.html", "/planos"], (_req, res) => res.redirect(301, "/solucoes"));
 app.get("/projetos", (_req, res) => sendPage(res, "projetos.html"));
 app.get("/cardapio", (_req, res) => sendPage(res, "cardapio.html"));
 app.get("/automacoes", (_req, res) => sendPage(res, "automacoes.html"));

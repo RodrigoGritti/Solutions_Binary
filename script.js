@@ -1344,7 +1344,7 @@ function brl(n) {
 
 /* -------------------------------------------------------------
    11. Preços e produtos — render a partir de window.SB (data.js)
-   Funciona em index.html, solucoes.html e precos.html: cada
+   Funciona em index.html e solucoes.html: cada
    bloco só é montado se o elemento existir na página.
    ------------------------------------------------------------- */
 (function initPricing() {
@@ -1443,61 +1443,6 @@ function brl(n) {
     grid.innerHTML = mainList + othersHtml;
   }
 
-  /* ---- planos (precos.html) — cartões com preço em destaque,
-     agrupados por família. Implantação e mensalidade separadas,
-     top 5 itens do "inclui" + link pra lista completa em Soluções. ---- */
-  function monthlyValue(plan) {
-    const m = monthlyLabel(plan).replace("+ ", "");
-    return m || "—";
-  }
-  function renderPricing(el) {
-    el.innerHTML = P.families
-      .map((fam) => {
-        const cards = fam.plans
-          .map((plan) => {
-            const d = discountFor(fam, plan);
-            const setupHtml = d
-              ? '<s>' + brl(d.normalSetup) + "</s> <strong>" + brl(d.founderSetup) + "</strong>"
-              : "<strong>" + setupLabel(plan) + "</strong>";
-            const wa = planWa(fam, plan);
-            const feat = plan.features.slice(0, 5);
-            const restCount = Math.max(0, plan.features.length - feat.length);
-            return (
-              '<div class="plan-card' +
-              (plan.tag ? " plan-card--tag" : "") +
-              (plan.featured ? " plan-card--featured" : "") +
-              '">' +
-              (plan.tag ? '<span class="plan-card__tag">' + esc(plan.tag) + "</span>" : "") +
-              '<h4 class="plan-card__name">' + esc(plan.name) + "</h4>" +
-              '<div class="price-card__cost">' +
-              '<span class="price-card__cost-row"><small>Implantação</small> ' + setupHtml + "</span>" +
-              '<span class="price-card__cost-row"><small>Mensalidade</small> <b>' + monthlyValue(plan) + "</b></span>" +
-              "</div>" +
-              '<ul class="plan-card__features">' + feat.map((f) => "<li>" + esc(f) + "</li>").join("") + "</ul>" +
-              (restCount
-                ? '<a class="plan-card__more" href="solucoes.html#' + fam.slug + '">+ ' + restCount + " itens — ver tudo que inclui</a>"
-                : '<a class="plan-card__more" href="solucoes.html#' + fam.slug + '">Ver detalhes da solução</a>') +
-              (plan.note ? '<p class="plan-card__note">' + esc(plan.note) + "</p>" : "") +
-              '<a class="btn btn--primary btn--sm plan-card__cta" data-wa data-wa-context="' + esc(wa) +
-              '" data-analytics="click_whatsapp" href="' + waHref(wa) + '" target="_blank" rel="noopener">' +
-              esc(planCta(fam, plan)) + "</a>" +
-              "</div>"
-            );
-          })
-          .join("");
-        return (
-          '<div class="price-group" id="' + fam.slug + '">' +
-          '<h3 class="price-group__title"><span class="price-group__ico" aria-hidden="true">' +
-          iconSvg(fam.icon) + "</span>" + esc(fam.name) + "</h3>" +
-          '<div class="catalog-family__plans">' + cards + "</div>" +
-          "</div>"
-        );
-      })
-      .join("");
-  }
-  const fullTable = document.getElementById("precosTable");
-  if (fullTable) renderPricing(fullTable);
-
   const noteEl = document.getElementById("pricingNote");
   if (noteEl && P.note) noteEl.textContent = P.note;
 
@@ -1539,7 +1484,7 @@ function brl(n) {
         const plans = fam.plans
           .map((plan) => {
             const d = discountFor(fam, plan);
-            const priceHtml = d
+            const setupHtml = d
               ? '<s>' + brl(d.normalSetup) + "</s> <strong>" + brl(d.founderSetup) + "</strong>"
               : "<strong>" + setupLabel(plan) + "</strong>";
             const wa = planWa(fam, plan);
@@ -1547,7 +1492,10 @@ function brl(n) {
               '<div class="plan-card' + (plan.tag ? " plan-card--tag" : "") + (plan.featured ? " plan-card--featured" : "") + '">' +
               (plan.tag ? '<span class="plan-card__tag">' + esc(plan.tag) + "</span>" : "") +
               '<h3 class="plan-card__name">' + esc(plan.name) + "</h3>" +
-              '<p class="plan-card__price">' + priceHtml + (monthlyLabel(plan) ? ' <span>' + esc(monthlyLabel(plan)) + "</span>" : "") + "</p>" +
+              '<div class="price-card__cost">' +
+              '<span class="price-card__cost-row"><small>Implantação</small> ' + setupHtml + "</span>" +
+              '<span class="price-card__cost-row"><small>Mensalidade</small> <b>' + (monthlyLabel(plan).replace("+ ", "") || "—") + "</b></span>" +
+              "</div>" +
               '<ul class="plan-card__features">' + plan.features.map((f) => "<li>" + esc(f) + "</li>").join("") + "</ul>" +
               (plan.note ? '<p class="plan-card__note">' + esc(plan.note) + "</p>" : "") +
               '<a class="btn btn--primary btn--sm plan-card__cta" data-wa data-wa-context="' + esc(wa) + '" data-analytics="click_whatsapp" href="' + waHref(wa) + '" target="_blank" rel="noopener">' + esc(planCta(fam, plan)) + "</a>" +
@@ -1578,7 +1526,7 @@ function brl(n) {
       .join("");
   }
 
-  /* ---- comparativo de cardápio (solucoes.html / precos.html) ---- */
+  /* ---- comparativo de cardápio (solucoes.html) ---- */
   const cmp = document.getElementById("compareCardapio");
   const famC = P.families.find((f) => f.slug === "cardapio");
   if (cmp && famC && famC.compare) {
