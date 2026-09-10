@@ -1188,7 +1188,10 @@ function brl(n) {
   window.dataLayer = window.dataLayer || [];
   window.track = function (name, props) {
     try {
+      // GTM / genérico
       window.dataLayer.push(Object.assign({ event: name, ts: Date.now() }, props || {}));
+      // GA4 (gtag.js) — quando o snippet está presente
+      if (typeof window.gtag === "function") window.gtag("event", name, props || {});
     } catch (e) {}
   };
 
