@@ -268,6 +268,7 @@ app.get("/automacoes", (_req, res) => sendPage(res, "automacoes.html"));
 app.get("/sobre", (_req, res) => sendPage(res, "sobre.html"));
 app.get("/contato", (_req, res) => sendPage(res, "contato.html"));
 app.get("/previa", (_req, res) => sendPage(res, "previa.html"));
+app.get(["/politica-privacidade", "/privacidade"], (_req, res) => sendPage(res, "politica-privacidade.html"));
 // catch-all: qualquer rota desconhecida cai na home (igual ao comportamento antigo)
 app.get("*", (_req, res) => sendPage(res, "index.html"));
 
