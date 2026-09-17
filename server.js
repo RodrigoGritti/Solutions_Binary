@@ -209,6 +209,38 @@ app.post("/api/preview", express.json({ limit: "64kb" }), async (req, res) => {
 
 app.get("/api/health", (_req, res) => res.json({ ok: true, model: MODEL, keyed: !!ANTHROPIC_API_KEY }));
 
+/* ---------- WhatsApp Cloud API: webhook ---------- */
+const WHATSAPP_VERIFY_TOKEN = process.env.WHATSAPP_VERIFY_TOKEN || "";
+
+// Meta chama esse GET uma vez, ao salvar a configuração do webhook, para confirmar
+// que o endpoint é seu (compara hub.verify_token com o valor cadastrado no app).
+app.get("/webhook", (req, res) => {
+  const mode = req.query["hub.mode"];
+  const token = req.query["hub.verify_token"];
+  const challenge = req.query["hub.challenge"];
+
+  if (mode === "subscribe" && token && WHATSAPP_VERIFY_TOKEN && token === WHATSAPP_VERIFY_TOKEN) {
+    return res.status(200).send(challenge);
+  }
+  return res.sendStatus(403);
+});
+
+// Meta envia POST aqui a cada mensagem/status novo do número conectado.
+app.post("/webhook", express.json(), (req, res) => {
+  const value = req.body?.entry?.[0]?.changes?.[0]?.value;
+  const message = value?.messages?.[0];
+
+  if (message) {
+    const from = message.from;
+    const text = message.text?.body;
+    console.log(`[whatsapp] mensagem de ${from}: ${text ?? "(sem texto — tipo: " + message.type + ")"}`);
+    // TODO: lógica do bot (responder automaticamente, transferir pra humano, etc.)
+  }
+
+  // Meta espera 200 rápido; qualquer coisa fora isso ele reenvia a mesma mensagem.
+  res.sendStatus(200);
+});
+
 /* ---------- arquivos estáticos + URLs limpas ---------- */
 app.use(
   express.static(__dirname, {
