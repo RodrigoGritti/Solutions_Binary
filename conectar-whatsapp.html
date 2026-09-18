@@ -1,0 +1,135 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Conectar WhatsApp Business — Solutions Binary</title>
+<meta name="robots" content="noindex, nofollow">
+<style>
+  :root { --accent: #2B3AFF; --ink: #16171b; --bg: #F7F7F8; }
+  * { box-sizing: border-box; }
+  body {
+    margin: 0;
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Arial, sans-serif;
+    background: var(--bg);
+    color: var(--ink);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    min-height: 100vh;
+    padding: 24px;
+  }
+  .card {
+    background: #fff;
+    border-radius: 16px;
+    box-shadow: 0 10px 40px rgba(0,0,0,.08);
+    max-width: 480px;
+    width: 100%;
+    padding: 32px;
+    text-align: center;
+  }
+  h1 { font-size: 1.4rem; margin: 0 0 8px; }
+  p { color: #55565c; line-height: 1.6; font-size: .95rem; }
+  button {
+    background: var(--accent);
+    color: #fff;
+    border: none;
+    border-radius: 999px;
+    padding: 14px 28px;
+    font-size: 1rem;
+    font-weight: 600;
+    cursor: pointer;
+    margin-top: 16px;
+  }
+  button:disabled { opacity: .6; cursor: default; }
+  #status {
+    margin-top: 20px;
+    padding: 14px;
+    border-radius: 10px;
+    background: #f0f0f5;
+    font-size: .85rem;
+    text-align: left;
+    white-space: pre-wrap;
+    word-break: break-all;
+    display: none;
+  }
+  #status.show { display: block; }
+  #status.error { background: #fdeceb; color: #b3261e; }
+  #status.ok { background: #e8f7ee; color: #1a7a3f; }
+</style>
+</head>
+<body>
+
+<div class="card">
+  <h1>Conectar WhatsApp Business</h1>
+  <p>Clique no botão abaixo e faça login com sua conta da Meta. Escolha a opção de usar o número que já está no app do WhatsApp Business (+55 19 99935-9533) e siga as instruções na tela — inclusive o passo de escanear o QR code ou digitar o código de acesso no celular.</p>
+  <button id="btnConnect" onclick="launchWhatsAppSignup()">Conectar WhatsApp Business</button>
+  <div id="status"></div>
+</div>
+
+<div id="fb-root"></div>
+<script>
+  window.fbAsyncInit = function () {
+    FB.init({
+      appId: '1393307709656573',
+      cookie: true,
+      xfbml: false,
+      version: 'v21.0'
+    });
+  };
+</script>
+<script async defer crossorigin="anonymous" src="https://connect.facebook.net/pt_BR/sdk.js"></script>
+
+<script>
+  function setStatus(text, kind) {
+    var el = document.getElementById('status');
+    el.textContent = text;
+    el.className = 'show' + (kind ? ' ' + kind : '');
+  }
+
+  // A Meta envia eventos de progresso do Embedded Signup via postMessage.
+  window.addEventListener('message', function (event) {
+    if (!event.origin.endsWith('facebook.com')) return;
+    try {
+      var data = JSON.parse(event.data);
+      if (data.type === 'WA_EMBEDDED_SIGNUP') {
+        console.log('WA_EMBEDDED_SIGNUP event:', data);
+        setStatus('Evento recebido: ' + JSON.stringify(data, null, 2), 'ok');
+      }
+    } catch (e) {
+      // mensagens de outra origem que não são JSON — ignorar
+    }
+  });
+
+  function fbLoginCallback(response) {
+    if (response && response.authResponse && response.authResponse.code) {
+      setStatus(
+        'Login concluído. Código recebido (válido por pouco tempo):\n\n' +
+        response.authResponse.code +
+        '\n\nManda esse código pra mim (ou um print desta tela) que eu continuo a configuração.',
+        'ok'
+      );
+    } else {
+      setStatus('O login não foi concluído ou foi cancelado. Pode tentar de novo.', 'error');
+    }
+  }
+
+  function launchWhatsAppSignup() {
+    if (typeof FB === 'undefined') {
+      setStatus('O SDK da Meta ainda está carregando, aguarde 1 segundo e tente de novo.', 'error');
+      return;
+    }
+    FB.login(fbLoginCallback, {
+      config_id: '1971619520466048',
+      response_type: 'code',
+      override_default_response_type: true,
+      extras: {
+        setup: {},
+        featureType: 'whatsapp_business_app_onboarding',
+        sessionInfoVersion: '3'
+      }
+    });
+  }
+</script>
+</body>
+</html>
