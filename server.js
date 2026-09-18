@@ -15,6 +15,7 @@
 import express from "express";
 import path from "node:path";
 import { fileURLToPath } from "node:url";
+import { handleIncomingChange } from "./whatsapp-bot.js";
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
 const app = express();
@@ -234,11 +235,15 @@ app.post("/webhook", express.json(), (req, res) => {
     const from = message.from;
     const text = message.text?.body;
     console.log(`[whatsapp] mensagem de ${from}: ${text ?? "(sem texto — tipo: " + message.type + ")"}`);
-    // TODO: lógica do bot (responder automaticamente, transferir pra humano, etc.)
   }
 
-  // Meta espera 200 rápido; qualquer coisa fora isso ele reenvia a mesma mensagem.
+  // Meta espera 200 rápido; a resposta do robô roda depois, sem segurar o webhook.
   res.sendStatus(200);
+  if (value) {
+    handleIncomingChange(value).catch((err) =>
+      console.error("[bot] erro ao processar mensagem:", err && err.message)
+    );
+  }
 });
 
 /* ---------- arquivos estáticos + URLs limpas ---------- */
