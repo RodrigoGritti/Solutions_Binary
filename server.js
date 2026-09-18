@@ -246,10 +246,11 @@ app.post("/webhook", express.json(), (req, res) => {
   }
 });
 
-// Diagnóstico manual do status real da conexão (protegido pelo mesmo token do webhook).
-// Uso: /api/wa-diag?token=SEU_WHATSAPP_VERIFY_TOKEN
+// Diagnóstico manual do status real da conexão (protegido por token próprio, separado do webhook).
+// Uso: /api/wa-diag?token=WA_DIAG_TOKEN
+const WA_DIAG_TOKEN = process.env.WA_DIAG_TOKEN || "";
 app.get("/api/wa-diag", async (req, res) => {
-  if (!WHATSAPP_VERIFY_TOKEN || req.query.token !== WHATSAPP_VERIFY_TOKEN) {
+  if (!WA_DIAG_TOKEN || req.query.token !== WA_DIAG_TOKEN) {
     return res.sendStatus(403);
   }
   const accessToken = process.env.WHATSAPP_ACCESS_TOKEN || "";
