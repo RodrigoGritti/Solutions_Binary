@@ -246,6 +246,37 @@ app.post("/webhook", express.json(), (req, res) => {
   }
 });
 
+// Diagnóstico manual do status real da conexão (protegido pelo mesmo token do webhook).
+// Uso: /api/wa-diag?token=SEU_WHATSAPP_VERIFY_TOKEN
+app.get("/api/wa-diag", async (req, res) => {
+  if (!WHATSAPP_VERIFY_TOKEN || req.query.token !== WHATSAPP_VERIFY_TOKEN) {
+    return res.sendStatus(403);
+  }
+  const accessToken = process.env.WHATSAPP_ACCESS_TOKEN || "";
+  const phoneId = process.env.WHATSAPP_PHONE_NUMBER_ID || "1324480410748649";
+  const wabaId = req.query.waba || process.env.WHATSAPP_WABA_ID || "994346090327810";
+  const version = process.env.WHATSAPP_API_VERSION || "v21.0";
+  if (!accessToken) return res.status(500).json({ error: "sem WHATSAPP_ACCESS_TOKEN configurado" });
+
+  async function graphGet(pathAndQuery) {
+    const r = await fetch(`https://graph.facebook.com/${version}/${pathAndQuery}`, {
+      headers: { Authorization: `Bearer ${accessToken}` },
+    });
+    const body = await r.json().catch(() => ({}));
+    return { httpStatus: r.status, body };
+  }
+
+  try {
+    const [phone, subscribedApps] = await Promise.all([
+      graphGet(`${phoneId}?fields=display_phone_number,verified_name,is_on_biz_app,platform_type,quality_rating,status,code_verification_status`),
+      graphGet(`${wabaId}/subscribed_apps`),
+    ]);
+    res.json({ phone, subscribedApps });
+  } catch (err) {
+    res.status(500).json({ error: err && err.message });
+  }
+});
+
 /* ---------- arquivos estáticos + URLs limpas ---------- */
 app.use(
   express.static(__dirname, {
