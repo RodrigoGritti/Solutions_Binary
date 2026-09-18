@@ -64,6 +64,7 @@
   <h1>Conectar WhatsApp Business</h1>
   <p>Clique no botão abaixo e faça login com sua conta da Meta. Escolha a opção de usar o número que já está no app do WhatsApp Business (+55 19 99935-9533) e siga as instruções na tela — inclusive o passo de escanear o QR code ou digitar o código de acesso no celular.</p>
   <button id="btnConnect" onclick="launchWhatsAppSignup()">Conectar WhatsApp Business</button>
+  <button id="btnConnectSimple" onclick="launchSimple()" style="background:#888;margin-left:8px;">Testar (sem coexistence)</button>
   <div id="status"></div>
 </div>
 
@@ -128,6 +129,19 @@
         featureType: 'whatsapp_business_app_onboarding',
         sessionInfoVersion: '3'
       }
+    });
+  }
+
+  function launchSimple() {
+    if (typeof FB === 'undefined') {
+      setStatus('O SDK da Meta ainda está carregando, aguarde 1 segundo e tente de novo.', 'error');
+      return;
+    }
+    FB.login(fbLoginCallback, {
+      config_id: '1971619520466048',
+      response_type: 'code',
+      override_default_response_type: true,
+      extras: { setup: {} }
     });
   }
 </script>
