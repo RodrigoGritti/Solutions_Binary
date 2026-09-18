@@ -115,35 +115,44 @@
     }
   }
 
-  function launchWhatsAppSignup() {
-    if (typeof FB === 'undefined') {
-      setStatus('O SDK da Meta ainda está carregando, aguarde 1 segundo e tente de novo.', 'error');
-      return;
-    }
-    FB.login(fbLoginCallback, {
+  // Monta a URL do diálogo OAuth manualmente e abre em popup — evita o
+  // FedCM do Chrome, que o próprio FB.login() do SDK tenta usar por padrão
+  // e que ignora o config_id (gera "scope=openid", inválido para o Facebook).
+  function openOAuthDialog(extras) {
+    var redirectUri = 'https://solutionsbinary.otimiza.in/conectar-whatsapp.html';
+    var params = new URLSearchParams({
+      client_id: '1393307709656573',
       config_id: '1967434083935230',
       response_type: 'code',
-      override_default_response_type: true,
-      extras: {
-        setup: {},
-        featureType: 'whatsapp_business_app_onboarding',
-        sessionInfoVersion: '3'
-      }
+      override_default_response_type: 'true',
+      redirect_uri: redirectUri,
+      extras: JSON.stringify(extras)
+    });
+    var url = 'https://www.facebook.com/v21.0/dialog/oauth?' + params.toString();
+    window.open(url, 'fb_login', 'width=600,height=700');
+  }
+
+  function launchWhatsAppSignup() {
+    openOAuthDialog({
+      setup: {},
+      featureType: 'whatsapp_business_app_onboarding',
+      sessionInfoVersion: '3'
     });
   }
 
   function launchSimple() {
-    if (typeof FB === 'undefined') {
-      setStatus('O SDK da Meta ainda está carregando, aguarde 1 segundo e tente de novo.', 'error');
-      return;
-    }
-    FB.login(fbLoginCallback, {
-      config_id: '1967434083935230',
-      response_type: 'code',
-      override_default_response_type: true,
-      extras: { setup: {} }
-    });
+    openOAuthDialog({ setup: {} });
   }
+
+  // Se o Facebook redirecionar de volta pra esta página com ?code=...,
+  // mostra o código na tela.
+  (function checkRedirectCode() {
+    var params = new URLSearchParams(window.location.search);
+    var code = params.get('code');
+    if (code) {
+      setStatus('Login concluído. Código recebido:\n\n' + code + '\n\nManda esse código pra mim.', 'ok');
+    }
+  })();
 </script>
 </body>
 </html>
