@@ -79,12 +79,15 @@ COMO RESPONDER:
 `.trim();
 
 /* ---------- estado de cada conversa (em memória) ---------- */
-const sessions = new Map(); // phone -> { history: [{role, content}], mode: 'bot'|'humano', humanUntil: number }
+const sessions = new Map(); // phone -> { history: [{role, content}], mode: 'bot'|'humano', humanUntil: number, lastHumanReminderAt: number }
+
+// Não avisa o cliente "você está em atendimento humano" toda mensagem — só de vez em quando.
+const HUMAN_REMINDER_COOLDOWN_MS = 15 * 60 * 1000;
 
 function getSession(phone) {
   let s = sessions.get(phone);
   if (!s) {
-    s = { history: [], mode: "bot", humanUntil: 0 };
+    s = { history: [], mode: "bot", humanUntil: 0, lastHumanReminderAt: 0 };
     sessions.set(phone, s);
   }
   // volta pro modo bot automaticamente depois do prazo de handoff
@@ -109,6 +112,16 @@ const HUMAN_KEYWORDS = [
 function wantsHuman(text) {
   const t = (text || "").toLowerCase().normalize("NFD").replace(/[̀-ͯ]/g, "");
   return HUMAN_KEYWORDS.some((k) => t.includes(k.normalize("NFD").replace(/[̀-ͯ]/g, "")));
+}
+
+const BACK_TO_BOT_KEYWORDS = [
+  "voltar pro robo", "voltar para o robo", "falar com o robo", "quero o robo",
+  "modo automatico", "atendimento automatico", "voltar ao robo", "robo de novo",
+];
+
+function wantsBackToBot(text) {
+  const t = (text || "").toLowerCase().normalize("NFD").replace(/[̀-ͯ]/g, "");
+  return BACK_TO_BOT_KEYWORDS.some((k) => t.includes(k.normalize("NFD").replace(/[̀-ͯ]/g, "")));
 }
 
 /* ---------- envio de mensagens via Cloud API ---------- */
@@ -217,7 +230,22 @@ async function handleCustomerMessage(message) {
   }
 
   if (session.mode === "humano") {
-    console.log(`[bot] ${from} está em modo humano — robô não responde`);
+    if (wantsBackToBot(text)) {
+      session.mode = "bot";
+      session.humanUntil = 0;
+      await sendWhatsAppText(from, "Prontinho, voltei! 🤖 Pode falar que eu te ajudo.");
+      console.log(`[bot] ${from} pediu pra voltar ao modo robô`);
+      return;
+    }
+    const now = Date.now();
+    if (now - session.lastHumanReminderAt > HUMAN_REMINDER_COOLDOWN_MS) {
+      session.lastHumanReminderAt = now;
+      await sendWhatsAppText(
+        from,
+        "Você está sendo atendido(a) pela nossa equipe — alguém já vai te responder por aqui. Se quiser voltar a falar com o assistente automático, é só mandar \"voltar pro robô\"."
+      );
+    }
+    console.log(`[bot] ${from} está em modo humano — robô não responde (mensagem)`);
     return;
   }
 
