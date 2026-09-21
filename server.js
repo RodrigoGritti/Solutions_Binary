@@ -278,6 +278,37 @@ app.get("/api/wa-diag", async (req, res) => {
   }
 });
 
+// Registra o número no Cloud API (passo que faltava depois da reconexão do Coexistence).
+// Uso: /api/wa-register?token=WA_DIAG_TOKEN&pin=123456
+app.get("/api/wa-register", async (req, res) => {
+  if (!WA_DIAG_TOKEN || req.query.token !== WA_DIAG_TOKEN) {
+    return res.sendStatus(403);
+  }
+  const pin = req.query.pin || "";
+  if (!/^\d{6}$/.test(pin)) {
+    return res.status(400).json({ error: "pin deve ter exatamente 6 dígitos" });
+  }
+  const accessToken = process.env.WHATSAPP_ACCESS_TOKEN || "";
+  const phoneId = process.env.WHATSAPP_PHONE_NUMBER_ID || "1324480410748649";
+  const version = process.env.WHATSAPP_API_VERSION || "v21.0";
+  if (!accessToken) return res.status(500).json({ error: "sem WHATSAPP_ACCESS_TOKEN configurado" });
+
+  try {
+    const r = await fetch(`https://graph.facebook.com/${version}/${phoneId}/register`, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: `Bearer ${accessToken}`,
+      },
+      body: JSON.stringify({ messaging_product: "whatsapp", pin }),
+    });
+    const body = await r.json().catch(() => ({}));
+    res.status(r.status).json({ httpStatus: r.status, body });
+  } catch (err) {
+    res.status(500).json({ error: err && err.message });
+  }
+});
+
 /* ---------- arquivos estáticos + URLs limpas ---------- */
 app.use(
   express.static(__dirname, {
