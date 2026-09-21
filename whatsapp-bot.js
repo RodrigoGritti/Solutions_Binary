@@ -30,6 +30,15 @@ const GRAPH_URL = `https://graph.facebook.com/${WHATSAPP_API_VERSION}/${WHATSAPP
 const HANDOFF_HOURS = Number(process.env.BOT_HANDOFF_HOURS || 6);
 const HANDOFF_MS = HANDOFF_HOURS * 60 * 60 * 1000;
 
+// Números dos sócios que recebem aviso quando um cliente pede atendente.
+// Observação: a Cloud API só entrega mensagem de texto livre pra esses números se
+// eles tiverem mandado mensagem pro robô nas últimas 24h (janela de atendimento).
+// Fora dessa janela, precisaria de um template aprovado pela Meta.
+const NOTIFY_NUMBERS = (process.env.BOT_NOTIFY_NUMBERS || "5519997897813,5548999591614")
+  .split(",")
+  .map((n) => n.trim())
+  .filter(Boolean);
+
 const MAX_HISTORY = 12; // mensagens guardadas por contato (pra não estourar o prompt)
 
 /* ---------- resumo da empresa para a IA (mantenha alinhado com data.js) ---------- */
@@ -130,6 +139,15 @@ async function sendWhatsAppText(to, body) {
   }
 }
 
+/* ---------- avisa os sócios quando um cliente pede atendente ---------- */
+async function notifyTeam(customerPhone, reason) {
+  const text = `⚠️ Cliente ${customerPhone} pediu atendimento humano (${reason}). O robô já pausou essa conversa.`;
+  for (const number of NOTIFY_NUMBERS) {
+    if (number === customerPhone) continue; // não avisa o próprio cliente, se coincidir
+    await sendWhatsAppText(number, text);
+  }
+}
+
 /* ---------- chamada à IA pra decidir a resposta ---------- */
 async function askAssistant(session) {
   const reqBody = JSON.stringify({
@@ -204,6 +222,7 @@ async function handleCustomerMessage(message) {
     session.mode = "humano";
     session.humanUntil = Date.now() + HANDOFF_MS;
     await sendWhatsAppText(from, "Claro! Já aviso a equipe e alguém te chama por aqui em instantes. 🙂");
+    await notifyTeam(from, "pediu explicitamente");
     return;
   }
 
@@ -237,5 +256,6 @@ async function handleCustomerMessage(message) {
     session.mode = "humano";
     session.humanUntil = Date.now() + HANDOFF_MS;
     console.log(`[bot] handoff acionado pela IA para ${from}`);
+    await notifyTeam(from, "a IA identificou necessidade de atendimento");
   }
 }
