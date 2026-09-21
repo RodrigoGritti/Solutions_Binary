@@ -12,7 +12,7 @@
    funcionando mesmo se data.js não carregar. */
 const SB = (window.SB = window.SB || {});
 const SB_WA = SB.whatsapp || {};
-const WHATSAPP_NUMBER = SB_WA.number || "5548999591614";
+const WHATSAPP_NUMBER = SB_WA.number || "5519999359533";
 const WHATSAPP_MESSAGE =
   SB_WA.default || "Olá! Vim pelo site da Solutions Binary e quero saber mais.";
 

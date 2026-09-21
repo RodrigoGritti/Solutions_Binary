@@ -23,7 +23,7 @@ window.SB = {
 
   /* ---------- Contato / WhatsApp ---------- */
   whatsapp: {
-    number: "5548999591614",
+    number: "5519999359533",
     email: "solutionsbinary4@gmail.com",
     default: "Olá! Vim pelo site da Solutions Binary e quero saber mais.",
     // Mensagens contextuais — usadas por [data-wa-context="chave"]
