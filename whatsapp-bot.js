@@ -8,18 +8,21 @@
      1. Mensagem chega em server.js -> handleIncomingChange(value)
      2. Se o cliente já está em modo "humano" (você respondeu pelo
         celular, ou pediu atendente), o robô fica quieto.
-     3. Senão, pergunta pra IA (Claude) o que responder, usando um
+     3. Senão, pergunta pra IA (OpenAI) o que responder, usando um
         resumo dos serviços/preços da Solutions Binary.
      4. Manda a resposta pela API oficial do WhatsApp.
 
    O histórico de conversa fica em memória (Map) — reinicia se o
    servidor reiniciar. Pra guardar de forma permanente no futuro,
    trocar por um banco de dados (ex: Supabase/Postgres).
+
+   Observação: só o robô do WhatsApp usa OpenAI — o gerador de prévia
+   do site (server.js -> /api/preview) continua na Anthropic.
    ============================================================= */
 
-const ANTHROPIC_API_KEY = process.env.ANTHROPIC_API_KEY || "";
-const BOT_MODEL = process.env.BOT_MODEL || process.env.PREVIEW_MODEL || "claude-sonnet-5";
-const ANTHROPIC_URL = "https://api.anthropic.com/v1/messages";
+const OPENAI_API_KEY = process.env.OPENAI_API_KEY || "";
+const BOT_MODEL = process.env.BOT_MODEL || "gpt-4o-mini";
+const OPENAI_URL = "https://api.openai.com/v1/chat/completions";
 
 const WHATSAPP_ACCESS_TOKEN = process.env.WHATSAPP_ACCESS_TOKEN || "";
 const WHATSAPP_PHONE_NUMBER_ID = process.env.WHATSAPP_PHONE_NUMBER_ID || "1324480410748649";
@@ -47,7 +50,7 @@ const REPLY_DEBOUNCE_MS = Number(process.env.BOT_REPLY_DEBOUNCE_MS || 6000);
 
 /* ---------- resumo da empresa para a IA (mantenha alinhado com data.js) ---------- */
 const COMPANY_CONTEXT = `
-Seu nome é Atlas — você é o assistente de atendimento da Solutions Binary pelo WhatsApp. Não diga que é uma IA da Anthropic nem cite o nome "Claude".
+Seu nome é Atlas — você é o assistente de atendimento da Solutions Binary pelo WhatsApp. Não diga que é uma IA da OpenAI/Anthropic nem cite nomes como "ChatGPT" ou "Claude".
 Na PRIMEIRA mensagem de uma conversa nova, comece se apresentando pelo nome, por exemplo: "Oi! Sou o Atlas, assistente virtual da Solutions Binary." (varie a frase, mas sempre inclua o nome Atlas logo no início). Nas mensagens seguintes da mesma conversa, não repita o nome — só se perguntarem diretamente ("qual seu nome?").
 
 SOBRE A EMPRESA:
@@ -174,32 +177,26 @@ async function askAssistant(session, isFirstMessage) {
   const reqBody = JSON.stringify({
     model: BOT_MODEL,
     max_tokens: 500,
-    system,
-    messages: session.history,
+    messages: [{ role: "system", content: system }, ...session.history],
   });
 
-  const r = await fetch(ANTHROPIC_URL, {
+  const r = await fetch(OPENAI_URL, {
     method: "POST",
     headers: {
       "content-type": "application/json",
-      "x-api-key": ANTHROPIC_API_KEY,
-      "anthropic-version": "2023-06-01",
+      Authorization: `Bearer ${OPENAI_API_KEY}`,
     },
     body: reqBody,
   });
 
   if (!r.ok) {
     const detail = await r.text().catch(() => "");
-    console.error("[bot] Anthropic", r.status, detail.slice(0, 300));
+    console.error("[bot] OpenAI", r.status, detail.slice(0, 300));
     return null;
   }
 
   const data = await r.json();
-  const text = (data.content || [])
-    .filter((b) => b.type === "text")
-    .map((b) => b.text)
-    .join("")
-    .trim();
+  const text = data.choices?.[0]?.message?.content?.trim();
   return text || null;
 }
 
@@ -262,8 +259,8 @@ async function handleCustomerMessage(message) {
     return;
   }
 
-  if (!ANTHROPIC_API_KEY) {
-    console.error("[bot] ANTHROPIC_API_KEY não configurada — robô não consegue responder.");
+  if (!OPENAI_API_KEY) {
+    console.error("[bot] OPENAI_API_KEY não configurada — robô não consegue responder.");
     return;
   }
 
