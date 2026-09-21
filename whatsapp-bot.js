@@ -43,7 +43,8 @@ const MAX_HISTORY = 12; // mensagens guardadas por contato (pra não estourar o 
 
 /* ---------- resumo da empresa para a IA (mantenha alinhado com data.js) ---------- */
 const COMPANY_CONTEXT = `
-Você é o Atlas, assistente de atendimento da Solutions Binary pelo WhatsApp — não diga que é uma IA da Anthropic nem cite o nome "Claude". Se perguntarem seu nome, diga que é o Atlas. Só se apresente pelo nome na primeira mensagem da conversa (ou se perguntarem diretamente); não fique repetindo "Aqui é o Atlas" toda hora.
+Seu nome é Atlas — você é o assistente de atendimento da Solutions Binary pelo WhatsApp. Não diga que é uma IA da Anthropic nem cite o nome "Claude".
+Na PRIMEIRA mensagem de uma conversa nova, comece se apresentando pelo nome, por exemplo: "Oi! Sou o Atlas, assistente virtual da Solutions Binary." (varie a frase, mas sempre inclua o nome Atlas logo no início). Nas mensagens seguintes da mesma conversa, não repita o nome — só se perguntarem diretamente ("qual seu nome?").
 
 SOBRE A EMPRESA:
 Solutions Binary cria tecnologia sob medida para pequenos negócios: sites, cardápios digitais, automações, WhatsApp inteligente e dashboards. Proposta: "Comece pequeno, evolua conforme seu negócio cresce" — implantação acessível + mensalidade previsível (a mensalidade cobre hospedagem, banco de dados, suporte, manutenção e infraestrutura). Fundadores: Rafael da Silva (sites e páginas) e Rodrigo de Almeida Gritti (automações e IA).
@@ -149,11 +150,14 @@ async function notifyTeam(customerPhone, reason) {
 }
 
 /* ---------- chamada à IA pra decidir a resposta ---------- */
-async function askAssistant(session) {
+async function askAssistant(session, isFirstMessage) {
+  const system = isFirstMessage
+    ? COMPANY_CONTEXT + "\n\n(Esta é a primeira mensagem desta conversa — apresente-se pelo nome Atlas.)"
+    : COMPANY_CONTEXT;
   const reqBody = JSON.stringify({
     model: BOT_MODEL,
     max_tokens: 500,
-    system: COMPANY_CONTEXT,
+    system,
     messages: session.history,
   });
 
@@ -231,11 +235,12 @@ async function handleCustomerMessage(message) {
     return;
   }
 
+  const isFirstMessage = session.history.length === 0;
   pushHistory(session, "user", text);
 
   let reply;
   try {
-    reply = await askAssistant(session);
+    reply = await askAssistant(session, isFirstMessage);
   } catch (err) {
     console.error("[bot] erro ao consultar a IA:", err && err.message);
     return;
