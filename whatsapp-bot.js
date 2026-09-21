@@ -41,6 +41,10 @@ const NOTIFY_NUMBERS = (process.env.BOT_NOTIFY_NUMBERS || "5519997897813,5548999
 
 const MAX_HISTORY = 12; // mensagens guardadas por contato (pra não estourar o prompt)
 
+// Espera esse tempo depois da última mensagem do cliente antes de responder —
+// se ele mandar várias mensagens seguidas, agrupa tudo numa resposta só.
+const REPLY_DEBOUNCE_MS = Number(process.env.BOT_REPLY_DEBOUNCE_MS || 6000);
+
 /* ---------- resumo da empresa para a IA (mantenha alinhado com data.js) ---------- */
 const COMPANY_CONTEXT = `
 Seu nome é Atlas — você é o assistente de atendimento da Solutions Binary pelo WhatsApp. Não diga que é uma IA da Anthropic nem cite o nome "Claude".
@@ -87,7 +91,7 @@ const HUMAN_REMINDER_COOLDOWN_MS = 15 * 60 * 1000;
 function getSession(phone) {
   let s = sessions.get(phone);
   if (!s) {
-    s = { history: [], mode: "bot", humanUntil: 0, lastHumanReminderAt: 0 };
+    s = { history: [], mode: "bot", humanUntil: 0, lastHumanReminderAt: 0, pendingTexts: [], pendingTimer: null };
     sessions.set(phone, s);
   }
   // volta pro modo bot automaticamente depois do prazo de handoff
@@ -263,8 +267,31 @@ async function handleCustomerMessage(message) {
     return;
   }
 
+  // Agrupa mensagens rápidas do mesmo contato numa resposta só, em vez de
+  // responder cada uma na hora (evita respostas picadas/fora de ordem).
+  session.pendingTexts.push(text);
+  if (session.pendingTimer) clearTimeout(session.pendingTimer);
+  session.pendingTimer = setTimeout(() => {
+    session.pendingTimer = null;
+    replyToBufferedMessages(from, session).catch((err) =>
+      console.error("[bot] erro ao responder mensagens agrupadas:", err && err.message)
+    );
+  }, REPLY_DEBOUNCE_MS);
+}
+
+async function replyToBufferedMessages(from, session) {
+  if (session.mode === "humano") {
+    // virou humano enquanto esperava o debounce — só guarda no histórico, sem responder
+    for (const t of session.pendingTexts) pushHistory(session, "user", t);
+    session.pendingTexts = [];
+    return;
+  }
+
+  const combinedText = session.pendingTexts.join("\n");
   const isFirstMessage = session.history.length === 0;
-  pushHistory(session, "user", text);
+  session.pendingTexts = [];
+
+  pushHistory(session, "user", combinedText);
 
   let reply;
   try {
