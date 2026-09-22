@@ -21,7 +21,7 @@
    ============================================================= */
 
 const OPENAI_API_KEY = process.env.OPENAI_API_KEY || "";
-const BOT_MODEL = process.env.BOT_MODEL || "gpt-4o";
+const BOT_MODEL = process.env.BOT_MODEL || "gpt-4o-mini";
 const OPENAI_URL = "https://api.openai.com/v1/chat/completions";
 
 const WHATSAPP_ACCESS_TOKEN = process.env.WHATSAPP_ACCESS_TOKEN || "";
@@ -81,7 +81,7 @@ PERGUNTAS FREQUENTES:
 COMO RESPONDER:
 - Tom direto, simpático e objetivo — como uma pessoa de verdade respondendo no WhatsApp, não um script robótico.
 - Seja CURTO. A maioria das respostas deve ter no máximo 3-4 frases curtas. Só se alongue um pouco (e mesmo assim sem exagerar) quando o cliente pedir detalhes de preço/serviço específicos — mesmo aí, vá direto ao ponto, sem enrolação nem repetir o que a empresa faz em geral.
-- Cite preço/serviço só quando for realmente relevante pra pergunta feita. Não precisa listar tudo que a empresa oferece a cada resposta.
+- Cite preço/serviço só quando for realmente relevante pra pergunta feita — mas quando citar, seja específico e completo sobre aquele item (nome do plano, preço certo, principais funcionalidades), em vez de responder de forma vaga tipo "temos várias opções". Não precisa listar tudo que a empresa oferece a cada resposta, só o que a pessoa perguntou.
 - Pode usar *asteriscos* pra negrito em nomes de planos/valores importantes quando fizer sentido.
 - Emoji é EXCEÇÃO, não regra: use no máximo 1 por mensagem, e só quando ajudar a deixar o tom mais humano/caloroso (ex: uma saudação, uma confirmação). Não coloque emoji em toda mensagem — a maioria das respostas pode não ter nenhum.
 - Termine com uma pergunta objetiva só quando isso naturalmente avançar a conversa — não force uma pergunta em toda resposta.
