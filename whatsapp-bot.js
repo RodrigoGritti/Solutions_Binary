@@ -51,7 +51,7 @@ const REPLY_DEBOUNCE_MS = Number(process.env.BOT_REPLY_DEBOUNCE_MS || 6000);
 /* ---------- resumo da empresa para a IA (mantenha alinhado com data.js) ---------- */
 const COMPANY_CONTEXT = `
 Seu nome é Atlas — você é o assistente de atendimento da Solutions Binary pelo WhatsApp. Não diga que é uma IA da OpenAI/Anthropic nem cite nomes como "ChatGPT" ou "Claude".
-Na PRIMEIRA mensagem de uma conversa nova, se apresente pelo nome E já dê um panorama rápido do que a empresa faz (sites, cardápios digitais, automações, WhatsApp inteligente e dashboards), convidando a pessoa a contar o que precisa — algo como "Oi! Sou o Atlas, assistente virtual da Solutions Binary. Trabalhamos com sites, cardápios digitais, automações, WhatsApp inteligente e dashboards — tudo sob medida pro seu negócio. Me conta o que você precisa que eu te ajudo a encontrar a melhor solução!" (varie a frase, mas sempre inclua o nome Atlas e esse panorama). Nas mensagens seguintes da mesma conversa, não repita a apresentação — só o nome, se perguntarem diretamente.
+O cliente JÁ RECEBEU uma mensagem fixa de boas-vindas se apresentando (é enviada automaticamente, fora da sua resposta) — por isso NUNCA se apresente de novo nem repita "sou o Atlas, assistente virtual da Solutions Binary" nas suas respostas. Vá direto ao que a pessoa perguntou. Só mencione seu nome se perguntarem diretamente ("qual seu nome?").
 
 SOBRE A EMPRESA:
 Solutions Binary cria tecnologia sob medida para pequenos negócios: sites, cardápios digitais, automações, WhatsApp inteligente e dashboards. Proposta: "Comece pequeno, evolua conforme seu negócio cresce" — implantação acessível + mensalidade previsível (a mensalidade cobre hospedagem, banco de dados, suporte, manutenção e infraestrutura). Fundadores: Rafael da Silva (sites e páginas) e Rodrigo de Almeida Gritti (automações e IA).
@@ -88,6 +88,24 @@ COMO RESPONDER:
 - Nunca invente preço, prazo ou funcionalidade que não está nesta lista. Se não souber algo específico, diga que vai confirmar com a equipe.
 - Se o cliente parecer pronto pra fechar negócio, pedir orçamento fora do padrão, reclamar de algo, ou pedir claramente para falar com uma pessoa, comece sua resposta com a tag "[HANDOFF]" seguida de uma mensagem curta avisando que alguém da equipe vai continuar por ali.
 - Nunca peça dados de pagamento ou envie links de pagamento.
+`.trim();
+
+// Mensagem fixa de boas-vindas — mandada por código (não pela IA), garantindo que
+// aparece exatamente uma vez, na primeira mensagem de cada conversa nova.
+const WELCOME_MESSAGE = `
+🌟 Bem-vindo(a) à Solutions Binary! 🌟
+Sou o *Atlas*, seu assistente virtual.
+
+Criamos tecnologia sob medida pra pequenos negócios:
+💻 Sites e páginas profissionais
+🍽️ Cardápios digitais
+⚙️ Automações que economizam seu tempo
+💬 WhatsApp inteligente com IA
+📊 Dashboards com seus indicadores
+
+📍 Comece pequeno, evolua conforme seu negócio cresce.
+
+Me conta o que você precisa que eu te ajudo a encontrar a melhor solução!
 `.trim();
 
 /* ---------- estado de cada conversa (em memória) ---------- */
@@ -175,14 +193,11 @@ async function notifyTeam(customerPhone, reason) {
 }
 
 /* ---------- chamada à IA pra decidir a resposta ---------- */
-async function askAssistant(session, isFirstMessage) {
-  const system = isFirstMessage
-    ? COMPANY_CONTEXT + "\n\n(Esta é a primeira mensagem desta conversa — apresente-se pelo nome Atlas.)"
-    : COMPANY_CONTEXT;
+async function askAssistant(session) {
   const reqBody = JSON.stringify({
     model: BOT_MODEL,
     max_tokens: 350,
-    messages: [{ role: "system", content: system }, ...session.history],
+    messages: [{ role: "system", content: COMPANY_CONTEXT }, ...session.history],
   });
 
   const r = await fetch(OPENAI_URL, {
@@ -233,6 +248,11 @@ async function handleCustomerMessage(message) {
   if (!text) {
     console.log(`[bot] mensagem de ${from} sem texto (tipo: ${message.type}) — ignorada pelo robô`);
     return;
+  }
+
+  const isFirstMessage = session.history.length === 0;
+  if (isFirstMessage) {
+    await sendWhatsAppText(from, WELCOME_MESSAGE);
   }
 
   if (session.mode === "humano") {
@@ -290,14 +310,13 @@ async function replyToBufferedMessages(from, session) {
   }
 
   const combinedText = session.pendingTexts.join("\n");
-  const isFirstMessage = session.history.length === 0;
   session.pendingTexts = [];
 
   pushHistory(session, "user", combinedText);
 
   let reply;
   try {
-    reply = await askAssistant(session, isFirstMessage);
+    reply = await askAssistant(session);
   } catch (err) {
     console.error("[bot] erro ao consultar a IA:", err && err.message);
     return;
