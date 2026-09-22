@@ -242,6 +242,7 @@ window.SB = {
             setup: 697, monthly: 149,
             ctaLabel: "Automatizar meu WhatsApp",
             waContext: "whatsappIa",
+            note: "O número conectado fica dedicado ao atendimento: sem grupos, chamadas ou catálogo nesse número (o app continua funcionando normalmente pra conversas).",
             features: [
               "Respostas automáticas", "Captação de informações",
               "Fluxos de atendimento", "Organização das conversas",
@@ -254,7 +255,7 @@ window.SB = {
             setup: 997, setupFrom: true, monthly: 249,
             ctaLabel: "Quero o WhatsApp com IA",
             waContext: "whatsappIaAvancado",
-            note: "Consumo extraordinário de APIs pode ser cobrado separadamente.",
+            note: "Consumo extraordinário de APIs pode ser cobrado separadamente. O número conectado fica dedicado ao atendimento: sem grupos, chamadas ou catálogo nesse número.",
             features: [
               "Inteligência artificial", "Interpretação de mensagens",
               "Classificação automática", "Respostas com IA",
@@ -369,6 +370,10 @@ window.SB = {
       {
         q: "O que acontece se eu parar de pagar?",
         a: "O serviço fica pausado até a regularização. As regras de suspensão e retomada são combinadas no contrato, sem surpresa."
+      },
+      {
+        q: "O número de WhatsApp continua funcionando no celular depois de automatizado?",
+        a: "Sim. Usamos uma tecnologia oficial da Meta que mantém o WhatsApp Business normal funcionando no celular ao mesmo tempo que o robô responde pelo mesmo número. A única observação: esse número passa a ser dedicado ao atendimento, então recursos como grupos, chamadas de voz/vídeo e catálogo ficam desativados nele — as conversas individuais continuam normais no app."
       }
     ]
   },
