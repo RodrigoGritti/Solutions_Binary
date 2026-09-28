@@ -12,3 +12,10 @@ services:
         sync: false
       - key: PREVIEW_MODEL
         value: claude-sonnet-5
+      # Persistência das sessões do robô de WhatsApp (db/bot_sessions.sql).
+      # Sem essas duas, o robô funciona igual, só que a conversa se perde
+      # se o servidor reiniciar (é isso que fazia ele "se apresentar" de novo).
+      - key: SUPABASE_URL
+        sync: false
+      - key: SUPABASE_SERVICE_ROLE_KEY
+        sync: false

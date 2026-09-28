@@ -12,9 +12,14 @@
         resumo dos serviços/preços da Solutions Binary.
      4. Manda a resposta pela API oficial do WhatsApp.
 
-   O histórico de conversa fica em memória (Map) — reinicia se o
-   servidor reiniciar. Pra guardar de forma permanente no futuro,
-   trocar por um banco de dados (ex: Supabase/Postgres).
+   O histórico de conversa fica em memória (Map), mas é replicado no
+   Supabase a cada mudança (se SUPABASE_URL/SUPABASE_SERVICE_ROLE_KEY
+   estiverem configurados). Assim, se o Render reiniciar o processo
+   (deploy, ou o servidor "dormir" no plano grátis), a conversa de
+   cada cliente é recarregada do banco em vez de começar do zero —
+   e o robô não manda a apresentação de novo pra quem já conversou.
+   Sem essas variáveis configuradas, o robô funciona exatamente como
+   antes (só em memória).
 
    Observação: só o robô do WhatsApp usa OpenAI — o gerador de prévia
    do site (server.js -> /api/preview) continua na Anthropic.
@@ -43,6 +48,18 @@ const NOTIFY_NUMBERS = (process.env.BOT_NOTIFY_NUMBERS || "5519997897813,5548999
   .filter(Boolean);
 
 const MAX_HISTORY = 12; // mensagens guardadas por contato (pra não estourar o prompt)
+
+// Persistência opcional no Supabase — sem isso configurado, tudo continua só em
+// memória (comportamento antigo). Usa a chave service_role (legacy JWT, formato
+// "eyJ...", em Supabase → Settings → API Keys → Legacy API keys) porque o
+// endpoint REST do Postgres exige esse formato pra ignorar RLS.
+const SUPABASE_URL = (process.env.SUPABASE_URL || "").replace(/\/+$/, "");
+const SUPABASE_SERVICE_KEY = process.env.SUPABASE_SERVICE_ROLE_KEY || "";
+const SESSIONS_TABLE = "bot_sessions";
+const DB_ENABLED = Boolean(SUPABASE_URL && SUPABASE_SERVICE_KEY);
+if (!DB_ENABLED) {
+  console.warn("[bot] SUPABASE_URL/SUPABASE_SERVICE_ROLE_KEY não configurados — sessões só em memória (somem se o servidor reiniciar).");
+}
 
 // Espera esse tempo depois da última mensagem do cliente antes de responder —
 // se ele mandar várias mensagens seguidas, agrupa tudo numa resposta só.
@@ -117,7 +134,7 @@ const HUMAN_REMINDER_COOLDOWN_MS = 15 * 60 * 1000;
 function getSession(phone) {
   let s = sessions.get(phone);
   if (!s) {
-    s = { history: [], mode: "bot", humanUntil: 0, lastHumanReminderAt: 0, pendingTexts: [], pendingTimer: null };
+    s = { history: [], mode: "bot", humanUntil: 0, lastHumanReminderAt: 0, welcomed: false, pendingTexts: [], pendingTimer: null };
     sessions.set(phone, s);
   }
   // volta pro modo bot automaticamente depois do prazo de handoff
@@ -125,6 +142,60 @@ function getSession(phone) {
     s.mode = "bot";
   }
   return s;
+}
+
+/* ---------- persistência no Supabase (opcional) ---------- */
+
+// Antes de criar uma sessão em branco pra um telefone que este processo ainda
+// não viu, tenta recarregar do banco — evita tratar cliente antigo como novo
+// só porque o servidor reiniciou.
+async function ensureSessionLoaded(phone) {
+  if (sessions.has(phone) || !DB_ENABLED) return;
+  try {
+    const r = await fetch(
+      `${SUPABASE_URL}/rest/v1/${SESSIONS_TABLE}?phone=eq.${encodeURIComponent(phone)}&select=*`,
+      { headers: { apikey: SUPABASE_SERVICE_KEY, Authorization: `Bearer ${SUPABASE_SERVICE_KEY}` } }
+    );
+    if (!r.ok) return;
+    const rows = await r.json();
+    const row = rows && rows[0];
+    if (!row) return;
+    sessions.set(phone, {
+      history: Array.isArray(row.history) ? row.history : [],
+      mode: row.mode === "humano" ? "humano" : "bot",
+      humanUntil: Number(row.human_until) || 0,
+      lastHumanReminderAt: Number(row.last_human_reminder_at) || 0,
+      welcomed: Boolean(row.welcomed),
+      pendingTexts: [],
+      pendingTimer: null,
+    });
+  } catch (err) {
+    console.error("[bot] falha ao carregar sessão do Supabase:", err && err.message);
+  }
+}
+
+// Salva o estado atual da conversa — chamada depois de toda mudança relevante.
+// Fire-and-forget: nunca atrasa a resposta ao cliente por causa do banco.
+function persistSession(phone, session) {
+  if (!DB_ENABLED) return;
+  fetch(`${SUPABASE_URL}/rest/v1/${SESSIONS_TABLE}?on_conflict=phone`, {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json",
+      apikey: SUPABASE_SERVICE_KEY,
+      Authorization: `Bearer ${SUPABASE_SERVICE_KEY}`,
+      Prefer: "resolution=merge-duplicates",
+    },
+    body: JSON.stringify({
+      phone,
+      history: session.history,
+      mode: session.mode,
+      human_until: session.humanUntil,
+      last_human_reminder_at: session.lastHumanReminderAt,
+      welcomed: session.welcomed,
+      updated_at: new Date().toISOString(),
+    }),
+  }).catch((err) => console.error("[bot] falha ao salvar sessão no Supabase:", err && err.message));
 }
 
 function pushHistory(session, role, content) {
@@ -233,9 +304,11 @@ export async function handleIncomingChange(value) {
   // (Só chega se o campo "smb_message_echoes" estiver assinado no app.)
   const echo = value?.message_echoes?.[0];
   if (echo?.to) {
+    await ensureSessionLoaded(echo.to);
     const session = getSession(echo.to);
     session.mode = "humano";
     session.humanUntil = Date.now() + HANDOFF_MS;
+    persistSession(echo.to, session);
     console.log(`[bot] humano respondeu ${echo.to} pelo celular — robô pausado por ${HANDOFF_HOURS}h`);
   }
 }
@@ -243,22 +316,26 @@ export async function handleIncomingChange(value) {
 async function handleCustomerMessage(message) {
   const from = message.from;
   const text = message.text?.body || "";
-  const session = getSession(from);
 
   if (!text) {
     console.log(`[bot] mensagem de ${from} sem texto (tipo: ${message.type}) — ignorada pelo robô`);
     return;
   }
 
-  const isFirstMessage = session.history.length === 0;
-  if (isFirstMessage) {
+  await ensureSessionLoaded(from);
+  const session = getSession(from);
+
+  if (!session.welcomed) {
+    session.welcomed = true;
     await sendWhatsAppText(from, WELCOME_MESSAGE);
+    persistSession(from, session);
   }
 
   if (session.mode === "humano") {
     if (wantsBackToBot(text)) {
       session.mode = "bot";
       session.humanUntil = 0;
+      persistSession(from, session);
       await sendWhatsAppText(from, "Prontinho, voltei! 🤖 Pode falar que eu te ajudo.");
       console.log(`[bot] ${from} pediu pra voltar ao modo robô`);
       return;
@@ -266,6 +343,7 @@ async function handleCustomerMessage(message) {
     const now = Date.now();
     if (now - session.lastHumanReminderAt > HUMAN_REMINDER_COOLDOWN_MS) {
       session.lastHumanReminderAt = now;
+      persistSession(from, session);
       await sendWhatsAppText(
         from,
         "Você está sendo atendido(a) pela nossa equipe — alguém já vai te responder por aqui. Se quiser voltar a falar com o assistente automático, é só mandar \"voltar pro robô\"."
@@ -279,6 +357,7 @@ async function handleCustomerMessage(message) {
     pushHistory(session, "user", text);
     session.mode = "humano";
     session.humanUntil = Date.now() + HANDOFF_MS;
+    persistSession(from, session);
     await sendWhatsAppText(from, "Claro! Já aviso a equipe e alguém te chama por aqui em instantes. 🙂");
     await notifyTeam(from, "pediu explicitamente");
     return;
@@ -306,6 +385,7 @@ async function replyToBufferedMessages(from, session) {
     // virou humano enquanto esperava o debounce — só guarda no histórico, sem responder
     for (const t of session.pendingTexts) pushHistory(session, "user", t);
     session.pendingTexts = [];
+    persistSession(from, session);
     return;
   }
 
@@ -339,4 +419,6 @@ async function replyToBufferedMessages(from, session) {
     console.log(`[bot] handoff acionado pela IA para ${from}`);
     await notifyTeam(from, "a IA identificou necessidade de atendimento");
   }
+
+  persistSession(from, session);
 }
